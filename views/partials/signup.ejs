@@ -1,0 +1,106 @@
+<form accept-charset="UTF-8" role="form" id="<%= formId %>">
+    <fieldset>
+        <div class="form-group">
+            <input class="form-control" placeholder="First Name" name="firstName" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" placeholder="Last Name" name="lastName" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" placeholder="E-mail" name="email" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" placeholder="Password" name="password" type="password">
+        </div>
+        <div class="form-group">
+            <input class="form-control" placeholder="Confirm Password" name="confirmpassword" type="password">
+        </div>
+    </fieldset>
+</form>
+
+<script type="text/javascript">
+    (function initSignup() {
+        var form = $('#<%= formId %>');
+
+        form[0].clear = function () {
+            form.find(".form-group input").val("");
+            form.find('.has-error').removeClass('has-error');
+            validator.resetForm();
+        }
+
+        form.bind('keypress', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode == 13) {
+                form.submit();
+            }
+        });
+
+        var validator = form.validate({
+            rules: {
+                email: {
+                    required: true,
+                    email: true,
+                    remote: {
+                        url: "/signup/validate",
+                        type: "post",
+                        data: {
+                            email: function() {
+                                return form.find('[name=email]').val();
+                            }
+                        }
+                    }
+                },
+                password: {
+                    minlength: 3,
+                    maxlength: 15,
+                    required: true
+                },
+                confirmpassword: {
+                    equalTo: "#<%=formId%> [name=password]"
+                },
+                firstName: {
+                    minlength: 3,
+                    maxlength: 15,
+                    required: true,
+                },
+                lastName: {
+                    minlength: 3,
+                    maxlength: 15,
+                    required: true
+                },
+                birthday: {
+                    required: true
+                }
+            },
+            messages: {
+                email: {
+                    remote: "Email address already in use. Please use other email."
+                }
+            },
+            highlight: function (element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            unhighlight: function (element) {
+                $(element).closest('.form-group').removeClass('has-error');
+            },
+            submitHandler: function (form) {
+                $(form).mask('Loading...');
+                $.ajax('/signup', {
+                    type: "POST",
+                    data: $(form).serialize(),
+                    statusCode: {
+                        200: function () {
+                            location.reload();
+                        },
+                        403: function (response) {
+
+                        }
+                    }
+                }).always(function () {
+                    $(form).unmask();
+                });
+            }
+        });
+    }
+    )();
+</script>

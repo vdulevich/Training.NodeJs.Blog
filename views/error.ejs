@@ -1,0 +1,13 @@
+<% layout('./layout/page') -%>
+
+<div style="overflow: auto">
+    <h1><%= message %></h1>
+    <% if(error && error.status) { %>
+    <div><%= ['Error code:', error.status ].join('') %></div>
+    <% } %>
+    <% if(error && error.stack) { %>
+    <div><%- ['Error stack:', error.stack.replace(/\n/g, '<br/>') ].join('') %></div>
+    <% } %>
+</div>
+
+

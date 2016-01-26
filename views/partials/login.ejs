@@ -1,0 +1,78 @@
+<form accept-charset="UTF-8" role="form" id="<%= formId %>">
+    <fieldset>
+        <div class="form-group">
+            <input class="form-control" placeholder="E-mail" name="email" type="text" required="true" >
+        </div>
+        <div class="form-group">
+            <input class="form-control" placeholder="Password" name="password" type="password" value="" required="true" >
+        </div>
+        <div class="checkbox">
+            <label>
+                <input name="remember" type="checkbox"> Remember Me
+            </label>
+        </div>
+        <input class="btn btn-lg btn-success btn-block" value="Login" onclick="$('#<%=formId%>').submit();">
+    </fieldset>
+</form>
+
+<script>
+    (function initLogin(){
+        var form = $('#<%=formId%>');
+
+        form[0].getEmailField = function(){
+            return $(form).find('[name="email"]');
+        }
+
+        form[0].clear = function(){
+            form.find(".form-group input").val("");
+            form.find('.has-error').removeClass('has-error');
+            validator.resetForm();
+        }
+
+        form.bind('keypress', function(e) {
+            var keyCode = e.keyCode || e.which;
+            if(keyCode == 13){
+                form.submit();
+            }
+        });
+
+        var validator = form.validate({
+            rules: {
+                email: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    minlength: 3,
+                    maxlength: 15,
+                    required: true
+                }
+            },
+            highlight: function(element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            unhighlight: function(element) {
+                $(element).closest('.form-group').removeClass('has-error');
+            },
+            submitHandler:function(form){
+                $(form).mask('Loading...');
+                $.ajax('/login', {
+                    type: "POST",
+                    data: $(form).serialize(),
+                    statusCode: {
+                        200: function () {
+                            location.reload();
+                        },
+                        403: function (response) {
+                            validator.showErrors({
+                                "password": "Invalid user or password"
+                            });
+                        }
+                    }
+                }).always(function () {
+                    $(form).unmask();
+                });
+            }
+        });
+    })();
+</script>

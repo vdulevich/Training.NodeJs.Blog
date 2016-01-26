@@ -1,0 +1,142 @@
+html, body{
+  height: 100%;
+}
+
+body {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+}
+
+a {
+  color: #00B7FF;
+}
+
+a:hover {
+  cursor:pointer;
+}
+
+.error{
+  color: darkred;
+}
+
+.navbar-link:hover{
+  color: white;
+}
+
+@media (min-width: 768px){
+  .navbar-right {
+    margin-right: 0px;
+  }
+}
+
+.modal-backdrop{
+  z-index: 0;
+}
+
+.ch-container {
+  padding-right: 0px;
+  padding-left: 0px;
+  height: 100%;
+}
+
+.ch-wrapper{
+  height: auto !important;
+  min-height: 100%;
+  margin-bottom: -40px;
+  padding-bottom: 40px;
+  position: relative;
+}
+
+.ch-wrapper::before {
+  content: '';
+  display: block;
+  border-radius: 6px 6px 0px 0px;
+  background-color: lavender;
+  position: absolute;
+  top: 90px;
+  bottom: 40px;
+  width: 100%;
+}
+
+@media only screen and (max-width: 532px) {
+  .ch-wrapper::before{
+    top: 50px;
+  }
+}
+
+.ch-header {
+  position: relative;
+  padding: 20px 0px 20px 0px;
+  z-index: 1;
+}
+
+@media only screen and (max-width: 532px) {
+  .ch-header {
+    padding: 0px;
+  }
+}
+
+.ch-center {
+  border-radius: 6px 6px 0px 0px;
+  background-color: lavender;
+  padding: 15px;
+  position: relative;
+}
+
+.ch-footer {
+  background-color: darkslateblue;
+  border-radius: 0px 0px 6px 6px;
+  min-height: 40px;
+  color:white;
+  padding: 10px;
+  text-align: center;
+}
+
+@media only screen and (max-width: 532px) {
+  .ch-footer {
+    border-radius: 0px;
+    min-height:40px;
+  }
+}
+
+.ch-chat-messages-list {
+  margin-top: 20px;
+  margin-bottom: 0px;
+  overflow: auto;
+  background-color: #f7f7f7;
+  min-height:100px;
+}
+
+.ch-chat-messages-list .list-group-item{
+  border-radius: 0px;
+}
+
+.ch-fit-container{
+  height: 100%;
+}
+
+.ch-top-navbar {
+  background-color: darkslateblue;
+  border-radius: 6px;
+  margin: 0px;
+  border: none;
+  overflow: hidden;
+}
+
+.ch-top-navbar .navbar-text{
+  color: #fff;
+}
+
+.ch-top-navbar .icon-bar{
+  background-color: white;
+}
+
+@media only screen and (max-width: 532px) {
+  .ch-top-navbar {
+    border-radius: 0px;
+  }
+}
+
+
+

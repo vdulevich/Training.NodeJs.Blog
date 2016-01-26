@@ -1,0 +1,13 @@
+{
+  "session" :{
+    "name": "sid",
+    "secret": "secretKey",
+    "cookie": {
+      "path": "/",
+      "httpOnly": true,
+      "maxAge": null
+    },
+    "resave": true,
+    "saveUninitialized": true
+  }
+}

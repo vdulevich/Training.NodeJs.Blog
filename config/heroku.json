@@ -1,0 +1,7 @@
+{
+  "server": {
+  },
+  "mongoose":{
+    "uri": "mongodb://blog:chart@ds035975.mongolab.com:35975/heroku_mgh5927c"
+  }
+}
