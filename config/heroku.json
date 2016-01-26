@@ -2,6 +2,6 @@
   "server": {
   },
   "mongoose":{
-    "uri": "mongodb://blog:chart@ds035975.mongolab.com:35975/heroku_mgh5927c"
+    "uri": "mongodb://heroku_zd52vt3z:sku9oefhpe5baf5t40ggahbo3b@ds047945.mongolab.com:47945/heroku_zd52vt3z"
   }
 }
