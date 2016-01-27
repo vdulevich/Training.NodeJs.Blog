@@ -37,8 +37,8 @@
                     type: "POST",
                     data: $(form).serialize(),
                     statusCode: {
-                        200: function () {
-                            $(form).trigger('articleSaved');
+                        200: function (data) {
+                            $(form).trigger('articleSaved', data);
                         },
                         403: function (response) {}
                     }

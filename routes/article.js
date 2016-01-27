@@ -16,10 +16,13 @@ router.post('/create', function(req, res, next){
 });
 
 router.post('/update', function(req, res, next){
-    Article.update({ _id: req.body.id }, { $set: { title: req.body.title, content: req.body.content }},
+    Article.findOneAndUpdate(
+        { _id: req.body.id },
+        { $set:{ title: req.body.title, content: req.body.content } },
+        { 'new': true },
         function(err, article) {
             if(err) return next(err);
-            res.end('');
+            res.json(article);
         });
 });
 
@@ -31,10 +34,10 @@ router.post('/delete', function(req, res, next){
         });
 });
 
-router.post('/getList', function(req, res, next){
+router.post('/find', function(req, res, next){
     Article.find({ _user: req.user }, function(err, articles){
         if(err) return next(err);
-        res.render('partials/articlesList.ejs', { articles: articles });
+        res.json(articles);
     })
 });
 
