@@ -45,11 +45,11 @@
             }).always(function(){ $('body').unmask();} );
         });
 
-        $('#<%=loginId%>').bind('click touchstart', function(){
+        $('#<%=loginId%>').bind('click', function(){
             $('#<%=loginModalWrapperId%>').find('.modal').modal();
         });
 
-        $('#<%=signupId%>').bind('click touchstart', function(){
+        $('#<%=signupId%>').bind('click', function(){
             $('#<%=signupModalWrapperId%>').find('.modal').modal();
         });
     })
