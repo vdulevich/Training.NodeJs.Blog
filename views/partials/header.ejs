@@ -28,24 +28,24 @@
     </nav>
 </div>
 
-<%-partial("../partials/loginDlg.ejs", {data: { dlgId: 'loginDlg', formId: 'loginForm' }}) %>
+<div id="test"><%-partial("../partials/loginDlg.ejs", {data: { dlgId: 'loginDlg', formId: 'loginForm' }}) %></div>
 <%-partial("../partials/signupDlg.ejs", {data: { dlgId: 'signupDlg', formId: 'signupForm' }}) %>
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $('#<%=logoutId%>').bind('touchstart', function(){
+        $('#<%=logoutId%>').bind('click touchstart', function(){
             $('body').mask('Loading...');
             $.post('/logout', function() {
                 window.location = '/';
             }).always(function(){ $('body').unmask();} );
         });
 
-        $('#loginDlg').on('show.bs.modal', function (e) {
+        $('#test').on('show.bs.modal', function (e) {
             var form = $(e.currentTarget).find('form');
             form[0].clear();
         });
 
-        $('#loginDlg').on('shown.bs.modal', function (e) {
+        $('#test').on('shown.bs.modal', function (e) {
             var form = $(e.currentTarget).find('form');
             form[0].getEmailField().focus();
         });

@@ -1,4 +1,6 @@
-<form accept-charset="UTF-8" role="form" id="<%= data.formId %>">
+<%var formId = 'loginForm'%>
+
+<form accept-charset="UTF-8" role="form" id="<%= formId %>">
     <fieldset>
         <div class="form-group">
             <input class="form-control" placeholder="E-mail" name="email" type="text" required="true" >
@@ -16,7 +18,7 @@
 
 <script>
     (function initLogin(){
-        var form = $('#<%=data.formId%>');
+        var form = $('#<%=formId%>');
 
         form[0].getEmailField = function(){
             return $(form).find('[name="email"]');
@@ -53,6 +55,11 @@
             unhighlight: function(element) {
                 $(element).closest('.form-group').removeClass('has-error');
             },
+            errorPlacement : function(error, element) {
+                if($(error).html() != "") {
+                    error.insertAfter(element);
+                }
+            },
             submitHandler:function(form){
                 $(form).mask('Loading...');
                 $.ajax('/login', {
@@ -64,6 +71,7 @@
                         },
                         403: function (response) {
                             validator.showErrors({
+                                "email": "",
                                 "password": "Invalid user or password"
                             });
                         }

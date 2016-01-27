@@ -1,4 +1,6 @@
-<div class="modal" id="<%=data.dlgId%>" tabindex="-1" role="dialog" aria-labelledby="loginLabel">
+<%var dlgId = 'loginDlg'%>
+
+<div class="modal" id="<%=dlgId%>" tabindex="-1" role="dialog" aria-labelledby="loginLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -6,10 +8,10 @@
                 <h4 class="modal-title" id="loginLabel">Login</h4>
             </div>
             <div class="modal-body">
-                <%-partial("../partials/login.ejs", data) %>
+                <%-partial("../partials/login.ejs") %>
             </div>
             <div class="modal-footer">
-                <input class="btn btn-lg btn-success btn-block" value="Login"/>
+                <input class="btn btn-lg btn-success btn-block" value="Login" type="button"/>
             </div>
         </div>
     </div>
@@ -17,8 +19,9 @@
 
 <script type="text/javascript">
     (function initSignupDlg(){
-        $('#<%=data.dlgId%>').find('.btn').on('click', function(){
-            $('#<%=data.formId%>').submit();
+        var dlgId = $('#<%=dlgId%>');
+        dlgId.find('.btn').on('click', function(){
+            dlgId.find('form').submit();
         });
     })();
 </script>

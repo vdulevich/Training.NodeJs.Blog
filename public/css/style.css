@@ -43,10 +43,6 @@ a:hover {
   }
 }
 
-.modal-backdrop{
-  z-index: 0;
-}
-
 .ch-container {
   padding-right: 0px;
   padding-left: 0px;
@@ -195,5 +191,11 @@ a:hover {
  padding-right: 5px ;
 }
 
+.ch-profileinfo-panel .form-group .form-control{
+  white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 
