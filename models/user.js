@@ -1,7 +1,8 @@
-var crypto = require("crypto");
 var mongoose = require("lib/mongoose");
 var async = require('async');
 var AuthError = require('errors').AuthError;
+var crypto = require("crypto");
+
 
 var schema = mongoose.Schema({
     email:{
@@ -17,13 +18,10 @@ var schema = mongoose.Schema({
         type: String,
         required: true
     },
-    created:{
+    created: {
         type: Date,
         default: Date.now()
-    }//,
-    /*_profile: {
-        type: mongoose.Schema.ObjectId, ref: 'Profile'
-    }*/
+    }
 });
 
 schema.methods.encryptPassword = function(password){

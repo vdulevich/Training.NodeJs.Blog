@@ -1,0 +1,51 @@
+<%var formId = 'articleEditForm'%>
+
+<form id="<%=formId%>" accept-charset="UTF-8" role="form">
+    <input name="id" type="hidden" value="<%=_id%>"/>
+    <fieldset>
+        <div class="form-group">
+            <input class="form-control" placeholder="Title..." name="title" type="text" value="<%=title%>"/>
+        </div>
+        <div class="form-group">
+            <textarea rows="10" class="form-control" placeholder="Content..." name="content"  type="text"><%=content%></textarea>
+        </div>
+    </fieldset>
+</form>
+
+<script>
+    (function initArticleEdit(){
+        var form = $('#<%=formId%>');
+
+        var validator = form.validate({
+            rules: {
+                title: {
+                    required: true
+                },
+                content: {
+                    required: true
+                }
+            },
+            highlight: function(element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            unhighlight: function(element) {
+                $(element).closest('.form-group').removeClass('has-error');
+            },
+            submitHandler:function(form){
+                $(form).mask('Loading...');
+                $.ajax('/article/update', {
+                    type: "POST",
+                    data: $(form).serialize(),
+                    statusCode: {
+                        200: function () {
+                            $(form).trigger('articleSaved');
+                        },
+                        403: function (response) {}
+                    }
+                }).always(function () {
+                    $(form).unmask();
+                });
+            }
+        });
+    })();
+</script>

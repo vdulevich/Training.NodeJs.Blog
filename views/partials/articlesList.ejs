@@ -1,0 +1,97 @@
+<%var articlesPanelId = 'articlesPanel'%>
+
+<div id="<%=articlesPanelId%>" >
+    <div class="ch-article-panel panel panel-default">
+        <div class="panel-heading">
+            Articles
+            <a href="#"><span class="pull-right glyphicon glyphicon-plus"></span></a>
+        </div>
+        <% if(articles.length > 0) { %>
+        <div class="ch-article-list list-group">
+            <% articles.forEach(function(article, index){ %>
+            <a class="ch-list-group-item list-group-item" articleId="<%=article._id.toString()%>">
+                <div class="list-group-list-content">
+                    <h4 class="list-group-item-heading"><%= article.title %></h4>
+                    <p class="list-group-item-text"><%= article.content %></p>
+                </div>
+                <div class="ch-article-list-edit">
+                    <span class="glyphicon glyphicon-edit"></span>
+                    <span data-toggle="confirmation-singleton" data-placement="left" data-original-title="" title="" class="glyphicon glyphicon-trash"></span>
+                </div>
+            </a>
+            <% }) %>
+        </div>
+        <% } else { %>
+        <span>No articles found.</span>
+        <% }%>
+    </div>
+    <script type="text/javascript">
+        (function initArticleList(){
+            var articlesPanel = $('#<%=articlesPanelId%> '),
+                articleAdd = articlesPanel.find('.glyphicon-plus'),
+                articleEdit = articlesPanel.find('.glyphicon-edit'),
+                articleDelete = articlesPanel.find('.glyphicon-trash');
+
+            function refreshGrid(){
+                $.ajax('/article/getList', {
+                    type: "POST",
+                    data: { },
+                    statusCode: {
+                        200: function (data) { articlesPanel.replaceWith(data); },
+                        403: function (response) { }
+                    }
+                }).always(function () {
+                    articlesPanel.unmask();
+                })
+            }
+
+            articleAdd.on('click', function(){
+                articlesPanel.mask('Loading...');
+                $.ajax('/article/create', {
+                    type: "POST",
+                    data: { title: 'No title', content: 'No content' },
+                    statusCode: {
+                        200: refreshGrid,
+                        403: function (response) { }
+                    }
+                }).always(function () {
+                    articlesPanel.unmask();
+                });
+            });
+
+            articleEdit.on('click', function(){
+                articlesPanel.mask('Loading...');
+                $.ajax('/article/getEditDlg', {
+                    type: "POST",
+                    data: { id: $(event.target).closest('a[articleId]').attr('articleId')},
+                    statusCode: {
+                        200: function (data) {
+                            $(data)
+                                .appendTo('body')
+                                .modal()
+                                .on('hidden.bs.modal', function () {
+                                    $(this).remove();
+                                })
+                                .on('articleSaved', refreshGrid);
+                        },
+                        403: function (response) { }
+                    }
+                }).always(function () {
+                    articlesPanel.unmask();
+                });
+            });
+
+            articleDelete.on('click', function(){
+                articlesPanel.mask('Loading...');
+                $.ajax('/article/delete', {
+                    type: "POST",
+                    data: { id: $(event.target).closest('a[articleId]').attr('articleId') },
+                    statusCode: {
+                        200: refreshGrid,
+                        403: function (response) { }
+                    }
+                });
+            })
+        })();
+    </script>
+</div>

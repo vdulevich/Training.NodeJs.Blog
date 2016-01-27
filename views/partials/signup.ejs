@@ -1,4 +1,4 @@
-<form accept-charset="UTF-8" role="form" id="<%= formId %>">
+<form accept-charset="UTF-8" role="form" id="<%=data.formId%>">
     <fieldset>
         <div class="form-group">
             <input class="form-control" placeholder="First Name" name="firstName" type="text">
@@ -20,7 +20,7 @@
 
 <script type="text/javascript">
     (function initSignup() {
-        var form = $('#<%= formId %>');
+        var form = $('#<%=data.formId%>');
 
         form[0].clear = function () {
             form.find(".form-group input").val("");
@@ -56,7 +56,7 @@
                     required: true
                 },
                 confirmpassword: {
-                    equalTo: "#<%=formId%> [name=password]"
+                    equalTo: "#<%=data.formId%> [name=password]"
                 },
                 firstName: {
                     minlength: 3,

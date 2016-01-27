@@ -25,7 +25,7 @@ router.post('/', function(req, res, next){
         }
             console.log(profile);
         req.session.user = profile._user.toString();
-        res.json({email: profile.user});
+        res.end('');
     });
 });
 

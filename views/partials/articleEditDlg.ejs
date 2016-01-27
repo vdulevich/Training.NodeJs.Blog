@@ -1,0 +1,30 @@
+<% var dlgId = 'articleEditDlg'%>
+
+<div id="<%=dlgId%>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="articleEditLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="articleEditLabel">Edit Article</h4>
+            </div>
+            <div class="modal-body">
+                <%-partial("../partials/articleEdit.ejs",{ title: title, content: content })%>
+            </div>
+            <div class="modal-footer">
+                <input class="btn btn-lg btn-success btn-block" value="Save"/>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        (function initArticleEditDlg(){
+            var dlg = $('#<%=dlgId%>');
+            var form = dlg.find('form');
+            dlg.find('.btn-success').on('click', function(){
+                form.submit();
+            });
+            form.on('articleSaved', function(){
+                dlg.modal('hide');
+            });
+        })();
+    </script>
+</div>

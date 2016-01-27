@@ -1,3 +1,24 @@
 <% layout('./layout/page') -%>
 
-<%= profile %>
+
+<div class="panel panel-default">
+    <div class="panel-heading">Profile info</div>
+    <div class="panel-body">
+        <div class="form-inline">
+        <div class="input-group form-group">
+            <span class="input-group-addon">Full Name: </span>
+            <span type="text" class="form-control">
+                <%= [profile.firstName, profile.lastName].join(' ') %>
+            </span>
+        </div>
+        <div class="input-group form-group">
+            <span class="input-group-addon">Email: </span>
+            <span type="text" class="form-control">
+                <%=user.email%>
+            </span>
+        </div>
+        </div>
+    </div>
+</div>
+
+<%-partial("partials/articlesList.ejs", {articles: articles}) %>

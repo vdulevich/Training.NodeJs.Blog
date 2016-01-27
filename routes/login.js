@@ -23,7 +23,7 @@ router.post('/', function(req, res, next){
             req.session.cookie.expires = false; // Cookie expires at end of session
         }
         req.session.user = user._id.toString();
-        res.json({email: user.email});
+        res.end('');
     });
 });
 

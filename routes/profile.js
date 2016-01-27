@@ -1,13 +1,45 @@
 var mongoose = require('lib/mongoose');
-var Profile = require('models/profile');
+var async = require('async');
 var express = require('express');
 var router = express.Router();
+var Profile = require('models/profile');
+var User = require('models/user');
+var Article = require('models/article');
 
 router.get('/', function(req, res, next){
-    Profile.findOne({_user: req.user._id.toString()}, function(err, profile){
-        if(err) return next(err);
-        res.render('profile', { profile: profile });
-    })
+    renderProfile(req.user,res, next);
 });
+
+router.get('/:id', function(req, res, next){
+    renderProfile(req.params.id, res, next);
+});
+
+function renderProfile(userId, res, callback){
+    async.waterfall([
+        function(callback){
+            Profile.findOne({_user: userId}, function(err, profile){
+                if(err) return callback(err);
+                callback(null, { profile: profile });
+            })
+        },
+        function(result, callback){
+            User.findById(userId, function(err, user){
+                if(err) return callback(err);
+                result.user = user;
+                callback(null, result);
+            })
+        },
+        function(result, callback){
+            Article.find({ _user: userId}, function(err, articles){
+                if(err) return callback(err);
+                result.articles = articles;
+                callback(null, result);
+            })
+        }
+    ],function(err, result){
+        if(err) return callback(err);
+        res.render('profile', result);
+    })
+}
 
 module.exports = router;
