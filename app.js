@@ -61,7 +61,7 @@ app.use(function(req, res, next) {
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
+if (app.get('NODE_ENV') === 'development') {
   app.use(function(err, req, res, next) {
       if (err instanceof errors.HttpError) {
           res.sendHttpError(err);
