@@ -55,11 +55,6 @@
             unhighlight: function(element) {
                 $(element).closest('.form-group').removeClass('has-error');
             },
-            errorPlacement : function(error, element) {
-                if($(error).html() != "") {
-                    error.insertAfter(element);
-                }
-            },
             submitHandler:function(form){
                 $(form).mask('Loading...');
                 $.ajax('/login', {

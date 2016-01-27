@@ -1,6 +1,6 @@
 <%var dlgId = 'loginDlg'%>
 
-<div class="modal" id="<%=dlgId%>" tabindex="-1" role="dialog" aria-labelledby="loginLabel">
+<div class="modal fade" id="<%=dlgId%>" tabindex="-1" role="dialog" aria-labelledby="loginLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -18,10 +18,22 @@
 </div>
 
 <script type="text/javascript">
-    (function initSignupDlg(){
+    (function initLoginDlg(){
         var dlgId = $('#<%=dlgId%>');
+
         dlgId.find('.btn').on('click', function(){
             dlgId.find('form').submit();
+        });
+
+        dlgId.on('show.bs.modal', function (e) {
+            var form = $(e.currentTarget).find('form');
+            if(form[0].clear())
+                form[0].clear();
+        });
+
+        dlgId.on('shown.bs.modal', function (e) {
+            var form = $(e.currentTarget).find('form');
+            form[0].getEmailField().focus();
         });
     })();
 </script>

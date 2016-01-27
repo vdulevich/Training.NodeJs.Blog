@@ -1,4 +1,9 @@
 <% var logoutId = 'logout' %>
+<% var loginId = 'login' %>
+<% var signupId = 'signup' %>
+<% var loginModalWrapperId = 'signupWrapper' %>
+<% var signupModalWrapperId = 'loginWrapper' %>
+
 <div class="ch-top-navbar">
     <div class="navbar-header">
         <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false">
@@ -20,16 +25,16 @@
                 <span class="collapse">Welcome <strong>'<%=user.name%>'</strong></span>
                 <a id='<%=logoutId%>' class="navbar-link">Logout</a>
             <% } else { %>
-                <a class="navbar-link" type="button" data-toggle="modal" data-target="#loginDlg">Login</a>
+                <a id="<%=loginId%>" class="navbar-link" type="button">Login</a>
                 <span>or</span>
-                <a class="navbar-link" type="button" data-toggle="modal" data-target="#signupDlg">Sign up</a>
+                <a id="<%=signupId%>" class="navbar-link" type="button">Sign up</a>
             <% } %>
         </div>
     </nav>
 </div>
 
-<div id="test"><%-partial("../partials/loginDlg.ejs", {data: { dlgId: 'loginDlg', formId: 'loginForm' }}) %></div>
-<%-partial("../partials/signupDlg.ejs", {data: { dlgId: 'signupDlg', formId: 'signupForm' }}) %>
+<div id="<%=loginModalWrapperId%>"><%-partial("../partials/loginDlg.ejs") %></div>
+<div id="<%=signupModalWrapperId%>"><%-partial("../partials/signupDlg.ejs") %></div>
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -40,14 +45,12 @@
             }).always(function(){ $('body').unmask();} );
         });
 
-        $('#test').on('show.bs.modal', function (e) {
-            var form = $(e.currentTarget).find('form');
-            form[0].clear();
+        $('#<%=loginId%>').bind('click touchstart', function(){
+            $('#<%=loginModalWrapperId%>').find('.modal').modal();
         });
 
-        $('#test').on('shown.bs.modal', function (e) {
-            var form = $(e.currentTarget).find('form');
-            form[0].getEmailField().focus();
+        $('#<%=signupId%>').bind('click touchstart', function(){
+            $('#<%=signupModalWrapperId%>').find('.modal').modal();
         });
     })
 </script>
