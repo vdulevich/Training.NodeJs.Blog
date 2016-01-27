@@ -15,18 +15,16 @@
             <li><a href="/profile">Profile</a></li>
             <% } %>
         </ul>
-
-            <div class="navbar-right navbar-text">
-                <% if(user) { %>
-                    <span class="collapse">Welcome <strong>'<%=user.name%>'</strong></span>
-                    <a id='<%=logoutId%>' class="navbar-link">Logout</a>
-                <% } else { %>
-                    <a class="navbar-link" type="button" data-toggle="modal" data-target="#loginDlg">Login</a>
-                    <span>or</span>
-                    <a class="navbar-link" type="button" data-toggle="modal" data-target="#signupDlg">Sign up</a>
-                <% } %>
-            </div>
-
+        <div class="navbar-right navbar-text">
+            <% if(user) { %>
+                <span class="collapse">Welcome <strong>'<%=user.name%>'</strong></span>
+                <a id='<%=logoutId%>' class="navbar-link">Logout</a>
+            <% } else { %>
+                <a class="navbar-link" type="button" data-toggle="modal" data-target="#loginDlg">Login</a>
+                <span>or</span>
+                <a class="navbar-link" type="button" data-toggle="modal" data-target="#signupDlg">Sign up</a>
+            <% } %>
+        </div>
     </nav>
 </div>
 
@@ -35,7 +33,7 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
-        $('#<%=logoutId%>').on('click', function(){
+        $('#<%=logoutId%>').bind('touchstart', function(){
             $('body').mask('Loading...');
             $.post('/logout', function() {
                 window.location = '/';

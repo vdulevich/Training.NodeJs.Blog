@@ -17,7 +17,10 @@
             </div>
             <div class="ch-article-list-edit">
                 <span class="glyphicon glyphicon-edit"></span>
-                <span class="glyphicon glyphicon-trash"></span>
+                <span class="glyphicon glyphicon-trash"
+                      data-text="Do you really want to delete that article?"
+                      data-confirm-button="Yes I am"
+                      data-cancel-button="No"></span>
             </div>
         </a>
     </div>
@@ -73,8 +76,8 @@
                 });
             }
 
-            function onDelete(){
-                var row = $(event.target).closest('a[articleId]'),
+            function onDelete(button){
+                var row = button.closest('a[articleId]'),
                         id = row.attr('articleId');
                 articlesPanel.mask('Loading...');
                 $.ajax('/article/delete', {
@@ -91,8 +94,9 @@
             function initHandlers(element) {
                 var articleEdit = element.find('.glyphicon-edit'),
                     articleDelete = element.find('.glyphicon-trash');
+
                 articleEdit.on('click', onEdit);
-                articleDelete.on('click', onDelete);
+                articleDelete.confirm({ confirm: onDelete });
             };
 
             initHandlers(articlesPanel);
