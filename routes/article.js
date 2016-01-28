@@ -5,6 +5,15 @@ var router = express.Router();
 var Article = require('models/article');
 var User = require('models/user');
 
+router.get('/:id', function(req, res, next){
+    Article.findById(req.params.id, function(err, article){
+        if(err) return next(err);
+        console.log(article);
+        console.log(req.body.id)
+        res.render('article', article);
+    })
+});
+
 router.post('/create', function(req, res, next){
     Article.create(
         req.body.title,
@@ -59,10 +68,13 @@ router.post('/findByLessThenDate', function(req, res, next){
             console.log(articles);
             res.json(articles.map(function(article){
                 return {
+                    id: article._id,
                     title: article.title,
                     content: article.content.substring(0, 200),
                     author: article._user._profile.fullName,
                     userId: article._user._id,
+                    readonly: article._user._id != req.user._id,
+                    rating: article.rating,
                     photo: '',
                 }
             }));
@@ -72,7 +84,13 @@ router.post('/findByLessThenDate', function(req, res, next){
 router.post('/findByUser', function(req, res, next){
     Article.find({ _user: req.body.id || req.user }, function(err, articles){
         if(err) return next(err);
-        res.json(articles);
+        res.json(articles.map(function(article){
+            return {
+                _id: article._id,
+                title: article.title,
+                content: article.content.substring(0, 200)
+            }
+        }));
     })
 });
 

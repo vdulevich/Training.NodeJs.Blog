@@ -10,20 +10,23 @@
         </div>
     </div>
     <div id="<%=articlesListItemTemplateId%>" type="text/x-jquery-tmpl" class="hidden">
-        <a class="list-group-item">
+        <div class="list-group-item">
             <div class="content-col">
-                <h4 class="list-group-item-heading">${title}</h4>
+                <span>
+                    <strong class="list-group-item-heading">${title}</strong>&nbsp;&nbsp;
+                    <a href="/article/${_id}">view article</a>
+                </span>
                 <p class="list-group-item-text">${content}</p>
             </div>
             <div class="edit-col">
-                <span class="glyphicon glyphicon-edit"></span>
-                <span class="glyphicon glyphicon-trash"
+                <a class="glyphicon glyphicon-edit"></a>
+                <a class="glyphicon glyphicon-trash"
                   data-confirm-button-class="btn-success"
                   data-text="Do you really want to delete that article?"
                   data-confirm-button="Yes I am"
-                  data-cancel-button="No"></span>
+                  data-cancel-button="No"></a>
             </div>
-        </a>
+        </div>
     </div>
     <script type="text/javascript">
         function initArticleList(){
@@ -50,7 +53,8 @@
             }
 
             function onEdit(){
-                var item = $.tmplItem($(event.target).closest('a'));
+                var item = $.tmplItem($(event.target).closest('.list-group-item'));
+
                 articlesPanel.mask('Loading...');
                 $.ajax('/article/getEditDlg', {
                     type: "POST",
@@ -76,7 +80,7 @@
             }
 
             function onDelete(button){
-                var item = $.tmplItem(button.closest('a'));
+                var item = $.tmplItem(button.closest('.list-group-item'));
 
                 articlesPanel.mask('Loading...');
                 $.ajax('/article/delete', {

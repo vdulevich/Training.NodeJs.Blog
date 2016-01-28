@@ -17,6 +17,10 @@ var schema = mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    rating: {
+        type: Number,
+        default: 0
+    },
     _user: {
         type: mongoose.Schema.ObjectId,
         ref: 'User',
@@ -26,7 +30,7 @@ var schema = mongoose.Schema({
 
 schema.static('create', function(title, content, userId, callback) {
     var Article = mongoose.models.Article;
-    (new Article({ title: title, content: content, _user: userId })).save(callback);
+    (new Article({ title: title, content: content, _user: userId, rating:3 })).save(callback);
 });
 
 if(mongoose.models.Article){

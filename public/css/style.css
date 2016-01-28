@@ -115,7 +115,6 @@ a:hover {
 
 .ch-top-navbar {
   background-image:url("../images/header-bg.png");
-  /*border-radius: 6px;*/
   margin: 0px;
   border: none;
   overflow: hidden;
@@ -162,7 +161,7 @@ a:hover {
   padding: 10px;
 }
 
-.ch-profile-actiles .list-group-item > div{
+.ch-profile-actiles .list-group-item > div {
   display: table-cell;
   vertical-align: middle;
 }
@@ -181,11 +180,11 @@ a:hover {
   text-align: right;
 }
 
-.ch-profile-actiles .edit-col span {
-  padding-right: 5px ;
+.ch-profile-actiles .edit-col .glyphicon {
+  padding-right: 10px ;
 }
 
-.ch-profile-actiles .edit-col span:last-child{
+.ch-profile-actiles .edit-col .glyphicon:last-child{
   padding-right: 0px;
 }
 
@@ -193,6 +192,7 @@ a:hover {
 
 .ch-feed-actiles .list-group-item {
   display: table;
+  table-layout: fixed;
   width: 100%;
   position: relative;
   padding: 10px;
@@ -207,13 +207,39 @@ a:hover {
   width: 100%;
 }
 
+.ch-feed-actiles .content-col p {
+  height: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom:20px;
+}
+
+.ch-feed-actiles .content-col a{
+  padding-left: 10px;
+}
+
 .ch-feed-actiles .photo-col {
   padding-right: 10px;
+  width: 115px;
 }
 
-.ch-feed-actiles .author-label{
+.ch-feed-actiles .photo-col img{
+  width: 100%;
+}
+
+.ch-feed-actiles .author-rate{
   position: absolute;
   right: 10px;
+  bottom: 10px;
 }
 
+.br-theme-bars-movie .br-widget a {
+  display: block;
+  width: 20px;
+  height: 5px;
+}
+
+.br-theme-bars-movie .br-widget .br-current-rating {
+  display: none;
+}
 

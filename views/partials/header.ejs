@@ -22,7 +22,8 @@
         </ul>
         <div class="navbar-right navbar-text">
             <% if(user) { %>
-                <span class="collapse">Welcome <strong>'<%=user.name%>'</strong></span>
+                <span>Welcome <strong>'<%=user.email %>'</strong></span>
+                <span class="nav-divider"/>
                 <a id='<%=logoutId%>' class="navbar-link"
                    data-text="Do you really want to logout?"
                    data-confirm-button-class="btn-success"
