@@ -56,10 +56,11 @@ router.post('/findByLessThenDate', function(req, res, next){
         })
         .exec(function(err, articles){
             if(err) return next(err);
+            console.log(articles);
             res.json(articles.map(function(article){
                 return {
                     title: article.title,
-                    content: article.content.substring(0,200),
+                    content: article.content.substring(0, 200),
                     author: article._user._profile.fullName,
                     userId: article._user._id,
                     photo: '',
