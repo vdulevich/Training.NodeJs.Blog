@@ -1,0 +1,68 @@
+<%var articlesFeedPanelId = 'articlesList', articlesFeedItemTemplateId = 'articlesListItemTemplate'; %>
+
+<div id="<%=articlesFeedPanelId%>" >
+    <div class="ch-article-panel panel panel-default">
+        <div class="panel-heading">
+            Articles
+        </div>
+        <div class="ch-feed-actiles list-group">
+        </div>
+        <input class="btn btn-lg btn-default btn-block" value="Load More" type="button"/>
+    </div>
+    <div type="text/x-jquery-tmpl" class="hidden">
+        <div class="list-group-item">
+            <div class="photo-col">
+                <img src="images/no-photo.png" height="100px" width="100px"/>
+            </div>
+            <div class="content-col">
+                <h4 class="list-group-item-heading">${title}</h4>
+                <p class="list-group-item-text">${content}</p>
+            </div>
+            <div class="author-label">Created by <a href="profile/${userId}"><strong>${author}</strong></a></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var articlesFeedStartDate = Date.now();
+
+        function initArticleFeed(){
+            var articlesPanel = $('#<%=articlesFeedPanelId%>'),
+                articlesList = articlesPanel.find('.list-group'),
+                articleLoadBtn = articlesPanel.find('.btn');
+
+            articleLoadBtn.on('click', function(){
+                bindArticleFeed(articlesList.find('.list-group-item').length);
+            });
+        }
+
+        function bindArticleFeed(startIndex){
+            var articlesPanel = $('#<%=articlesFeedPanelId%>'),
+                articlesList = articlesPanel.find('.list-group'),
+                articleLoadBtn = articlesPanel.find('.btn'),
+                articlesTpl = articlesPanel.find('[type="text/x-jquery-tmpl"]');
+
+            $.ajax('/article/findByLessThenDate', {
+                type: "POST",
+                data: {
+                    startdate: articlesFeedStartDate,
+                    startIndex: startIndex || 0,
+                    pageSize: 5
+                },
+                statusCode: {
+                    200: function (data) {
+                        data.forEach(function(item){
+                            articlesTpl.tmpl(item).appendTo(articlesList);
+                        });
+                        if(data.length == 0){
+                            articleLoadBtn.prop("disabled",true);
+                        }
+                    }
+                }
+            }).always(function () {
+                articlesList.unmask();
+            })
+        };
+        initArticleFeed();
+        bindArticleFeed();
+
+    </script>
+</div>

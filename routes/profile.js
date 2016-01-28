@@ -7,11 +7,12 @@ var User = require('models/user');
 var Article = require('models/article');
 
 router.get('/', function(req, res, next){
-    renderProfile(req.user,res, next);
+    renderProfile(req.user._id, res, next);
 });
 
 router.get('/:id', function(req, res, next){
     renderProfile(req.params.id, res, next);
+    console.log('By Id')
 });
 
 function renderProfile(userId, res, callback){
@@ -28,16 +29,11 @@ function renderProfile(userId, res, callback){
                 result.user = user;
                 callback(null, result);
             })
-        },
-        function(result, callback){
-            Article.find({ _user: userId}, function(err, articles){
-                if(err) return callback(err);
-                result.articles = articles;
-                callback(null, result);
-            })
         }
     ],function(err, result){
         if(err) return callback(err);
+        result.userId = userId;
+        result.readonly = res.locals.user._id.toString() != userId
         res.render('profile', result);
     })
 }

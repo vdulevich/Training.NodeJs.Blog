@@ -20,7 +20,7 @@ a:hover {
   color: white;
 }
 
-.error{
+.error {
   color: #b92c28;
 }
 
@@ -47,6 +47,8 @@ a:hover {
   }
 }
 
+/*-----Layout page-----*/
+
 .ch-container {
   padding-right: 0px;
   padding-left: 0px;
@@ -65,7 +67,7 @@ a:hover {
   content: '';
   display: block;
   border-radius: 6px 6px 0px 0px;
-  background-color: lavender;
+  background-color:#f9f9f9;
   position: absolute;
   top: 90px;
   bottom: 0px;
@@ -80,7 +82,7 @@ a:hover {
 }
 
 .ch-header {
-  padding: 20px 0px 20px 0px;
+  /*padding: 20px 0px 20px 0px;*/
 }
 
 @media only screen and (max-width: 532px) {
@@ -90,45 +92,30 @@ a:hover {
 }
 
 .ch-center {
-  border-radius: 6px 6px 0px 0px;
-  background-color: lavender;
-  padding: 15px;
+  /*border-radius: 6px 6px 0px 0px;*/
+  padding: 10px;
+  background-color:#f9f9f9;
 }
 
 .ch-footer {
-  background-color:darkslategray;
-  border-radius: 0px 0px 6px 6px;
+  background-color:#eea236;
+  /*border-radius: 0px 0px 6px 6px;*/
   height: 50px;
   color:white;
   padding: 10px;
   text-align: center;
 }
 
-@media only screen and (max-width: 532px) {
+/*@media only screen and (max-width: 532px) {
   .ch-footer {
     border-radius: 0px;
   }
-}
+}*/
 
-.ch-chat-messages-list {
-  margin-top: 20px;
-  margin-bottom: 0px;
-  overflow: auto;
-  background-color: #f7f7f7;
-  min-height:100px;
-}
-
-.ch-chat-messages-list .list-group-item{
-  border-radius: 0px;
-}
-
-.ch-fit-container{
-  height: 100%;
-}
 
 .ch-top-navbar {
   background-image:url("../images/header-bg.png");
-  border-radius: 6px;
+  /*border-radius: 6px;*/
   margin: 0px;
   border: none;
   overflow: hidden;
@@ -154,52 +141,79 @@ a:hover {
   }
 }
 
-.ch-article-panel{
-
-}
-
-.ch-article-list .list-group-item {
-  display: table;
-  table-layout: fixed;
-  width: 100%;
-}
-
-.ch-article-list .list-group-item > div{
-  display: table-cell;
-}
-
-.ch-article-list .list-group-list-content{
-  width: 100%;
-}
-
-.ch-article-list .list-group-list-content p {
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-
-.ch-article-list .ch-article-list-edit {
-  vertical-align: middle;
-}
-
-.ch-article-list .list-group-item-heading {
-  white-space: nowrap;
-}
-
-.ch-article-list .list-group-item-text {
-  white-space: nowrap;
-}
-.ch-article-list .ch-article-list-edit{
-  width: 45px;
-}
-.ch-article-list .ch-article-list-edit span {
- padding-right: 5px ;
-}
+/*-----Profile page-----*/
 
 .ch-profileinfo-panel .form-group .form-control{
   white-space: nowrap;
   max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.ch-article-panel.ch-article-panel--readonly .glyphicon-plus,
+.ch-article-panel.ch-article-panel--readonly .edit-col{
+  display: none;
+}
+
+.ch-profile-actiles .list-group-item {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  padding: 10px;
+}
+
+.ch-profile-actiles .list-group-item > div{
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.ch-profile-actiles .content-col {
+  width: 100%;
+}
+
+.ch-profile-actiles .content-col p {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.ch-profile-actiles .edit-col{
+  width: 50px;
+  text-align: right;
+}
+
+.ch-profile-actiles .edit-col span {
+  padding-right: 5px ;
+}
+
+.ch-profile-actiles .edit-col span:last-child{
+  padding-right: 0px;
+}
+
+/*-----Home page-----*/
+
+.ch-feed-actiles .list-group-item {
+  display: table;
+  width: 100%;
+  position: relative;
+  padding: 10px;
+}
+
+.ch-feed-actiles .list-group-item > div{
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.ch-feed-actiles .content-col {
+  width: 100%;
+}
+
+.ch-feed-actiles .photo-col {
+  padding-right: 10px;
+}
+
+.ch-feed-actiles .author-label{
+  position: absolute;
+  right: 10px;
 }
 
 

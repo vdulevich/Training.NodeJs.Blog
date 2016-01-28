@@ -1,26 +1,27 @@
 <%var articlesPanelId = 'articlesList', articlesListItemTemplateId = 'articlesListItemTemplate'; %>
 
-<div id="<%=articlesPanelId%>" >
-    <div class="ch-article-panel panel panel-default">
+<div id="<%=articlesPanelId%>">
+    <div class="ch-article-panel panel panel-default <%=readonly?'ch-article-panel--readonly':''%>">
         <div class="panel-heading">
             Articles
-            <a href="#"><span class="pull-right glyphicon glyphicon-plus"></span></a>
+            <a class="pull-right glyphicon glyphicon-plus"></a>
         </div>
-        <div class="ch-article-list list-group">
+        <div class="ch-profile-actiles list-group">
         </div>
     </div>
     <div id="<%=articlesListItemTemplateId%>" type="text/x-jquery-tmpl" class="hidden">
-        <a class="ch-list-group-item list-group-item" articleId="${_id}">
-            <div class="list-group-list-content">
+        <a class="list-group-item">
+            <div class="content-col">
                 <h4 class="list-group-item-heading">${title}</h4>
                 <p class="list-group-item-text">${content}</p>
             </div>
-            <div class="ch-article-list-edit">
+            <div class="edit-col">
                 <span class="glyphicon glyphicon-edit"></span>
                 <span class="glyphicon glyphicon-trash"
-                      data-text="Do you really want to delete that article?"
-                      data-confirm-button="Yes I am"
-                      data-cancel-button="No"></span>
+                  data-confirm-button-class="btn-success"
+                  data-text="Do you really want to delete that article?"
+                  data-confirm-button="Yes I am"
+                  data-cancel-button="No"></span>
             </div>
         </a>
     </div>
@@ -28,7 +29,7 @@
         function initArticleList(){
             var articlesPanel = $('#<%=articlesPanelId%>'),
                 articlesTpl = $('#<%=articlesListItemTemplateId%>'),
-                articlesList = $('#<%=articlesPanelId%>').find('.ch-article-list');
+                articlesList = articlesPanel.find('.list-group');
 
             articlesPanel.find('.glyphicon-plus').on('click', onAdd);
 
@@ -49,26 +50,24 @@
             }
 
             function onEdit(){
-                var row = $(event.target).closest('a[articleId]'),
-                        id = row.attr('articleId');
+                var item = $.tmplItem($(event.target).closest('a'));
                 articlesPanel.mask('Loading...');
                 $.ajax('/article/getEditDlg', {
                     type: "POST",
-                    data: { id: id },
+                    data: { id: item.data._id },
                     statusCode: {
                         200: function (data) {
                             $(data)
-                                .appendTo('body')
-                                .modal()
-                                .on('hidden.bs.modal', function () {
-                                    $(this).remove();
-                                })
-                                .on('articleSaved', function(event, data){
-                                    var item = $.tmplItem(row);
-                                    item.data = data;
-                                    item.update();
-                                    initHandlers($(item.nodes));
-                                });
+                            .appendTo('body')
+                            .modal()
+                            .on('hidden.bs.modal', function () {
+                                $(this).remove();
+                            })
+                            .on('articleSaved', function(event, data){
+                                item.data = data;
+                                item.update();
+                                initHandlers($(item.nodes));
+                            });
                         }
                     }
                 }).always(function () {
@@ -77,14 +76,14 @@
             }
 
             function onDelete(button){
-                var row = button.closest('a[articleId]'),
-                        id = row.attr('articleId');
+                var item = $.tmplItem(button.closest('a'));
+
                 articlesPanel.mask('Loading...');
                 $.ajax('/article/delete', {
                     type: "POST",
-                    data: { id: id },
+                    data: { id: item.data._id },
                     statusCode: {
-                        200: function(){ row.remove(); }
+                        200: function(){ $(item.nodes).remove(); }
                     }
                 }).always(function () {
                     articlesPanel.unmask();
@@ -103,11 +102,11 @@
         }
 
         (function bindArticleList(){
-            var articlesList = $('#<%=articlesPanelId%>').find('.ch-article-list');
+            var articlesList = $('#<%=articlesPanelId%>').find('.list-group');
             var articlesTpl = $('#<%=articlesListItemTemplateId%>');
-            $.ajax('/article/find', {
+            $.ajax('/article/findByUser', {
                 type: "POST",
-                data: { },
+                data: { id : '<%=userId%>' },
                 statusCode: {
                     200: function (data) {
                         data.forEach(function(item){

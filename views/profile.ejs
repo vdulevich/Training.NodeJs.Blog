@@ -1,24 +1,20 @@
 <% layout('./layout/page') -%>
 
 
-<div class="panel panel-default ch-profileinfo-panel">
+<div class="panel panel-default ch-profileinfo-panel <%=readonly?'ch-profileinfo-panel--readonly':''%>">
     <div class="panel-heading">Profile info</div>
     <div class="panel-body">
         <div class="form-inline">
         <div class="input-group form-group">
             <span class="input-group-addon">Full Name: </span>
-            <span type="text" class="form-control">
-                <%= [profile.firstName, profile.lastName].join(' ') %>
-            </span>
+            <input type="text" class="form-control" value="<%=profile.fullName%>" <%=readonly ? 'disabled': ''%>/>
         </div>
         <div class="input-group form-group">
             <span class="input-group-addon">Email: </span>
-            <span type="text" class="form-control">
-                <%=user.email%>
-            </span>
+            <input type="text" class="form-control" value="<%=user.email%>" <%=readonly ? 'disabled': ''%>/>
         </div>
         </div>
     </div>
 </div>
 
-<%-partial("partials/articlesList.ejs") %>
+<%-partial("partials/articlesListProfile.ejs", {userId: userId, readonly: readonly}) %>

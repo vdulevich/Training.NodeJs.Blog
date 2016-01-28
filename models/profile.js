@@ -22,6 +22,11 @@ var schema = mongoose.Schema({
     }
 });
 
+schema.virtual('fullName')
+    .get(function(){
+        return [this.firstName, this.lastName].join(' ');
+    });
+
 schema.static('save', function(profileData, callback) {
     var Profile = mongoose.models.Profile;
     (new Profile(profileData)).save(callback)
@@ -44,7 +49,17 @@ schema.static('create', function(firstName, lastName, email, password, callback)
             });
         },
         function(user, callback){
-            Profile.save({ firstName: firstName, lastName: lastName, _user: user._id}, callback);
+            Profile.save({ firstName: firstName, lastName: lastName, _user: user._id}, function(err, profile){
+                if(err) return callback(err);
+                callback(null, user, profile);
+            });
+        },
+        function(user, profile, callback){
+            user._profile = profile._id;
+            user.save(function(err){
+                if(err) return callback(err);
+                callback(null, profile);
+            });
         }
     ],callback);
 });

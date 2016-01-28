@@ -21,6 +21,10 @@ var schema = mongoose.Schema({
     created: {
         type: Date,
         default: Date.now()
+    },
+    _profile: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Profile'
     }
 });
 
