@@ -5,8 +5,7 @@
     <div class="list-group ch-feed-actiles-list">
         <div class="ch-data-empty-message">No articles found.</div>
     </div>
-    <input class="btn btn-lg btn-default btn-block btn-link" value="Load More" type="button"/>
-
+    <input class="btn btn-default btn-block btn-link" value="Load More" type="button"/>
     <script type="text/html" class="hidden" id="<%=articlesFeedItemTemplateId%>">
         <div class="list-group-item" data-readonly="${readonly}">
             <div class="list-group-item-heading row">
@@ -98,7 +97,7 @@
                         } else {
                             articleLoadBtn.prop("disabled", true);
                             if(startIndex == 0){
-                                articlesList.toggleClass('ch-data-empty');
+                                articlesList.addClass('ch-data-empty');
                             }
                         }
                     }

@@ -5,6 +5,7 @@
     <div class="panel panel-default">
         <div class="panel-heading">Comments</div>
         <div class="ch-comments-list list-group">
+            <div class="ch-data-empty-message">No comments found.</div>
         </div>
         <% if(user) { %>
         <div class="panel-footer">
@@ -32,61 +33,61 @@
     </script>
 
     <script type="text/javascript">
-        (function initCommentsList(){
-            var commentsContainer = $('#<%=commentsContainerId%>'),
-                commentsItemTpl = $('#<%=commentItemTmplId%>'),
+        (function() {
+            var commentsContainer = $('#<%= commentsContainerId %>'),
+                commentsItemTpl = $('#<%= commentItemTmplId %>'),
                 commentsList = commentsContainer.find('.list-group'),
                 commentAddBtn = commentsContainer.find('.btn-success'),
                 commentsForm = commentsContainer.find('form');
 
-            commentAddBtn.on('click', function(){
-                commentsForm.submit();
-            });
-
-            commentsForm.validate({
-                rules: {
-                    content: {
-                        required: true
+            function initHandlers() {
+                commentAddBtn.on('click', function () {
+                    commentsForm.submit();
+                });
+                commentsForm.validate({
+                    rules: {
+                        content: { required: true }
+                    },
+                    highlight: function (element) {
+                        $(element).closest('.form-group').addClass('has-error');
+                    },
+                    unhighlight: function (element) {
+                        $(element).closest('.form-group').removeClass('has-error');
+                    },
+                    submitHandler: function (form) {
+                        $(form).mask('Loading...');
+                        $.ajax('/comment/create', {
+                            type: "POST",
+                            data: $(form).serialize(),
+                            success: function (data) {
+                                commentsItemTpl.tmpl(data).appendTo(commentsList);
+                                commentsList.removeClass('ch-data-empty');
+                            }
+                        }).always(function () {
+                            $(form).unmask();
+                        });
                     }
-                },
-                highlight: function(element) {
-                    $(element).closest('.form-group').addClass('has-error');
-                },
-                unhighlight: function(element) {
-                    $(element).closest('.form-group').removeClass('has-error');
-                },
-                submitHandler:function(form){
-                    $(form).mask('Loading...');
-                    $.ajax('/comment/create', {
-                        type: "POST",
-                        data: $(form).serialize(),
-                        statusCode: {
-                            200: function (data) { commentsItemTpl.tmpl(data).appendTo(commentsList); },
-                            403: function (response) { }
-                        }
-                    }).always(function () {
-                        $(form).unmask();
-                    });
-                }
-            });
-        })();
+                });
+            }
 
-        (function bindCommentsList(){
-            var commentsList = $('#<%=commentsContainerId%>').find('.list-group');
-            var commentsItemTpl = $('#<%=commentItemTmplId%>');
-
-            commentsList.mask('Loading...');
-            $.ajax('/comment/findByArticleId', {
-                type: "POST",
-                data: { _id : '<%=article._id%>' },
-                statusCode: {
-                    200: function (data) {
+            function databind() {
+                commentsList.mask('Loading...');
+                $.ajax('/comment/findByArticleId', {
+                    type: "POST",
+                    data: {_id: '<%= article._id %>'},
+                    success: function (data) {
                         commentsItemTpl.tmpl(data).appendTo(commentsList);
+                        if(data.length == 0){
+                            commentsList.addClass('ch-data-empty');
+                        }
                     }
-                }
-            }).always(function () {
-                commentsList.unmask();
-            })
+                }).always(function () {
+                    commentsList.unmask();
+                })
+            };
+
+            initHandlers();
+            databind();
         })();
     </script>
 </div>

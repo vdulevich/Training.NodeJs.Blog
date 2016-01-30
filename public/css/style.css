@@ -145,7 +145,7 @@ a:hover {
 }
 
 .panel-default > .panel-heading{
-  background-color: #f7f7f7;
+  background-color: #eee;
 }
 
 /*-----Generic styles----*/
@@ -157,10 +157,11 @@ a:hover {
 .ch-data-empty .ch-data-empty-message{
   display: block;
   width: 100%;
-  text-align: center;
+  /*text-align: center;*/
   height: 50px;
-  line-height: 50px;
-  background-color: #eee;
+  /*line-height: 50px;*/
+  padding: 15px;
+  /*background-color: #eee;*/
 }
 
 /*-----Profile page-----*/
@@ -221,10 +222,14 @@ a:hover {
 
 /*-----Feed article list-----*/
 
+.ch-feed-actiles-list{
+  margin-bottom: 0px;
+}
+
 .ch-feed-actiles-list .list-group-item{
   margin-bottom: 10px;
   border: none;
-  background-color: #f7f7f7;
+  background-color: #eee;
 }
 
 .ch-feed-actiles-list .list-group-item-heading{
