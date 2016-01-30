@@ -6,6 +6,7 @@
         <div class="panel-heading">Comments</div>
         <div class="ch-comments-list list-group">
         </div>
+        <% if(user) { %>
         <div class="panel-footer">
             <form accept-charset="UTF-8" role="form">
                 <div class="form-group">
@@ -15,6 +16,7 @@
             </form>
             <input class="btn btn-success" value="Leave comment" type="button">
         </div>
+        <% } %>
     </div>
 
     <script id="<%=commentItemTmplId%>" type="text/html">

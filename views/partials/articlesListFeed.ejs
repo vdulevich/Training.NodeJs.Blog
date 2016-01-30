@@ -63,11 +63,12 @@
                         .find('select')
                         .barrating({
                             theme: 'bars-movie',
-                            readonly: false,
+                            readonly: '<%=!user%>',
                             onSelect: function(value, text, event) {
                                 if (typeof(event) !== 'undefined') {
-                                    var id = $.tmplItem($(event.target).closest('.list-group-item')).data.id;
-                                    //articleContainer.mask('Loading...');
+                                    var item = $(event.target).closest('.list-group-item');
+                                        id = $.tmplItem(item).data.id;
+                                    item.mask('Loading...');
                                     $.ajax('/article/setUserRate', {
                                         type: "POST",
                                         data: {rate: value, id: id },
@@ -79,7 +80,7 @@
                                             }
                                         }
                                     }).always(function () {
-                                        //articleContainer.unmask();
+                                        item.unmask();
                                     });
                                 }
                             }

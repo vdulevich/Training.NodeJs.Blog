@@ -1,10 +1,12 @@
 var mongoose = require('lib/mongoose');
 var async = require('async');
 var express = require('express');
+var checkAuth = require('middleware/checkAuth');
 var router = express.Router();
 var Comment = require('models/comment');
 
-router.post('/create', function(req, res, next){
+
+router.post('/create', checkAuth, function(req, res, next){
     var data = req.body;
     data._user = req.user._id;
     async.waterfall([

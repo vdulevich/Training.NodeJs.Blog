@@ -1,10 +1,11 @@
 var mongoose = require('lib/mongoose');
 var async = require('async');
 var express = require('express');
+var checkAuth = require('middleware/checkAuth');
 var router = express.Router();
 var Profile = require('models/profile');
 var User = require('models/user');
-var Article = require('models/article');
+
 
 router.get('/', function(req, res, next){
     renderProfile(req.user._id, res, next);
@@ -14,7 +15,7 @@ router.get('/:id', function(req, res, next){
     renderProfile(req.params.id, res, next);
 });
 
-router.post('/update', function(req, res, next){
+router.post('/update', checkAuth, function(req, res, next){
     var Profile = mongoose.models.Profile;
     Profile.findOneAndUpdate({_id: req.body._id}, req.body, {new: true},
         function(err, profile, resp) {

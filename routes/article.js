@@ -1,9 +1,12 @@
 var mongoose = require('lib/mongoose');
 var async = require('async');
 var express = require('express');
+var errors = require('errors');
+var checkAuth = require('middleware/checkAuth');
 var router = express.Router();
 var Article = require('models/article');
 var User = require('models/user');
+
 
 router.get('/:id', function(req, res, next){
     Article.findById(req.params.id, function(err, article){
@@ -12,7 +15,7 @@ router.get('/:id', function(req, res, next){
     })
 });
 
-router.post('/create', function(req, res, next){
+router.post('/create', checkAuth, function(req, res, next){
     var data = req.body;
     data._user = req.user._id;
     (new Article(data)).save(
@@ -22,7 +25,7 @@ router.post('/create', function(req, res, next){
     });
 });
 
-router.post('/update', function(req, res, next){
+router.post('/update', checkAuth, function(req, res, next){
     Article.findOneAndUpdate(
         { _id: req.body.id },
         { $set:{ title: req.body.title, content: req.body.content } },
@@ -33,7 +36,7 @@ router.post('/update', function(req, res, next){
         });
 });
 
-router.post('/delete', function(req, res, next){
+router.post('/delete', checkAuth, function(req, res, next){
     Article.remove({_id: req.body.id, _user: req.user },
         function(err) {
             if(err) return next(err);
@@ -89,7 +92,8 @@ router.post('/findByUser', function(req, res, next){
     })
 });
 
-router.post('/setUserRate', function(req, res, next){
+router.post('/setUserRate', checkAuth, function(req, res, next){
+    if(!req.user) next(new errors.HttpError(403));
     Article.findById(req.body.id, function(err, article){
         if(err) return next(err);
         article.addOrUpdateUserRate(req.user._id, parseInt(req.body.rate));
