@@ -2,6 +2,15 @@ var mongoose = require("lib/mongoose");
 var async = require('async');
 var AuthError = require('errors').AuthError;
 
+var schemaOptions = {
+    toObject: {
+        virtuals: true
+    }
+    ,toJSON: {
+        virtuals: true
+    }
+};
+
 var schema = mongoose.Schema({
     firstName:{
         type: String,
@@ -20,24 +29,19 @@ var schema = mongoose.Schema({
         ref: 'User',
         required:true
     }
-});
+},schemaOptions);
 
 schema.virtual('fullName')
     .get(function(){
         return [this.firstName, this.lastName].join(' ');
     });
 
-schema.static('save', function(profileData, callback) {
-    var Profile = mongoose.models.Profile;
-    (new Profile(profileData)).save(callback)
-});
-
-schema.static('create', function(firstName, lastName, email, password, callback) {
+schema.static('signup', function(data, callback) {
     var User = mongoose.models.User,
         Profile = mongoose.models.Profile;
     async.waterfall([
         function(callback){
-            User.save({ email: email, password: password }, function(err, user){
+            User.save(data, function(err, user){
                 if(err){
                     if(err.code == 11000){
                         return callback(new AuthError("User with such name already exists"))
@@ -45,11 +49,12 @@ schema.static('create', function(firstName, lastName, email, password, callback)
                         return callback(err);
                     }
                 }
-                callback(null, user);
+                data._user = user._id;
+                callback(null, user, data);
             });
         },
-        function(user, callback){
-            Profile.save({ firstName: firstName, lastName: lastName, _user: user._id}, function(err, profile){
+        function(user, data, callback){
+            (new Profile(data)).save(function(err, profile){
                 if(err) return callback(err);
                 callback(null, user, profile);
             });

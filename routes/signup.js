@@ -7,11 +7,7 @@ var User = require('models/user');
 
 
 router.post('/', function(req, res, next){
-    Profile.create(
-            req.body.firstName,
-            req.body.lastName,
-            req.body.email,
-            req.body.password,
+    Profile.signup(req.body,
         function(err, profile) {
             if(err) {
                 if (err instanceof errors.AuthError) {

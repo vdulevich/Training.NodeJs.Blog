@@ -1,5 +1,58 @@
 <% layout('./layout/page') -%>
 
+<%var articleContainerId = 'articleContainer', articleRatingId = 'articleRating', articleRatingTmplId = 'articleRatingTmpl'%>
 
-<h4><%-title%></h4>
-<div><%-content%></div>
+<div id="<%=articleContainerId%>" class="panel panel-default ch-article-panel">
+    <div class="panel-heading ">
+        <strong><%-article.title%></strong>
+        <div id="<%=articleRatingId%>" class="ch-article-raiting"></div>
+    </div>
+    <div class="panel-body">
+        <div><%-article.content%></div>
+    </div>
+    <script id="<%=articleRatingTmplId%>" type="text/html">
+        <select>
+            {{each [0,1,2,3,4,5,6,7,8,9]}}
+            <option value="${$value}" ${$item.isSelected(rating, $value)}>${$value}</option>
+            {{/each}}
+        </select>
+    </script>
+</div>
+
+<%-partial("partials/articleComments.ejs", { article: article }) %>
+
+<script type="text/javascript">
+    (function initArticlePage(){
+        var articleContainer = $('#<%=articleContainerId%>'),
+            articleRating = $('#<%=articleRatingId%>'),
+            articleRatingTmpl = $('#<%=articleRatingTmplId%>');
+
+        var articleRatingPlg = articleRating.html(articleRatingTmpl.tmpl({rating: '<%=article.rating%>'}, {
+            isSelected:function(rating, index){
+                return rating == index ? 'selected' : '';
+            }
+        }))
+        .find('select')
+        .barrating({
+            theme: 'bars-movie',
+            onSelect: function(value, text, event) {
+                if (typeof(event) !== 'undefined') {
+                    articleContainer.mask('Loading...');
+                    $.ajax('/article/setUserRate', {
+                        type: "POST",
+                        data: {rate: value, id: '<%= article._id %>'},
+                        statusCode: {
+                            200: function (data) {
+                                articleRatingPlg.barrating('set', data);
+                            },
+                            403: function () {
+                            }
+                        }
+                    }).always(function () {
+                        articleContainer.unmask();
+                    });
+                }
+            }
+        });
+    })();
+</script>

@@ -1,20 +1,122 @@
 <% layout('./layout/page') -%>
+<% var profileEditPnlId = 'profileEditPnl'%>
 
-
-<div class="panel panel-default ch-profileinfo-panel <%=readonly?'ch-profileinfo-panel--readonly':''%>">
-    <div class="panel-heading">Profile info</div>
-    <div class="panel-body">
-        <div class="form-inline">
-            <div class="input-group form-group">
-                <span class="input-group-addon">Full Name: </span>
-                <input type="text" class="form-control" value="<%=profile.fullName%>" <%=readonly ? 'disabled': ''%>/>
-            </div>
-            <div class="input-group form-group">
-                <span class="input-group-addon">Email: </span>
-                <input type="text" class="form-control" value="<%=user.email%>" <%=readonly ? 'disabled': ''%>/>
+<% if(!readonly) {%>
+    <div id="<%=profileEditPnlId%>" class="panel panel-default ch-profileinfo-panel">
+        <div class="panel-heading">Profile info<a class="glyphicon glyphicon-edit pull-right"></a></div>
+        <div class="panel-body">
+            <form>
+                <input type="hidden" name="_id" value="<%=profile._id%>"/>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon">Full Name: </span>
+                            <input name="fullName" type="text" class="form-control" value="<%=profile.fullName%>" disabled="disabled"/>
+                        </div>
+                        <div class="input-group form-group">
+                            <span class="input-group-addon">Email: </span>
+                            <input name="email" type="text" class="form-control" value="<%=user.email%>" disabled="disabled"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon">First Name: </span>
+                            <input type="text" name="firstName" class="form-control" value="<%=profile.firstName%>" readonly="readonly"/>
+                        </div>
+                        <div class="input-group form-group">
+                            <span class="input-group-addon">Last Name: </span>
+                            <input type="text" name="lastName" class="form-control" value="<%=profile.lastName%>" readonly="readonly"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="panel-footer text-right">
+            <input class="btn btn-success" value="Save" type="button">
+            <input class="btn btn-default" value="Cancel" type="button">
+        </div>
+    </div>
+<%} else {%>
+    <div class="panel panel-default ch-profileinfo-panel">
+        <div class="panel-heading">Profile info</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Full Name: </span>
+                        <input type="text" class="form-control" value="<%=profile.fullName%>" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="input-group">
+                        <span class="input-group-addon">Email: </span>
+                        <input type="text" class="form-control" value="<%=user.email%>" readonly="readonly"/>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+<%}%>
 
-<%-partial("partials/articlesListProfile.ejs", {userId: userId, readonly: readonly}) %>
+<%-partial("partials/articlesListProfile.ejs", { user: user, readonly: readonly}) %>
+
+<script type="text/javascript">
+    (function initProfile(){
+        var profileEditPnlId = $('#<%=profileEditPnlId%>'),
+            profileEditBtn = profileEditPnlId.find('.glyphicon-edit'),
+            profileSaveBtn = profileEditPnlId.find('.btn-success'),
+            profileCloseBtn = profileEditPnlId.find('.btn-default');
+
+        function bindForm(form, data){
+            if(data.isArray) {
+                data.forEach(function (item) {
+                    form.find(['input[name=', item.name, ']'].join('')).val(item.value);
+                });
+            }else{
+                for(var key in data){
+                    form.find(['input[name=', key, ']'].join('')).val(data[key]);
+                }
+            }
+        }
+
+        function editMode(panel, mode){
+            if(mode == "edit") {
+                panel.addClass('ch-profileinfo-panel--edit');
+                panel.find('input').removeAttr('readonly');
+
+            } else {
+                panel.removeClass('ch-profileinfo-panel--edit');
+                panel.find('input').attr('readonly', 'readonly');
+            }
+        }
+
+        profileEditBtn.on('click', function(event){
+            var panel = $(event.target).closest('.panel');
+            editMode(panel, "edit");
+            panel[0].prevValue = panel.find('form').serializeArray();
+        });
+
+        profileCloseBtn.on('click', function(event){
+            var panel = $(event.target).closest('.panel');
+            bindForm(panel, panel[0].prevValue);
+            editMode(panel, "read");
+        });
+
+        profileSaveBtn.on('click', function(){
+            var panel = $(event.target).closest('.panel');
+            panel.mask('Saving...')
+            $.ajax('/profile/update', {
+                type: "POST",
+                data: panel.find('form').serialize(),
+                statusCode: {
+                    200: function (data) {
+                        bindForm(panel, data);
+                        editMode(panel, "read");
+                    }
+                }
+            }).always(function () {
+                panel.unmask();
+            });
+        });
+    })();
+</script>

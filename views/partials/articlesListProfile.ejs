@@ -9,11 +9,11 @@
         <div class="ch-profile-actiles list-group">
         </div>
     </div>
-    <div id="<%=articlesListItemTemplateId%>" type="text/x-jquery-tmpl" class="hidden">
+    <script id="<%=articlesListItemTemplateId%>" type="text/html">
         <div class="list-group-item">
             <div class="content-col">
                 <span>
-                    <strong class="list-group-item-heading">${title}</strong>&nbsp;&nbsp;
+                    <strong class="list-group-item-heading">${title}</strong>
                     <a href="/article/${_id}">view article</a>
                 </span>
                 <p class="list-group-item-text">${content}</p>
@@ -27,7 +27,7 @@
                   data-cancel-button="No"></a>
             </div>
         </div>
-    </div>
+    </script>
     <script type="text/javascript">
         function initArticleList(){
             var articlesPanel = $('#<%=articlesPanelId%>'),
@@ -110,12 +110,10 @@
             var articlesTpl = $('#<%=articlesListItemTemplateId%>');
             $.ajax('/article/findByUser', {
                 type: "POST",
-                data: { id : '<%=userId%>' },
+                data: { id : '<%=user._id%>' },
                 statusCode: {
                     200: function (data) {
-                        data.forEach(function(item){
-                            articlesTpl.tmpl(item).appendTo(articlesList);
-                        });
+                        articlesTpl.tmpl(data).appendTo(articlesList);
                         initArticleList();
                     }
                 }

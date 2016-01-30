@@ -15,6 +15,7 @@ var logout = require('routes/logout');
 var signup = require('routes/signup');
 var profile = require('routes/profile');
 var article = require('routes/article');
+var comment = require('routes/comment');
 
 var app = express();
 
@@ -41,6 +42,8 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('middleware/sendHttpError'));
 app.use(require('middleware/loadUser'));
+app.use(require('middleware/loadTabName'));
+
 
 app.use('/', index );
 app.use('/index', index );
@@ -49,6 +52,8 @@ app.use('/logout', logout);
 app.use('/signup', signup);
 app.use('/profile', profile);
 app.use('/article', article);
+app.use('/comment', comment);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

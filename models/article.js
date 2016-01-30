@@ -1,6 +1,7 @@
 var mongoose = require("lib/mongoose");
 var errors = require('errors');
-
+var async = require('async');
+var Rate = require('models/rate');
 
 var schema = mongoose.Schema({
     title:{
@@ -17,10 +18,7 @@ var schema = mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    rating: {
-        type: Number,
-        default: 0
-    },
+    rates: [Rate],
     _user: {
         type: mongoose.Schema.ObjectId,
         ref: 'User',
@@ -28,10 +26,23 @@ var schema = mongoose.Schema({
     }
 });
 
-schema.static('create', function(title, content, userId, callback) {
-    var Article = mongoose.models.Article;
-    (new Article({ title: title, content: content, _user: userId, rating:3 })).save(callback);
-});
+schema.methods.addOrUpdateUserRate = function(userId, rating){
+    var rate = this.rates.find(function(rate){ return userId.equals(rate._user) });
+    if(!rate){
+        rate = {_user: userId, rate: rating };
+        this.rates.push(rate);
+    }
+    rate.rate = rating;
+}
+
+schema.virtual('rating')
+    .get(function(){
+        console.log(this.rates);
+        return Math.round(this.rates
+                .map(function(item){ return item.rate; })
+                .reduce(function(a, b) { return a + b;}, 0)
+            / (this.rates.length == 0 ? 1 : this.rates.length));
+    });
 
 if(mongoose.models.Article){
     module.exports = mongoose.models.Article;

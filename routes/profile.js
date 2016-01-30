@@ -12,7 +12,15 @@ router.get('/', function(req, res, next){
 
 router.get('/:id', function(req, res, next){
     renderProfile(req.params.id, res, next);
-    console.log('By Id')
+});
+
+router.post('/update', function(req, res, next){
+    var Profile = mongoose.models.Profile;
+    Profile.findOneAndUpdate({_id: req.body._id}, req.body, {new: true},
+        function(err, profile, resp) {
+            if(err) return next(err);
+            res.json(profile);
+        });
 });
 
 function renderProfile(userId, res, callback){
@@ -27,15 +35,14 @@ function renderProfile(userId, res, callback){
             User.findById(userId, function(err, user){
                 if(err) return callback(err);
                 result.user = user;
+                result.readonly = res.locals.user._id.toString() != userId
                 callback(null, result);
             })
         }
     ],function(err, result){
         if(err) return callback(err);
-        result.userId = userId;
-        result.readonly = res.locals.user._id.toString() != userId
         res.render('profile', result);
-    })
+    });
 }
 
 module.exports = router;

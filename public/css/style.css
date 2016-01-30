@@ -130,6 +130,11 @@ a:hover {
   color: #1b6d85;
 }
 
+.ch-top-navbar .navbar-nav li a.nav-selected {
+  background-color: #eee;
+  color: #1b6d85;;
+}
+
 .ch-top-navbar .icon-bar{
   background-color: white;
 }
@@ -144,9 +149,16 @@ a:hover {
 
 .ch-profileinfo-panel .form-group .form-control{
   white-space: nowrap;
-  max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.ch-profileinfo-panel .panel-footer{
+  display: none;
+}
+
+.ch-profileinfo-panel.ch-profileinfo-panel--edit .panel-footer{
+  display: block;
 }
 
 .ch-article-panel.ch-article-panel--readonly .glyphicon-plus,
@@ -173,6 +185,7 @@ a:hover {
 .ch-profile-actiles .content-col p {
   text-overflow: ellipsis;
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .ch-profile-actiles .edit-col{
@@ -218,19 +231,16 @@ a:hover {
   padding-left: 10px;
 }
 
-.ch-feed-actiles .photo-col {
-  padding-right: 10px;
-  width: 115px;
-}
-
-.ch-feed-actiles .photo-col img{
-  width: 100%;
-}
-
 .ch-feed-actiles .author-rate{
   position: absolute;
   right: 10px;
   bottom: 10px;
+}
+
+@media (min-width: 1200px) {
+  .ch-feed-actiles .author-label {
+    text-align: right;
+  }
 }
 
 .br-theme-bars-movie .br-widget a {
@@ -243,3 +253,38 @@ a:hover {
   display: none;
 }
 
+/*-------Comments---------*/
+
+.ch-comments-list{
+  margin-bottom: 0px;
+}
+
+.ch-comments-list .photo-col {
+  padding-right: 10px;
+  width: 80px;
+}
+
+.ch-comments-list .photo-col img {
+  width: 100%;
+}
+
+.ch-comments-list .list-group-item {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.ch-comments-list .list-group-item > div{
+  display: table-cell;
+  vertical-align: top;
+}
+
+.ch-article-panel .panel-heading {
+  position: relative;
+}
+
+.ch-article-panel .ch-article-raiting {
+  position: absolute;
+  right: 10px;
+  top: 16px;
+}

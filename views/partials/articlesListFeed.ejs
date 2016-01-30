@@ -7,17 +7,14 @@
         </div>
         <div class="ch-feed-actiles list-group">
         </div>
-        <input class="btn btn-lg btn-default btn-block" value="Load More" type="button"/>
+        <input class="btn btn-lg btn-default btn-block btn-link" value="Load More" type="button"/>
     </div>
     <script type="text/html" class="hidden" id="articlesFeedItemTmpl">
         <div class="list-group-item" data-readonly="${readonly}">
-            <div class="photo-col">
-                <img class="img-circle" src="images/no-photo.png"/>
-            </div>
             <div class="content-col">
                 <div class="list-group-item-heading row">
-                    <div class="col-lg-10"><strong class="panel-title">${title}</strong><a href="/article/${id}">view article</a></div>
-                    <div class="col-lg-2 author-label">Created by <a href="profile/${userId}"><strong>${author}</strong></a></div>
+                    <div class="col-lg-6"><strong class="panel-title">${title}</strong><a href="/article/${id}">view article</a></div>
+                    <div class="col-lg-6 author-label">Created by <a href="profile/${userId}"><strong>${author}</strong></a></div>
                 </div>
                 <p class="list-group-item-text">${content}</p>
             </div>
@@ -66,8 +63,26 @@
                         .find('select')
                         .barrating({
                             theme: 'bars-movie',
-                            readonly: true,
-                            initialRating: 0
+                            readonly: false,
+                            onSelect: function(value, text, event) {
+                                if (typeof(event) !== 'undefined') {
+                                    var id = $.tmplItem($(event.target).closest('.list-group-item')).data.id;
+                                    //articleContainer.mask('Loading...');
+                                    $.ajax('/article/setUserRate', {
+                                        type: "POST",
+                                        data: {rate: value, id: id },
+                                        statusCode: {
+                                            200: function (data) {
+                                                $(event.target).closest('.author-rate').find('select').barrating('set', data);
+                                            },
+                                            403: function () {
+                                            }
+                                        }
+                                    }).always(function () {
+                                        //articleContainer.unmask();
+                                    });
+                                }
+                            }
                         });
                         if(data.length == 0){
                             articleLoadBtn.prop("disabled",true);

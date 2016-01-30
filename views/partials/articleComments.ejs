@@ -1,0 +1,90 @@
+<%var commentsContainerId ='articlesComentsPanel', commentItemTmplId = 'articlesComentTmpl'; %>
+
+
+<div id="<%=commentsContainerId%>">
+    <div class="panel panel-default">
+        <div class="panel-heading">Comments</div>
+        <div class="ch-comments-list list-group">
+        </div>
+        <div class="panel-footer">
+            <form accept-charset="UTF-8" role="form">
+                <div class="form-group">
+                    <input type="hidden" name="_article" value="<%=article._id%>"/>
+                    <textarea name="content" class="form-control" style="height: 100px;"></textarea>
+                </div>
+            </form>
+            <input class="btn btn-success" value="Leave comment" type="button">
+        </div>
+    </div>
+
+    <script id="<%=commentItemTmplId%>" type="text/html">
+        <div class="list-group-item">
+            <div class="photo-col">
+                <img class="img-circle" src="/images/no-photo.png"/>
+            </div>
+            <div>
+                <div class="author-label">Comment by <a href="/profile/${_user._id}"><strong>${_user._profile.fullName}</strong></a></div>
+                <p class="list-group-item-text">${content}</p>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/javascript">
+        (function initCommentsList(){
+            var commentsContainer = $('#<%=commentsContainerId%>'),
+                commentsItemTpl = $('#<%=commentItemTmplId%>'),
+                commentsList = commentsContainer.find('.list-group'),
+                commentAddBtn = commentsContainer.find('.btn-success'),
+                commentsForm = commentsContainer.find('form');
+
+            commentAddBtn.on('click', function(){
+                commentsForm.submit();
+            });
+
+            commentsForm.validate({
+                rules: {
+                    content: {
+                        required: true
+                    }
+                },
+                highlight: function(element) {
+                    $(element).closest('.form-group').addClass('has-error');
+                },
+                unhighlight: function(element) {
+                    $(element).closest('.form-group').removeClass('has-error');
+                },
+                submitHandler:function(form){
+                    $(form).mask('Loading...');
+                    $.ajax('/comment/create', {
+                        type: "POST",
+                        data: $(form).serialize(),
+                        statusCode: {
+                            200: function (data) { commentsItemTpl.tmpl(data).appendTo(commentsList); },
+                            403: function (response) { }
+                        }
+                    }).always(function () {
+                        $(form).unmask();
+                    });
+                }
+            });
+        })();
+
+        (function bindCommentsList(){
+            var commentsList = $('#<%=commentsContainerId%>').find('.list-group');
+            var commentsItemTpl = $('#<%=commentItemTmplId%>');
+
+            commentsList.mask('Loading...');
+            $.ajax('/comment/findByArticleId', {
+                type: "POST",
+                data: { _id : '<%=article._id%>' },
+                statusCode: {
+                    200: function (data) {
+                        commentsItemTpl.tmpl(data).appendTo(commentsList);
+                    }
+                }
+            }).always(function () {
+                commentsList.unmask();
+            })
+        })();
+    </script>
+</div>
