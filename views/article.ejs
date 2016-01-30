@@ -35,7 +35,7 @@
         .find('select')
         .barrating({
             theme: 'bars-movie',
-            readonly: '<%=!user%>',
+            readonly: <%=!user%>,
             onSelect: function(value, text, event) {
                 if (typeof(event) !== 'undefined') {
                     articleContainer.mask('Loading...');
