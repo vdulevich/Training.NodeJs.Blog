@@ -36,7 +36,7 @@ function renderProfile(userId, res, callback){
             User.findById(userId, function(err, user){
                 if(err) return callback(err);
                 result.user = user;
-                result.readonly = res.locals.user._id.toString() != userId
+                result.readonly = !(res.locals.user && res.locals.user._id.toString() == userId)
                 callback(null, result);
             })
         }

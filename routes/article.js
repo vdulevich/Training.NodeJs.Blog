@@ -44,13 +44,22 @@ router.post('/delete', checkAuth, function(req, res, next){
         });
 });
 
-router.post('/findByLessThenDate', function(req, res, next){
-    var startDate = req.body.startdate,
+router.post('/findFeedList', function(req, res, next){
+    var searchText = req.body.searchText,
+        startDate = req.body.startdate,
         startIndex = parseInt(req.body.startIndex),
-        pageSize = parseInt(req.body.pageSize);
+        pageSize = parseInt(req.body.pageSize),
+        findOptions = { created: { $lte: startDate } };
 
+    if(searchText){
+        findOptions.title = new RegExp(searchText, "i");
+    }
     Article
-        .find({ created: { $lte: startDate }} , { }, { limit: pageSize, skip: startIndex, sort: { created: -1 }})
+        .find(
+            findOptions,
+            { },
+            { limit: pageSize, skip: startIndex, sort: { created: -1 }}
+        )
         .populate({
             path: '_user',
             model: 'User',
@@ -63,7 +72,6 @@ router.post('/findByLessThenDate', function(req, res, next){
         })
         .exec(function(err, articles){
             if(err) return next(err);
-            console.log(articles);
             res.json(articles.map(function(article){
                 return {
                     id: article._id,
@@ -73,7 +81,7 @@ router.post('/findByLessThenDate', function(req, res, next){
                     userId: article._user._id,
                     readonly: !(req.user && article._user._id == req.user._id),
                     rating: article.rating,
-                    photo: '',
+                    created: article.created
                 }
             }));
         });

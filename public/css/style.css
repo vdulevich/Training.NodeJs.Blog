@@ -106,13 +106,6 @@ a:hover {
   text-align: center;
 }
 
-/*@media only screen and (max-width: 532px) {
-  .ch-footer {
-    border-radius: 0px;
-  }
-}*/
-
-
 .ch-top-navbar {
   background-image:url("../images/header-bg.png");
   margin: 0px;
@@ -143,6 +136,31 @@ a:hover {
   .ch-top-navbar {
     border-radius: 0px;
   }
+}
+
+/*-------Bootstrap------*/
+
+.panel-default{
+  border-radius: 0px;
+}
+
+.panel-default > .panel-heading{
+  background-color: #f7f7f7;
+}
+
+/*-----Generic styles----*/
+
+.ch-data-empty-message{
+  display: none;
+}
+
+.ch-data-empty .ch-data-empty-message{
+  display: block;
+  width: 100%;
+  text-align: center;
+  height: 50px;
+  line-height: 50px;
+  background-color: #eee;
 }
 
 /*-----Profile page-----*/
@@ -201,47 +219,46 @@ a:hover {
   padding-right: 0px;
 }
 
-/*-----Home page-----*/
+/*-----Feed article list-----*/
 
-.ch-feed-actiles .list-group-item {
-  display: table;
-  table-layout: fixed;
-  width: 100%;
-  position: relative;
-  padding: 10px;
+.ch-feed-actiles-list .list-group-item{
+  margin-bottom: 10px;
+  border: none;
+  background-color: #f7f7f7;
 }
 
-.ch-feed-actiles .list-group-item > div{
-  display: table-cell;
-  vertical-align: middle;
+.ch-feed-actiles-list .list-group-item-heading{
+  border-bottom: 1px solid #ddd;
 }
 
-.ch-feed-actiles .content-col {
-  width: 100%;
-}
-
-.ch-feed-actiles .content-col p {
-  height: 70px;
+.ch-feed-actiles-list .ch-feed-content {
+  height: 80px;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-bottom:20px;
+  /*margin-bottom:20px;*/
 }
 
-.ch-feed-actiles .content-col a{
+.ch-feed-actiles-list .ch-feed-viewlink {
   padding-left: 10px;
 }
 
-.ch-feed-actiles .author-rate{
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
+.ch-feed-actiles-list .ch-feed-rate{
+  margin-top:10px;
+}
+
+@media (min-width: 1200px){
+  .ch-feed-actiles-list .ch-feed-rate{
+    float: right;
+  }
 }
 
 @media (min-width: 1200px) {
-  .ch-feed-actiles .author-label {
+  .ch-feed-actiles-list .ch-feed-author {
     text-align: right;
   }
 }
+
+/* Bar rate style*/
 
 .br-theme-bars-movie .br-widget a {
   display: block;

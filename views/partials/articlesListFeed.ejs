@@ -1,100 +1,114 @@
-<%var articlesFeedPanelId = 'articlesList', articlesFeedItemTemplateId = 'articlesListItemTemplate'; %>
+<%var articlesFeedContainerId = 'articlesFeedContainer', articlesFeedItemTemplateId = 'articlesFeedItemTemplate'; %>
 
-<div id="<%=articlesFeedPanelId%>" >
-    <div class="ch-article-panel panel panel-default">
-        <div class="panel-heading">
-            Articles
-        </div>
-        <div class="ch-feed-actiles list-group">
-        </div>
-        <input class="btn btn-lg btn-default btn-block btn-link" value="Load More" type="button"/>
+<div id="<%=articlesFeedContainerId%>" >
+
+    <div class="list-group ch-feed-actiles-list">
+        <div class="ch-data-empty-message">No articles found.</div>
     </div>
-    <script type="text/html" class="hidden" id="articlesFeedItemTmpl">
+    <input class="btn btn-lg btn-default btn-block btn-link" value="Load More" type="button"/>
+
+    <script type="text/html" class="hidden" id="<%=articlesFeedItemTemplateId%>">
         <div class="list-group-item" data-readonly="${readonly}">
-            <div class="content-col">
-                <div class="list-group-item-heading row">
-                    <div class="col-lg-6"><strong class="panel-title">${title}</strong><a href="/article/${id}">view article</a></div>
-                    <div class="col-lg-6 author-label">Created by <a href="profile/${userId}"><strong>${author}</strong></a></div>
+            <div class="list-group-item-heading row">
+                <div class="ch-feed-title col-lg-6">
+                    <strong class="panel-title">${title}</strong>
+                    <a class="ch-feed-viewlink" href="/article/${id}">view article</a>
                 </div>
-                <p class="list-group-item-text">${content}</p>
+                <div class="ch-feed-author col-lg-6">
+                    <span>Created by <a href="profile/${userId}"><strong>${author}</strong></a></span>
+                </div>
             </div>
-            <div class="author-rate">
-                <select>
-                    {{each [0,1,2,3,4,5,6,7,8,9]}}
-                        <option value="${$value}" ${$item.isSelected(rating, $value)}>${$value}</option>
-                    {{/each}}
-                </select>
+            <p class="ch-feed-content">${content}</p>
+            <div class="row">
+                <div class="ch-feed-title col-lg-6">
+                    ${$item.created(created)}
+                </div>
+                <div class="ch-feed-author col-lg-6">
+                    <div class="ch-feed-rate">
+                        <select>
+                            {{each [0,1,2,3,4,5,6,7,8,9]}}
+                            <option value="${$value}" ${$item.isSelected(rating, $value)}>${$value}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </script>
-
     <script type="text/javascript">
-        var articlesFeedStartDate = Date.now();
-        function initArticleFeed(){
-            var articlesPanel = $('#<%=articlesFeedPanelId%>'),
-                articlesList = articlesPanel.find('.list-group'),
-                articleLoadBtn = articlesPanel.find('.btn');
-
-            articleLoadBtn.on('click', function(){
-                bindArticleFeed(articlesList.find('.list-group-item').length);
-            });
-        };
-        function bindArticleFeed(startIndex){
-            var articlesPanel = $('#<%=articlesFeedPanelId%>'),
+        (function () {
+            var articlesFeedStartDate = Date.now(),
+                articlesSearch = '<%=searchText%>',
+                articlesPanel = $('#<%= articlesFeedContainerId %>'),
                 articlesList = articlesPanel.find('.list-group'),
                 articleLoadBtn = articlesPanel.find('.btn'),
-                articlesTpl = articlesPanel.find('#articlesFeedItemTmpl');
+                articlesTpl = articlesPanel.find('#<%= articlesFeedItemTemplateId %>');
 
-            $.ajax('/article/findByLessThenDate', {
-                type: "POST",
-                data: {
-                    startdate: articlesFeedStartDate,
-                    startIndex: startIndex || 0,
-                    pageSize: 5
-                },
-                statusCode: {
-                    200: function (data) {
-                        $(articlesTpl.tmpl(data, {
-                            isSelected:function(rating, index){
-                                return rating == index ? 'selected' : '';
-                            }
-                        })
-                        .appendTo(articlesList))
-                        .find('select')
-                        .barrating({
-                            theme: 'bars-movie',
-                            readonly: <%=!user%>,
-                            onSelect: function(value, text, event) {
-                                if (typeof(event) !== 'undefined') {
-                                    var item = $(event.target).closest('.list-group-item');
-                                        id = $.tmplItem(item).data.id;
-                                    item.mask('Loading...');
-                                    $.ajax('/article/setUserRate', {
-                                        type: "POST",
-                                        data: {rate: value, id: id },
-                                        statusCode: {
-                                            200: function (data) {
-                                                $(event.target).closest('.author-rate').find('select').barrating('set', data);
-                                            },
-                                            403: function () {
-                                            }
-                                        }
-                                    }).always(function () {
-                                        item.unmask();
-                                    });
+            function initHandlers() {
+                articleLoadBtn.on('click', function () {
+                    databind();
+                });
+            };
+
+            function initRating(ratingCtrl){
+                ratingCtrl.barrating({
+                    theme: 'bars-movie',
+                    readonly: <%=!user%>,
+                    onSelect: function (value, text, event) {
+                        if (typeof(event) !== 'undefined') {
+                            var item = $(event.target).closest('.list-group-item');
+                            id = $.tmplItem(item).data.id;
+                            item.mask('Loading...');
+                            $.ajax('/article/setUserRate', {
+                                type: "POST",
+                                data: {rate: value, id: id},
+                                success: function (data) {
+                                    $(event.target).closest('.author-rate').find('select').barrating('set', data);
                                 }
-                            }
-                        });
-                        if(data.length == 0){
-                            articleLoadBtn.prop("disabled",true);
+                            }).always(function () {
+                                item.unmask();
+                            });
                         }
                     }
-                }
-            }).always(function () {
-                articlesList.unmask();
-            })
-        };
-        initArticleFeed();
-        bindArticleFeed();
+                });
+            }
+
+            function databind() {
+                var startIndex = articlesList.find('.list-group-item').length;
+
+                $.ajax('/article/findFeedList', {
+                    type: "POST",
+                    data: {
+                        searchText: articlesSearch,
+                        startdate: articlesFeedStartDate,
+                        startIndex: startIndex,
+                        pageSize: 5
+                    },
+                    success: function (data) {
+                        if (data.length != 0) {
+                            var newArticles = $(articlesTpl.tmpl(data, {
+                                isSelected: function (rating, index) {
+                                    return rating == index ? 'selected' : '';
+                                },
+                                created: function (created) {
+                                    return new Date(created).format("dd-MM-yyyy");
+                                }
+                            })).appendTo(articlesList);
+                            initRating(newArticles.find('select'));
+                        } else {
+                            articleLoadBtn.prop("disabled", true);
+                            if(startIndex == 0){
+                                articlesList.toggleClass('ch-data-empty');
+                            }
+                        }
+                    }
+                }).always(function () {
+                    articlesList.unmask();
+                })
+            };
+
+            initHandlers();
+            databind();
+        })();
     </script>
 </div>
