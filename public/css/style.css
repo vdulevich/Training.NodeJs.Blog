@@ -150,18 +150,25 @@ a:hover {
 
 /*-----Generic styles----*/
 
-.ch-data-empty-message{
-  display: none;
+.ch-data-empty{
+  position: relative;
 }
 
 .ch-data-empty .ch-data-empty-message{
   display: block;
+}
+
+.ch-data-empty-message{
+  display: none;
   width: 100%;
-  /*text-align: center;*/
-  height: 50px;
-  /*line-height: 50px;*/
+  height: 100%;
   padding: 15px;
-  /*background-color: #eee;*/
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  background-color: #f7f7f7;
 }
 
 /*-----Profile page-----*/
@@ -224,6 +231,7 @@ a:hover {
 
 .ch-feed-list{
   margin-bottom: 0px;
+  min-height: 50px;
 }
 
 .ch-feed-list .ch-feed-list-item{
@@ -245,7 +253,6 @@ a:hover {
   padding-top: 0px;
 
 }
-
 
 @media (min-width: 1200px) {
   .ch-feed-list .panel {
@@ -301,6 +308,7 @@ a:hover {
 
 .ch-comments-list{
   margin-bottom: 0px;
+  min-height:40px;
 }
 
 .ch-comments-list .photo-col {
