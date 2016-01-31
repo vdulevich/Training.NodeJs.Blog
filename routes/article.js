@@ -81,6 +81,7 @@ router.post('/findFeedList', function(req, res, next){
                     userId: article._user._id,
                     readonly: !(req.user && article._user._id == req.user._id),
                     rating: article.rating,
+                    comments: article._comments.length,
                     created: article.created
                 }
             }));
@@ -104,6 +105,7 @@ router.post('/setUserRate', checkAuth, function(req, res, next){
     if(!req.user) next(new errors.HttpError(403));
     Article.findById(req.body.id, function(err, article){
         if(err) return next(err);
+        if(!article) return next(new errors.HttpError(404));
         article.addOrUpdateUserRate(req.user._id, parseInt(req.body.rate));
         article.save(function(err, article){
             if(err) return next(err);

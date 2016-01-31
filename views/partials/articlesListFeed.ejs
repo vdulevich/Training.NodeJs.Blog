@@ -1,14 +1,17 @@
-<%var articlesFeedContainerId = 'articlesFeedContainer', articlesFeedItemTemplateId = 'articlesFeedItemTemplate'; %>
+<%var articlesFeedContainerId = 'articlesFeedContainer',
+      articlesFeedItemTemplateId = 'articlesFeedItemTemplate',
+        articlesFeedListId = 'articlesFeedList'; %>
 
 <div id="<%=articlesFeedContainerId%>" >
 
-    <div class="list-group ch-feed-actiles-list">
+    <div id="<%=articlesFeedListId%>" class="ch-feed-list">
         <div class="ch-data-empty-message">No articles found.</div>
     </div>
     <input class="btn btn-default btn-block btn-link" value="Load More" type="button"/>
     <script type="text/html" class="hidden" id="<%=articlesFeedItemTemplateId%>">
-        <div class="panel panel-success list-group-item" data-readonly="${readonly}">
-            <div class="panel-heading list-group-item-heading">
+       <div class="col-lg-6 ch-feed-list-item" data-readonly="${readonly}">
+           <div class="panel">
+            <div class="panel-heading">
                 <div class="row">
                 <div class="ch-feed-title col-lg-6">
                     <strong class="panel-title">${title}</strong>
@@ -24,6 +27,8 @@
             <div class="row">
                 <div class="ch-feed-title col-lg-6">
                     ${$item.created(created)}
+
+                    <a class="ch-feed-viewlink" href="/article/${id}">comments (${comments})</a>
                 </div>
                 <div class="ch-feed-author col-lg-6">
                     <div class="ch-feed-rate">
@@ -37,13 +42,14 @@
             </div>
             </div>
         </div>
+       </div>
     </script>
     <script type="text/javascript">
         (function () {
             var articlesFeedStartDate = Date.now(),
                 articlesSearch = '<%=searchText%>',
                 articlesPanel = $('#<%= articlesFeedContainerId %>'),
-                articlesList = articlesPanel.find('.list-group'),
+                articlesList = articlesPanel.find('#<%=articlesFeedListId%>'),
                 articleLoadBtn = articlesPanel.find('.btn'),
                 articlesTpl = articlesPanel.find('#<%= articlesFeedItemTemplateId %>');
 
@@ -59,7 +65,7 @@
                     readonly: <%=!user%>,
                     onSelect: function (value, text, event) {
                         if (typeof(event) !== 'undefined') {
-                            var item = $(event.target).closest('.list-group-item');
+                            var item = $(event.target).closest('.ch-feed-list-item');
                             id = $.tmplItem(item).data.id;
                             item.mask('Loading...');
                             $.ajax('/article/setUserRate', {
@@ -77,7 +83,7 @@
             }
 
             function databind() {
-                var startIndex = articlesList.find('.list-group-item').length;
+                var startIndex = articlesList.find('.ch-feed-list-item').length;
 
                 $.ajax('/article/findFeedList', {
                     type: "POST",

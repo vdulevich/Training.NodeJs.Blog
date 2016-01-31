@@ -4,7 +4,7 @@ var express = require('express');
 var checkAuth = require('middleware/checkAuth');
 var router = express.Router();
 var Comment = require('models/comment');
-
+var Article = require('models/article');
 
 router.post('/create', checkAuth, function(req, res, next){
     var data = req.body;
@@ -15,6 +15,16 @@ router.post('/create', checkAuth, function(req, res, next){
                 if(err) return callback(err);
                 callback(null, comment);
             });
+        },
+        function(comment, callback){
+            Article.findById(comment._article, function(err, article){
+                if(err) callback(err);
+                article._comments.push(comment._id);
+                article.save(function(err, article){
+                    if(err) callback(err);
+                    callback(null, comment);
+                })
+            })
         },
         function(comment, callback) {
             Comment.populate(comment, {

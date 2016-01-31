@@ -19,6 +19,11 @@ var schema = mongoose.Schema({
         default: Date.now()
     },
     rates: [Rate],
+    _comments: [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Comment',
+        required:true
+    }],
     _user: {
         type: mongoose.Schema.ObjectId,
         ref: 'User',
