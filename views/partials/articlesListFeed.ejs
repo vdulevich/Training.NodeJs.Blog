@@ -84,7 +84,7 @@
 
             function databind() {
                 var startIndex = articlesList.find('.ch-feed-list-item').length;
-                articlesList.mask('Loading...');
+                $('.ch-wrapper').mask('body');
                 $.ajax('/article/findFeedList', {
                     type: "POST",
                     data: {
@@ -112,7 +112,7 @@
                         }
                     }
                 }).always(function () {
-                    articlesList.unmask();
+                    $('.ch-wrapper').unmask();
                 })
             };
 
