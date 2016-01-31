@@ -140,7 +140,7 @@ a:hover {
 
 /*-------Bootstrap------*/
 
-.panel-default{
+.panel{
   border-radius: 0px;
 }
 
@@ -229,7 +229,8 @@ a:hover {
 .ch-feed-actiles-list .list-group-item{
   margin-bottom: 10px;
   border: none;
-  background-color: #eee;
+  /* background-color: #eee; */
+  padding: 0px;
 }
 
 .ch-feed-actiles-list .list-group-item-heading{

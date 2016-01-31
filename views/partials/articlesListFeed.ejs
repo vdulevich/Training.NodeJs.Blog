@@ -7,8 +7,9 @@
     </div>
     <input class="btn btn-default btn-block btn-link" value="Load More" type="button"/>
     <script type="text/html" class="hidden" id="<%=articlesFeedItemTemplateId%>">
-        <div class="list-group-item" data-readonly="${readonly}">
-            <div class="list-group-item-heading row">
+        <div class="panel panel-success list-group-item" data-readonly="${readonly}">
+            <div class="panel-heading list-group-item-heading">
+                <div class="row">
                 <div class="ch-feed-title col-lg-6">
                     <strong class="panel-title">${title}</strong>
                     <a class="ch-feed-viewlink" href="/article/${id}">view article</a>
@@ -16,7 +17,9 @@
                 <div class="ch-feed-author col-lg-6">
                     <span>Created by <a href="profile/${userId}"><strong>${author}</strong></a></span>
                 </div>
+                </div>
             </div>
+            <div class="panel-body">
             <p class="ch-feed-content">${content}</p>
             <div class="row">
                 <div class="ch-feed-title col-lg-6">
@@ -31,6 +34,7 @@
                         </select>
                     </div>
                 </div>
+            </div>
             </div>
         </div>
     </script>
