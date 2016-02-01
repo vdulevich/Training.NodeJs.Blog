@@ -33,14 +33,11 @@
             },
             submitHandler:function(form){
                 $(form).mask('Loading...');
-                $.ajax('/article/update', {
+                $.ajax('/article/save', {
                     type: "POST",
                     data: $(form).serialize(),
-                    statusCode: {
-                        200: function (data) {
-                            $(form).trigger('articleSaved', data);
-                        },
-                        403: function (response) {}
+                    success: function (data) {
+                        $(form).trigger('articleSaved', data);
                     }
                 }).always(function () {
                     $(form).unmask();

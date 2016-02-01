@@ -29,23 +29,57 @@
         </div>
     </script>
     <script type="text/javascript">
-        function initArticleList(){
+        (function (){
             var articlesPanel = $('#<%=articlesPanelId%>'),
                 articlesTpl = $('#<%=articlesListItemTemplateId%>'),
-                articlesList = articlesPanel.find('.list-group');
+                articlesList = articlesPanel.find('.list-group'),
+                articleAddBtn = articlesPanel.find('.glyphicon-plus');
 
-            articlesPanel.find('.glyphicon-plus').on('click', onAdd);
+
+            function initHandlers(){
+                articleAddBtn.on('click', onAdd);
+                initListItemHandlers(articlesList);
+            }
+
+            function initListItemHandlers(element) {
+                var articleEdit = element.find('.glyphicon-edit'),
+                    articleDelete = element.find('.glyphicon-trash');
+
+                articleEdit.on('click', onEdit);
+                articleDelete.confirm({ confirm: onDelete });
+            };
+
+            function databind(){
+                var articlesList = $('#<%=articlesPanelId%>').find('.list-group');
+                var articlesTpl = $('#<%=articlesListItemTemplateId%>');
+                $.ajax('/article/findByUser', {
+                    type: "POST",
+                    data: { id : '<%=user._id%>' },
+                    statusCode: {
+                        200: function (data) {
+                            articlesTpl.tmpl(data).appendTo(articlesList);
+                            initHandlers();
+                        }
+                    }
+                }).always(function () {
+                    articlesList.unmask();
+                })
+            }
 
             function onAdd(){
-                articlesPanel.mask('Loading...');
-                $.ajax('/article/create', {
+                $.ajax('/article/getEditDlg', {
                     type: "POST",
-                    data: { title: 'No title', content: 'No content' },
-                    statusCode: {
-                        200: function(data){
-                            var row = articlesTpl.tmpl(data).appendTo(articlesList);
-                            initHandlers(row);
-                        }
+                    success: function (data) {
+                        $(data)
+                                .appendTo('body')
+                                .modal()
+                                .on('hidden.bs.modal', function () {
+                                    $(this).remove();
+                                })
+                                .on('articleSaved', function(event, data){
+                                    var row = articlesTpl.tmpl(data).appendTo(articlesList);
+                                    initListItemHandlers(row);
+                                });
                     }
                 }).always(function () {
                     articlesPanel.unmask();
@@ -62,16 +96,16 @@
                     statusCode: {
                         200: function (data) {
                             $(data)
-                            .appendTo('body')
-                            .modal()
-                            .on('hidden.bs.modal', function () {
-                                $(this).remove();
-                            })
-                            .on('articleSaved', function(event, data){
-                                item.data = data;
-                                item.update();
-                                initHandlers($(item.nodes));
-                            });
+                                    .appendTo('body')
+                                    .modal()
+                                    .on('hidden.bs.modal', function () {
+                                        $(this).remove();
+                                    })
+                                    .on('articleSaved', function(event, data){
+                                        item.data = data;
+                                        item.update();
+                                        initHandlers($(item.nodes));
+                                    });
                         }
                     }
                 }).always(function () {
@@ -94,32 +128,7 @@
                 });
             };
 
-            function initHandlers(element) {
-                var articleEdit = element.find('.glyphicon-edit'),
-                    articleDelete = element.find('.glyphicon-trash');
-
-                articleEdit.on('click', onEdit);
-                articleDelete.confirm({ confirm: onDelete });
-            };
-
-            initHandlers(articlesPanel);
-        }
-
-        (function bindArticleList(){
-            var articlesList = $('#<%=articlesPanelId%>').find('.list-group');
-            var articlesTpl = $('#<%=articlesListItemTemplateId%>');
-            $.ajax('/article/findByUser', {
-                type: "POST",
-                data: { id : '<%=user._id%>' },
-                statusCode: {
-                    200: function (data) {
-                        articlesTpl.tmpl(data).appendTo(articlesList);
-                        initArticleList();
-                    }
-                }
-            }).always(function () {
-                articlesList.unmask();
-            })
+            databind();
         })();
     </script>
 </div>

@@ -15,21 +15,11 @@ router.get('/:id', function(req, res, next){
     })
 });
 
-router.post('/create', checkAuth, function(req, res, next){
-    var data = req.body;
-    data._user = req.user._id;
-    (new Article(data)).save(
-        function(err, article) {
-            if(err) return next(err);
-            res.json(article);
-    });
-});
-
-router.post('/update', checkAuth, function(req, res, next){
+router.post('/save', checkAuth, function(req, res, next){
     Article.findOneAndUpdate(
         { _id: req.body.id },
-        { $set:{ title: req.body.title, content: req.body.content } },
-        { 'new': true },
+        { $set:{ title: req.body.title, content: req.body.content, _user: req.user._id } },
+        { new: true, upsert: true },
         function(err, article) {
             if(err) return next(err);
             res.json(article);
@@ -117,8 +107,7 @@ router.post('/setUserRate', checkAuth, function(req, res, next){
 router.post('/getEditDlg', function(req, res, next){
     Article.findById(req.body.id, function(err, article) {
         if(err) return next(err);
-        console.log(article);
-        res.render('partials/articleEditDlg.ejs', article);
+        res.render('partials/articleEditDlg.ejs', article || new Article({title: '', content: ''}));
     });
 });
 

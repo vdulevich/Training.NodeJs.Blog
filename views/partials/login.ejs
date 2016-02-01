@@ -30,13 +30,6 @@
             validator.resetForm();
         }
 
-        form.bind('keypress', function(e) {
-            var keyCode = e.keyCode || e.which;
-            if(keyCode == 13){
-                form.submit();
-            }
-        });
-
         var validator = form.validate({
             rules: {
                 email: {

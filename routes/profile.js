@@ -46,4 +46,11 @@ function renderProfile(userId, res, callback){
     });
 }
 
+router.post('/getEditDlg', function(req, res, next){
+    Profile.findById(req.body.id, function(err, profile) {
+        if(err) return next(err);
+        res.render('partials/profileInfoEditDlg.ejs', { profile: profile });
+    });
+});
+
 module.exports = router;

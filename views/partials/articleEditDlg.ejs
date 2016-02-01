@@ -10,8 +10,9 @@
             <div class="modal-body">
                 <%-partial("../partials/articleEdit.ejs",{ title: title, content: content })%>
             </div>
-            <div class="modal-footer">
-                <input class="btn btn-lg btn-success btn-block" value="Save" type="button"/>
+            <div class="modal-footer text-right">
+                <input class="btn btn-success" value="Save" type="button"/>
+                <input class="btn btn-default" value="Cancel" data-dismiss="modal" type="button">
             </div>
         </div>
     </div>

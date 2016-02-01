@@ -8,9 +8,6 @@ var schema = mongoose.Schema({
         type: String,
         required: true,
     },
-    keywords: {
-        type: Array
-    },
     content: {
         type: String
     },

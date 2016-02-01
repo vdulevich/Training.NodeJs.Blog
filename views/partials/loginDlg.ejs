@@ -21,6 +21,13 @@
     (function initLoginDlg(){
         var dlgId = $('#<%=dlgId%>');
 
+        dlgId.bind('keypress', function(e) {
+            var keyCode = e.keyCode || e.which;
+            if(keyCode == 13){
+                dlgId.find('form').submit();
+            }
+        });
+
         dlgId.find('.btn').on('click', function(){
             dlgId.find('form').submit();
         });

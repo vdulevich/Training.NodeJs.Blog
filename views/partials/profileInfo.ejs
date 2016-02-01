@@ -1,0 +1,92 @@
+<% var profileEditPnlId = 'profileEditPnl'%>
+
+<% if(!readonly) {%>
+    <div id="<%=profileEditPnlId%>" class="panel panel-default ch-profileinfo-panel">
+        <div class="panel-heading">Profile info<a class="glyphicon glyphicon-edit pull-right"></a></div>
+        <div class="panel-body">
+            <form>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon">Full Name: </span>
+                            <input name="fullName" type="text" class="form-control" value="<%=profile.fullName%>" disabled="disabled"/>
+                        </div>
+                        <div class="input-group form-group">
+                            <span class="input-group-addon">Email: </span>
+                            <input name="email" type="text" class="form-control" value="<%=user.email%>" disabled="disabled"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="input-group form-group">
+                            <span class="input-group-addon">First Name: </span>
+                            <input type="text" name="firstName" class="form-control" value="<%=profile.firstName%>" readonly="readonly"/>
+                        </div>
+                        <div class="input-group form-group">
+                            <span class="input-group-addon">Last Name: </span>
+                            <input type="text" name="lastName" class="form-control" value="<%=profile.lastName%>" readonly="readonly"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+<%} else {%>
+    <div class="panel panel-default ch-profileinfo-panel">
+        <div class="panel-heading">Profile info</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="input-group form-group">
+                        <span class="input-group-addon">Full Name: </span>
+                        <input type="text" class="form-control" value="<%=profile.fullName%>" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="input-group form-group">
+                        <span class="input-group-addon">Email: </span>
+                        <input type="text" class="form-control" value="<%=user.email%>" readonly="readonly"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<%}%>
+
+<script type="text/javascript">
+    (function(){
+        var profileEditPnl = $('#<%=profileEditPnlId%>'),
+            form = profileEditPnl.find('form'),
+            profileEditBtn = profileEditPnl.find('.glyphicon-edit');
+
+        function initHandlers(){
+            profileEditBtn.on('click', function(){
+                profileEditPnl.mask('Loading...');
+                $.ajax('/profile/getEditDlg', {
+                    type: "POST",
+                    data: { id: '<%=profile._id%>' },
+                    success: function (data) {
+                        $(data)
+                            .appendTo('body')
+                            .modal()
+                            .on('hidden.bs.modal', function () {
+                                $(this).remove();
+                            })
+                            .on('profileSaved', function(event, data){
+                                databind(form, data);
+                            })
+                    }
+                }).always(function () {
+                    profileEditPnl.unmask();
+                });
+            })
+        }
+
+        function databind(form, data){
+            for(var key in data){
+                form.find(['input[name=', key, ']'].join('')).val(data[key]);
+            }
+        }
+
+        initHandlers();
+    })();
+</script>
