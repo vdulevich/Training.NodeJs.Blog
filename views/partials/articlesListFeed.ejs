@@ -48,7 +48,8 @@
                 articlesList = articlesPanel.find('#<%=articlesFeedListId%>'),
                 articleLoadBtn = articlesPanel.find('.btn'),
                 articlesTpl = articlesPanel.find('#<%= articlesFeedItemTemplateId %>'),
-                noData = false;
+                noData = false,
+                loading = false;
 
             function initHandlers() {
                 articleLoadBtn.on('click', function () {
@@ -56,7 +57,7 @@
                 });
 
                 $(window).scroll(function() {
-                    if(($(window).scrollTop() >= ($(document).height() - $(window).height() - 50)) && !noData) {
+                    if(($(window).scrollTop() >= ($(document).height() - $(window).height() - 50)) && !noData && !loading) {
                         databind();;
                     }
                 });
@@ -65,6 +66,7 @@
             function databind() {
                 var startIndex = articlesList.find('.ch-feed-list-item').length;
                 articlesList.mask('Loading...');
+                loading = true;
                 $.ajax('/article/findFeedList', {
                     type: "POST",
                     data: {
@@ -73,6 +75,7 @@
                         pageSize: 5
                     },
                     success: function (data) {
+                        loading = false;
                         if (data.length != 0) {
                             var newArticles = $(articlesTpl.tmpl(data, {
                                 isSelected: function (rating, index) {
