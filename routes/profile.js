@@ -25,7 +25,7 @@ function renderProfile(userId, req, res, callback){
             {
                 user: profile._user,
                 profile: profile,
-                readonly: !(profile._user._id.equals(req.user._id))
+                readonly: !(req.user && profile._user._id.equals(req.user._id))
             });
     });
 }

@@ -70,7 +70,7 @@ router.post('/findFeedList', function(req, res, next){
                     content: article.content.substring(0, 200),
                     author: article._user._profile.fullName,
                     userId: article._user._id,
-                    readonly: !(req.user && article._user._id == req.user._id),
+                    readonly: !(req.user && article._user._id.equals(req.user._id)),
                     rating: article.rating,
                     comments: article._comments.length,
                     created: article.created
