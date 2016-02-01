@@ -62,7 +62,7 @@
             function initRating(ratingCtrl){
                 ratingCtrl.barrating({
                     theme: 'bars-movie',
-                    readonly: <%=!user%>,
+                    readonly: <%=!loggedUser%>,
                     onSelect: function (value, text, event) {
                         if (typeof(event) !== 'undefined') {
                             var item = $(event.target).closest('.ch-feed-list-item');

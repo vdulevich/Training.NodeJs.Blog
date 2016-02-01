@@ -8,12 +8,27 @@ var User = require('models/user');
 
 
 router.get('/', function(req, res, next){
-    renderProfile(req.user._id, res, next);
+    renderProfile(req.user._id, req, res, next);
 });
 
 router.get('/:id', function(req, res, next){
-    renderProfile(req.params.id, res, next);
+    renderProfile(req.params.id, req, res, next);
 });
+
+function renderProfile(userId, req, res, callback){
+    Profile.findOne({_user: userId}).populate({
+        path: '_user',
+        model: 'User'
+    }).exec(function(err, profile){
+        if(err) return callback(err);
+        res.render('profile',
+            {
+                user: profile._user,
+                profile: profile,
+                readonly: !(profile._user._id.equals(req.user._id))
+            });
+    });
+}
 
 router.post('/update', checkAuth, function(req, res, next){
     var Profile = mongoose.models.Profile;
@@ -24,32 +39,13 @@ router.post('/update', checkAuth, function(req, res, next){
         });
 });
 
-function renderProfile(userId, res, callback){
-    async.waterfall([
-        function(callback){
-            Profile.findOne({_user: userId}, function(err, profile){
-                if(err) return callback(err);
-                callback(null, { profile: profile });
-            })
-        },
-        function(result, callback){
-            User.findById(userId, function(err, user){
-                if(err) return callback(err);
-                result.user = user;
-                result.readonly = !(res.locals.user && res.locals.user._id.toString() == userId)
-                callback(null, result);
-            })
-        }
-    ],function(err, result){
-        if(err) return callback(err);
-        res.render('profile', result);
-    });
-}
-
 router.post('/getEditDlg', function(req, res, next){
-    Profile.findById(req.body.id, function(err, profile) {
+    Profile.findById(req.body.id).populate({
+        path: '_user',
+        model: 'User'
+    }).exec(function(err, profile) {
         if(err) return next(err);
-        res.render('partials/profileInfoEditDlg.ejs', { profile: profile });
+        res.render('partials/profileInfoEditDlg.ejs', { user: profile._user, profile: profile});
     });
 });
 
