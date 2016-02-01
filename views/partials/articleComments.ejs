@@ -7,7 +7,7 @@
         <div class="ch-comments-list list-group">
             <div class="ch-data-empty-message">No comments found.</div>
         </div>
-        <% if(loggedUser) { %>
+        <% if(!readonly) { %>
         <div class="panel-footer">
             <form accept-charset="UTF-8" role="form">
                 <div class="form-group">

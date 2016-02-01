@@ -12,7 +12,7 @@ var User = require('models/user');
 router.get('/:id', function(req, res, next){
     Article.findById(req.params.id, function(err, article){
         if(err) return next(err);
-        res.render('article', { article: article });
+        res.render('article', { article: article, readonly: !(req.user && !article._user.equals(req.user._id)) });
     })
 });
 
@@ -53,7 +53,6 @@ router.post('/findFeedList', function(req, res, next){
             }
         },
         function(profiles, callback) {
-
             var findOptions = { published : true };
             if(searchText){
                 findOptions.$or = [
@@ -88,7 +87,7 @@ router.post('/findFeedList', function(req, res, next){
                 content: article.content.substring(0, 200),
                 author: article._user._profile.fullName,
                 userId: article._user._id,
-                readonly: !(req.user && article._user._id.equals(req.user._id)),
+                readonly: !(req.user && !article._user._id.equals(req.user._id)),
                 rating: article.rating,
                 comments: article._comments.length,
                 created: article.created

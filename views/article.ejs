@@ -19,7 +19,7 @@
     </script>
 </div>
 
-<%-partial("partials/articleComments.ejs", { article: article }) %>
+<%-partial("partials/articleComments.ejs", { article: article, readonly: readonly }) %>
 
 <script type="text/javascript">
     (function initArticlePage(){
@@ -35,7 +35,7 @@
         .find('select')
         .barrating({
             theme: 'bars-movie',
-            readonly: <%=!loggedUser%>,
+            readonly: <%=readonly%>,
             onSelect: function(value, text, event) {
                 if (typeof(event) !== 'undefined') {
                     articleContainer.mask('Loading...');

@@ -1,11 +1,12 @@
 <%var articlesFeedContainerId = 'articlesFeedContainer',
-      articlesFeedItemTemplateId = 'articlesFeedItemTemplate',
-        articlesFeedListId = 'articlesFeedList'; %>
+      articlesFeedItemTemplateId = 'articlesFeedItemTemplate', 
+      articlesFeedListId = 'articlesFeedList'; %>
 
 <div id="<%=articlesFeedContainerId%>" >
     <div id="<%=articlesFeedListId%>" class="ch-feed-list clearfix">
         <div class="ch-data-empty-message">No articles found.</div>
     </div>
+    <input type="button" class="btn btn-default btn-link btn-block" value="Load more"/>
     <script type="text/html" class="hidden" id="<%=articlesFeedItemTemplateId%>">
        <div class="col-lg-6 ch-feed-list-item" data-readonly="${readonly}">
            <div class="panel">
@@ -44,22 +45,14 @@
     <script type="text/javascript">
         (function () {
             var articlesSearch = '<%=searchText%>',
-                articlesPanel = $('#<%= articlesFeedContainerId %>'),
-                articlesList = articlesPanel.find('#<%=articlesFeedListId%>'),
-                articleLoadBtn = articlesPanel.find('.btn'),
-                articlesTpl = articlesPanel.find('#<%= articlesFeedItemTemplateId %>'),
-                noData = false,
-                loading = false;
+                articlesContainer = $('#<%= articlesFeedContainerId %>'),
+                articlesList = articlesContainer.find('#<%=articlesFeedListId%>'),
+                articleLoadBtn = articlesContainer.find('.btn'),
+                articlesTpl = articlesContainer.find('#<%= articlesFeedItemTemplateId %>');
 
             function initHandlers() {
                 articleLoadBtn.on('click', function () {
                     databind();
-                });
-
-                $(window).scroll(function() {
-                    if(($(window).scrollTop() >= ($(document).height() - $(window).height() - 50)) && !noData && !loading) {
-                        databind();;
-                    }
                 });
             };
 
@@ -84,16 +77,16 @@
                                 created: function (created) {
                                     return new Date(created).format("dd-MM-yyyy");
                                 }
-                            })).appendTo(articlesList);
-                            initRating(newArticles.find('select'));
-                            if(!$('.ch-container').hasScrollBar()){
-                                databind();
-                            }
+                            }))
+                           .each(function(index, item){
+                               initRating($(item).find('select'), $.tmplItem(item).data);
+                           })
+                           .appendTo(articlesList);
                         } else {
-                            noData = true;
                             if(startIndex == 0){
                                 articlesList.addClass('ch-data-empty');
                             }
+                            articleLoadBtn.attr('disabled', 'disabled')
                         }
                     }
                 }).always(function () {
@@ -101,10 +94,10 @@
                 })
             };
 
-            function initRating(ratingCtrl){
+            function initRating(ratingCtrl, data){
                 ratingCtrl.barrating({
                     theme: 'bars-movie',
-                    readonly: <%=!loggedUser%>,
+                    readonly: data.readonly,
                     onSelect: function (value, text, event) {
                         if (typeof(event) !== 'undefined') {
                             var item = $(event.target).closest('.ch-feed-list-item');
