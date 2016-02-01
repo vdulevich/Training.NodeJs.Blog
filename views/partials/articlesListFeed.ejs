@@ -114,7 +114,7 @@
                                 type: "POST",
                                 data: {rate: value, id: id},
                                 success: function (data) {
-                                    $(event.target).closest('.author-rate').find('select').barrating('set', data);
+                                    $(event.target).closest('.ch-feed-rate').find('select').barrating('set', data);
                                 }
                             }).always(function () {
                                 item.unmask();
