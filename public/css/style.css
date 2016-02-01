@@ -92,14 +92,12 @@ a:hover {
 }
 
 .ch-center {
-  /*border-radius: 6px 6px 0px 0px;*/
   padding: 10px;
   background-color:#f9f9f9;
 }
 
 .ch-footer {
-  background-color:#eea236;
-  /*border-radius: 0px 0px 6px 6px;*/
+  background-color:#28a4c9;
   height: 50px;
   color:white;
   padding: 10px;
@@ -313,7 +311,7 @@ a:hover {
 
 .ch-comments-list .photo-col {
   padding-right: 10px;
-  width: 80px;
+  width: 50px;
 }
 
 .ch-comments-list .photo-col img {
