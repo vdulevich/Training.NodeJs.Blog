@@ -88,6 +88,9 @@
                             }
                         } else {
                             noData = true;
+                            if(startIndex == 0){
+                                articlesList.addClass('ch-data-empty');
+                            }
                         }
                     }
                 }).always(function () {
