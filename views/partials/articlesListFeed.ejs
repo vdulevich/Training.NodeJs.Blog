@@ -3,11 +3,9 @@
         articlesFeedListId = 'articlesFeedList'; %>
 
 <div id="<%=articlesFeedContainerId%>" >
-
-    <div id="<%=articlesFeedListId%>" class="ch-feed-list">
+    <div id="<%=articlesFeedListId%>" class="ch-feed-list clearfix">
         <div class="ch-data-empty-message">No articles found.</div>
     </div>
-    <input class="btn btn-default btn-block btn-link" value="Load More" type="button"/>
     <script type="text/html" class="hidden" id="<%=articlesFeedItemTemplateId%>">
        <div class="col-lg-6 ch-feed-list-item" data-readonly="${readonly}">
            <div class="panel">
@@ -27,7 +25,6 @@
             <div class="row">
                 <div class="ch-feed-title col-lg-6">
                     ${$item.created(created)}
-
                     <a class="ch-feed-viewlink" href="/article/${id}">comments (${comments})</a>
                 </div>
                 <div class="ch-feed-author col-lg-6">
@@ -50,12 +47,52 @@
                 articlesPanel = $('#<%= articlesFeedContainerId %>'),
                 articlesList = articlesPanel.find('#<%=articlesFeedListId%>'),
                 articleLoadBtn = articlesPanel.find('.btn'),
-                articlesTpl = articlesPanel.find('#<%= articlesFeedItemTemplateId %>');
+                articlesTpl = articlesPanel.find('#<%= articlesFeedItemTemplateId %>'),
+                noData = false;
 
             function initHandlers() {
                 articleLoadBtn.on('click', function () {
                     databind();
                 });
+
+                $(window).scroll(function() {
+                    if($(window).scrollTop() == $(document).height() - $(window).height() && !noData) {
+                        databind();;
+                    }
+                });
+            };
+
+            function databind() {
+                var startIndex = articlesList.find('.ch-feed-list-item').length;
+                articlesList.mask('Loading...');
+                $.ajax('/article/findFeedList', {
+                    type: "POST",
+                    data: {
+                        searchText: articlesSearch,
+                        startIndex: startIndex,
+                        pageSize: 5
+                    },
+                    success: function (data) {
+                        if (data.length != 0) {
+                            var newArticles = $(articlesTpl.tmpl(data, {
+                                isSelected: function (rating, index) {
+                                    return rating == index ? 'selected' : '';
+                                },
+                                created: function (created) {
+                                    return new Date(created).format("dd-MM-yyyy");
+                                }
+                            })).appendTo(articlesList);
+                            initRating(newArticles.find('select'));
+                            if(!$('.ch-container').hasScrollBar()){
+                                databind();
+                            }
+                        } else {
+                            noData = true;
+                        }
+                    }
+                }).always(function () {
+                    articlesList.unmask();
+                })
             };
 
             function initRating(ratingCtrl){
@@ -80,39 +117,6 @@
                     }
                 });
             }
-
-            function databind() {
-                var startIndex = articlesList.find('.ch-feed-list-item').length;
-                $('.ch-wrapper').mask('Loading...');
-                $.ajax('/article/findFeedList', {
-                    type: "POST",
-                    data: {
-                        searchText: articlesSearch,
-                        startIndex: startIndex,
-                        pageSize: 5
-                    },
-                    success: function (data) {
-                        if (data.length != 0) {
-                            var newArticles = $(articlesTpl.tmpl(data, {
-                                isSelected: function (rating, index) {
-                                    return rating == index ? 'selected' : '';
-                                },
-                                created: function (created) {
-                                    return new Date(created).format("dd-MM-yyyy");
-                                }
-                            })).appendTo(articlesList);
-                            initRating(newArticles.find('select'));
-                        } else {
-                            articleLoadBtn.prop("disabled", true);
-                            if(startIndex == 0){
-                                articlesList.addClass('ch-data-empty');
-                            }
-                        }
-                    }
-                }).always(function () {
-                    $('.ch-wrapper').unmask();
-                })
-            };
 
             initHandlers();
             databind();
