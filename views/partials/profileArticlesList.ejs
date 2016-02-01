@@ -10,7 +10,7 @@
         </div>
     </div>
     <script id="<%=articlesListItemTemplateId%>" type="text/html">
-        <div class="list-group-item">
+        <div class="list-group-item ${(published ? 'list-group-item-success':'')}">
             <div class="content-col">
                 <span>
                     <strong class="list-group-item-heading">${title}</strong>
@@ -71,15 +71,15 @@
                     type: "POST",
                     success: function (data) {
                         $(data)
-                                .appendTo('body')
-                                .modal()
-                                .on('hidden.bs.modal', function () {
-                                    $(this).remove();
-                                })
-                                .on('articleSaved', function(event, data){
-                                    var row = articlesTpl.tmpl(data).appendTo(articlesList);
-                                    initListItemHandlers(row);
-                                });
+                            .appendTo('body')
+                            .modal()
+                            .on('hidden.bs.modal', function () {
+                                $(this).remove();
+                            })
+                            .on('articleSaved', function(event, data){
+                                var row = articlesTpl.tmpl(data).appendTo(articlesList);
+                                initListItemHandlers(row);
+                            });
                     }
                 }).always(function () {
                     articlesPanel.unmask();
@@ -96,16 +96,16 @@
                     statusCode: {
                         200: function (data) {
                             $(data)
-                                    .appendTo('body')
-                                    .modal()
-                                    .on('hidden.bs.modal', function () {
-                                        $(this).remove();
-                                    })
-                                    .on('articleSaved', function(event, data){
-                                        item.data = data;
-                                        item.update();
-                                        initHandlers($(item.nodes));
-                                    });
+                            .appendTo('body')
+                            .modal()
+                            .on('hidden.bs.modal', function () {
+                                $(this).remove();
+                            })
+                            .on('articleSaved', function(event, data){
+                                item.data = data;
+                                item.update();
+                                initListItemHandlers($(item.nodes));
+                            });
                         }
                     }
                 }).always(function () {

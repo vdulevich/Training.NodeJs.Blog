@@ -9,6 +9,12 @@
         <div class="form-group">
             <textarea rows="10" class="form-control" placeholder="Content..." name="content"  type="text"><%=content%></textarea>
         </div>
+        <div class="input-group">
+            <span class="input-group-addon">
+                <input name="published" type="checkbox" <%=published ? "checked='checked'" : ""%> />
+            </span>
+            <span class="form-control">Publish</span>
+        </div>
     </fieldset>
 </form>
 

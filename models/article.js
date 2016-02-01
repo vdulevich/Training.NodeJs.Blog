@@ -11,6 +11,9 @@ var schema = mongoose.Schema({
     content: {
         type: String
     },
+    published:{
+        type: Boolean
+    },
     created: {
         type: Date,
         default: Date.now()

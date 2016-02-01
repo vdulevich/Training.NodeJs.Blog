@@ -16,9 +16,11 @@ router.get('/:id', function(req, res, next){
 });
 
 router.post('/save', checkAuth, function(req, res, next){
+    req.body._user = req.user._id;
+    req.body.published = req.body.published || false;
     Article.findOneAndUpdate(
         { _id: req.body.id },
-        { $set:{ title: req.body.title, content: req.body.content, _user: req.user._id } },
+        { $set: req.body },
         { new: true, upsert: true },
         function(err, article) {
             if(err) return next(err);
@@ -38,7 +40,7 @@ router.post('/findFeedList', function(req, res, next){
     var searchText = req.body.searchText,
         startIndex = parseInt(req.body.startIndex),
         pageSize = parseInt(req.body.pageSize),
-        findOptions = { };
+        findOptions = { published : true };
 
     if(searchText){
         findOptions.title = new RegExp(searchText, "i");
@@ -84,7 +86,8 @@ router.post('/findByUser', function(req, res, next){
             return {
                 _id: article._id,
                 title: article.title,
-                content: article.content.substring(0, 200)
+                content: article.content.substring(0, 200),
+                published: article.published
             }
         }));
     })
