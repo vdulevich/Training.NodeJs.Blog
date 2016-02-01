@@ -56,7 +56,7 @@
                 });
 
                 $(window).scroll(function() {
-                    if(($(window).scrollTop() == $(document).height() - $(window).height()) && !noData) {
+                    if(($(window).scrollTop() >= ($(document).height() - $(window).height() - 50)) && !noData) {
                         databind();;
                     }
                 });
