@@ -67,6 +67,7 @@
             }
 
             function onAdd(){
+                articlesPanel.mask();
                 $.ajax('/article/getEditDlg', {
                     type: "POST",
                     success: function (data) {
