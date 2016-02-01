@@ -10,7 +10,7 @@
         </div>
     </div>
     <script id="<%=articlesListItemTemplateId%>" type="text/html">
-        <div class="list-group-item ${(published ? 'list-group-item-success':'')}">
+        <div class="list-group-item ${(published && !<%=readonly%> ? 'list-group-item-success':'')}">
             <div class="content-col">
                 <span>
                     <strong class="list-group-item-heading">${title}</strong>

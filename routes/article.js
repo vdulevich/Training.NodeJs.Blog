@@ -80,7 +80,11 @@ router.post('/findFeedList', function(req, res, next){
 });
 
 router.post('/findByUser', function(req, res, next){
-    Article.find({ _user: req.body.id || req.user }, function(err, articles){
+    var findOptions = { _user: req.body.id || req.user };
+    if(!(req.user && req.user._id.equals(req.body.id))){
+        findOptions.published = true;
+    }
+    Article.find(findOptions, function(err, articles){
         if(err) return next(err);
         res.json(articles.map(function(article){
             return {
