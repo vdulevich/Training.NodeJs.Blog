@@ -36,10 +36,9 @@ router.post('/delete', checkAuth, function(req, res, next){
 
 router.post('/findFeedList', function(req, res, next){
     var searchText = req.body.searchText,
-        startDate = req.body.startdate,
         startIndex = parseInt(req.body.startIndex),
         pageSize = parseInt(req.body.pageSize),
-        findOptions = { created: { $lte: startDate } };
+        findOptions = { };
 
     if(searchText){
         findOptions.title = new RegExp(searchText, "i");

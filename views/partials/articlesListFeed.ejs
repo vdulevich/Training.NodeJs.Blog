@@ -46,8 +46,7 @@
     </script>
     <script type="text/javascript">
         (function () {
-            var articlesFeedStartDate = Date.now(),
-                articlesSearch = '<%=searchText%>',
+            var articlesSearch = '<%=searchText%>',
                 articlesPanel = $('#<%= articlesFeedContainerId %>'),
                 articlesList = articlesPanel.find('#<%=articlesFeedListId%>'),
                 articleLoadBtn = articlesPanel.find('.btn'),
@@ -89,7 +88,6 @@
                     type: "POST",
                     data: {
                         searchText: articlesSearch,
-                        startdate: articlesFeedStartDate,
                         startIndex: startIndex,
                         pageSize: 5
                     },
