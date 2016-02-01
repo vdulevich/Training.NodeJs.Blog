@@ -4,6 +4,7 @@ var express = require('express');
 var errors = require('errors');
 var checkAuth = require('middleware/checkAuth');
 var router = express.Router();
+var Profile = require('models/profile');
 var Article = require('models/article');
 var User = require('models/user');
 
@@ -39,44 +40,61 @@ router.post('/delete', checkAuth, function(req, res, next){
 router.post('/findFeedList', function(req, res, next){
     var searchText = req.body.searchText,
         startIndex = parseInt(req.body.startIndex),
-        pageSize = parseInt(req.body.pageSize),
-        findOptions = { published : true };
-
-    if(searchText){
-        findOptions.title = new RegExp(searchText, "i");
-    }
-    Article
-        .find(
-            findOptions,
-            { },
-            { limit: pageSize, skip: startIndex, sort: { created: -1 }}
-        )
-        .populate({
-            path: '_user',
-            model: 'User',
-            select: '_profile',
-            populate: {
-                path: '_profile',
-                model: 'Profile',
-                select: 'firstName lastName'
+        pageSize = parseInt(req.body.pageSize);
+    async.waterfall([
+        function(callback){
+            if(searchText) {
+                Profile
+                    .find({ $or : [{'firstName' : new RegExp(searchText, "i")}, {'lastName' : new RegExp(searchText, "i")}] })
+                    .select({ _user: 1})
+                    .exec(callback);
+            } else {
+                callback(null, []);
             }
-        })
-        .exec(function(err, articles){
-            if(err) return next(err);
-            res.json(articles.map(function(article){
-                return {
-                    id: article._id,
-                    title: article.title,
-                    content: article.content.substring(0, 200),
-                    author: article._user._profile.fullName,
-                    userId: article._user._id,
-                    readonly: !(req.user && article._user._id.equals(req.user._id)),
-                    rating: article.rating,
-                    comments: article._comments.length,
-                    created: article.created
-                }
-            }));
-        });
+        },
+        function(profiles, callback) {
+
+            var findOptions = { published : true };
+            if(searchText){
+                findOptions.$or = [
+                    {'title' : new RegExp(searchText, "i") },
+                    { '_user': { $in: profiles.map(function(profiles){ return profiles._user }) } }
+                ]
+            }
+            Article
+                .find(
+                    findOptions,
+                    {},
+                    {limit: pageSize, skip: startIndex, sort: {created: -1}}
+                )
+                .populate({
+                    path: '_user',
+                    model: 'User',
+                    select: '_profile',
+                    populate: {
+                        path: '_profile',
+                        model: 'Profile',
+                        select: 'firstName lastName'
+                    }
+                }).exec(callback)
+        }
+    ],
+    function(err, articles){
+        if(err) return next(err);
+        res.json(articles.map(function(article){
+            return {
+                id: article._id,
+                title: article.title,
+                content: article.content.substring(0, 200),
+                author: article._user._profile.fullName,
+                userId: article._user._id,
+                readonly: !(req.user && article._user._id.equals(req.user._id)),
+                rating: article.rating,
+                comments: article._comments.length,
+                created: article.created
+            }
+        }));
+    });
 });
 
 router.post('/findByUser', function(req, res, next){
