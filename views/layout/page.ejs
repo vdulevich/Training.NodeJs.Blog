@@ -43,16 +43,18 @@
         <% } %>
     </head>
     <body>
-        <div class="ch-container container">
+
             <div class="ch-wrapper">
                 <div class="ch-header">
-                    <%-partial("../partials/header.ejs")%>
+                    <div class="container">
+                        <%-partial("../partials/header.ejs")%>
+                    </div>
                 </div>
-                <div class="ch-center">
+                <div class="ch-center container">
                     <%-body%>
                 </div>
             </div>
             <div class="ch-footer">Footer container</div>
-        </div>
+
     </body>
 </html>
