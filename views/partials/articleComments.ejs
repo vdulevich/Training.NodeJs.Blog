@@ -2,31 +2,36 @@
 
 
 <div id="<%=commentsContainerId%>">
-    <div class="panel panel-default">
-        <div class="panel-heading">Comments</div>
+
+    <div class="form-group">
         <div class="ch-comments-list list-group">
             <div class="ch-data-empty-message">No comments found.</div>
         </div>
-        <% if(!readonly) { %>
-        <div class="panel-footer">
-            <form accept-charset="UTF-8" role="form">
-                <div class="form-group">
-                    <input type="hidden" name="_article" value="<%=article._id%>"/>
-                    <textarea name="content" class="form-control" style="height: 100px;"></textarea>
-                </div>
-            </form>
-            <input class="btn btn-success" value="Leave comment" type="button">
-        </div>
-        <% } %>
+
     </div>
 
-    <script id="<%=commentItemTmplId%>" type="text/html">
-        <div class="list-group-item">
-            <div class="photo-col">
-                <img class="img-circle" src="/images/no-photo.png"/>
+    <% if(!readonly) { %>
+    <div class="">
+        <form accept-charset="UTF-8" role="form">
+            <div class="form-group">
+                <input type="hidden" name="_article" value="<%=article._id%>"/>
+                <textarea name="content" class="form-control" style="height: 100px;"></textarea>
             </div>
-            <div>
-                <div class="author-label">Comment by <a href="/profile/${_user._id}"><strong>${_user._profile.fullName}</strong></a></div>
+        </form>
+        <input class="btn btn-success" value="Leave comment" type="button">
+    </div>
+    <% } %>
+
+    <script id="<%=commentItemTmplId%>" type="text/html">
+        <div class="ch-comments-list-item">
+            <div class="photo-col">
+                <img src="/images/no-photo.png"/>
+            </div>
+            <div class="content-col">
+                <div class="content-col-header">Comment by
+                    <a href="/profile/${_user._id}">
+                        <strong>${_user._profile.fullName}</strong>
+                    </a> at ${$item.created(created)}</div>
                 <p class="list-group-item-text">${content}</p>
             </div>
         </div>
@@ -76,7 +81,11 @@
                     type: "POST",
                     data: {_id: '<%= article._id %>'},
                     success: function (data) {
-                        commentsItemTpl.tmpl(data).appendTo(commentsList);
+                        commentsItemTpl.tmpl(data,{
+                            created: function (created) {
+                                return new Date(created).format("dd-mm-yyyy");
+                            }
+                        }).appendTo(commentsList);
                         if(data.length == 0){
                             commentsList.addClass('ch-data-empty');
                         }

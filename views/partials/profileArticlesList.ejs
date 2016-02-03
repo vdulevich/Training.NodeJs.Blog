@@ -3,10 +3,10 @@
 <div id="<%=articlesPanelId%>">
     <div class="ch-article-panel panel panel-default <%=readonly?'ch-article-panel--readonly':''%>">
         <div class="panel-heading">
-            Articles
-            <a class="pull-right glyphicon glyphicon-plus"></a>
+            Articles <a class="pull-right glyphicon glyphicon-plus"></a>
         </div>
         <div class="ch-profile-actiles list-group">
+            <div class="ch-data-empty-message">No articles found.</div>
         </div>
     </div>
     <script id="<%=articlesListItemTemplateId%>" type="text/html">
@@ -55,11 +55,12 @@
                 $.ajax('/article/findByUser', {
                     type: "POST",
                     data: { id : '<%=user._id%>' },
-                    statusCode: {
-                        200: function (data) {
-                            articlesTpl.tmpl(data).appendTo(articlesList);
-                            initHandlers();
+                    success:  function (data) {
+                        articlesTpl.tmpl(data).appendTo(articlesList);
+                        if(data.length == 0){
+                            articlesList.addClass('ch-data-empty');
                         }
+                        initHandlers();
                     }
                 }).always(function () {
                     articlesList.unmask();

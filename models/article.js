@@ -52,10 +52,10 @@ schema.methods.addOrUpdateUserRate = function(userId, rating){
 schema.virtual('rating')
     .get(function(){
         console.log(this.rates);
-        return Math.round(this.rates
+        return this.rates
                 .map(function(item){ return item.rate; })
                 .reduce(function(a, b) { return a + b;}, 0)
-            / (this.rates.length == 0 ? 1 : this.rates.length));
+            / (this.rates.length == 0 ? 1 : this.rates.length);
     });
 
 if(mongoose.models.Article){

@@ -30,11 +30,11 @@
                 </div>
                 <div class="ch-feed-author col-lg-6">
                     <div class="ch-feed-rate">
-                        <select>
-                            {{each [0,1,2,3,4,5,6,7,8,9]}}
-                            <option value="${$value}" ${$item.isSelected(rating, $value)}>${$value}</option>
-                            {{/each}}
-                        </select>
+                        <span>rating
+                            <strong>${parseFloat(rating).toFixed(1)}
+                                <span class="glyphicon glyphicon-star"></span>
+                            </strong>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -78,12 +78,12 @@
                                     return backgroundPath.replace('public\\','').replace(new RegExp("\\\\",'g'), '/')
                                 },
                                 created: function (created) {
-                                    return new Date(created).format("dd-MM-yyyy");
+                                    return new Date(created).format("dd-mm-yyyy");
                                 }
                             }))
-                           .each(function(index, item){
+                           /*.each(function(index, item){
                                initRating($(item).find('select'), $.tmplItem(item).data);
-                           })
+                           })*/
                            .appendTo(articlesList);
                         } else {
                             if(startIndex == 0){
@@ -97,7 +97,7 @@
                 })
             };
 
-            function initRating(ratingCtrl, data){
+            /*function initRating(ratingCtrl, data){
                 ratingCtrl.barrating({
                     theme: 'bars-movie',
                     readonly: data.readonly,
@@ -118,7 +118,7 @@
                         }
                     }
                 });
-            }
+            }*/
 
             initHandlers();
             databind();

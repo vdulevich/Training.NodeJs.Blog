@@ -80,14 +80,7 @@ a:hover {
   overflow: hidden;
 }
 
-/*@media only screen and (max-width: 532px) {
-  .ch-wrapper::before{
-    top: 50px;
-  }
-}*/
-
 .ch-header {
-  /*padding: 20px 0px 20px 0px;*/
   background-image:url("../images/header-bg.png");
 }
 
@@ -164,12 +157,22 @@ a:hover {
 
 /*-------Bootstrap------*/
 
-.panel{
-  /*border-radius: 0px;*/
+.panel {
+  border-radius: 0px;
 }
 
 .panel-default > .panel-heading{
-  background-color: #eee;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 0px;
+}
+
+.panel-body{
+  padding: 8px 15px;
+}
+
+.form-group{
+  margin-bottom: 8px;
 }
 
 /*-----Generic styles----*/
@@ -198,17 +201,8 @@ a:hover {
   text-overflow: ellipsis;
 }
 
-.ch-profileinfo-panel .panel-footer{
-  display: none;
-}
-
-.ch-profileinfo-panel.ch-profileinfo-panel--edit .panel-footer{
-  display: block;
-}
-
-.ch-article-panel.ch-article-panel--readonly .glyphicon-plus,
-.ch-article-panel.ch-article-panel--readonly .edit-col{
-  display: none;
+.ch-profileinfo-panel .panel-body{
+  padding-bottom: 0px;
 }
 
 .ch-profile-actiles .list-group-item {
@@ -295,8 +289,13 @@ a:hover {
   padding-left: 10px;
 }
 
-.ch-feed-list .ch-feed-rate{
-  margin-top:10px;
+.ch-feed-list .ch-feed-rate strong{
+  color: #b92c28;
+}
+.ch-feed-list .ch-feed-rate .glyphicon {
+  position: relative;
+  top: 2px;
+  padding-left: 3px;
 }
 
 @media (min-width: 1200px){
@@ -339,16 +338,35 @@ a:hover {
   width: 100%;
 }
 
-.ch-comments-list .list-group-item {
+.ch-comments-list .content-col {
+  background-color: #f7f7f7;
+  border-radius: 3px;
+  padding: 0px 10px;
+}
+
+.ch-comments-list .content-col p {
+  min-height:50px;
+  padding-top: 5px;
+}
+
+.ch-comments-list .content-col-header{
+  border-bottom: 1px solid lightgray;
+  padding: 3px 0px;
+}
+
+.ch-comments-list .ch-comments-list-item {
   display: table;
   table-layout: fixed;
   width: 100%;
+  margin-bottom: 8px;
 }
 
-.ch-comments-list .list-group-item > div{
+.ch-comments-list .ch-comments-list-item > div{
   display: table-cell;
   vertical-align: top;
 }
+
+/*--------Articles--------*/
 
 .ch-article-panel .panel-heading {
   position: relative;
@@ -358,4 +376,8 @@ a:hover {
   position: absolute;
   right: 10px;
   top: 16px;
+}
+
+.ch-article-panel .panel-body{
+  min-height:100px;
 }

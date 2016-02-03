@@ -29,16 +29,39 @@ router.post('/save', checkAuth , upload.single('background'), function(req, res,
     if(req.file && req.file.path) {
         req.body.backgroundPath = req.file.path;
         req.body.backgroundFileName = req.file.originalname;
-        console.log(req.file);
     }
-    Article.findOneAndUpdate(
-        { _id: req.body.id },
-        { $set: req.body },
-        { new: true, upsert: true },
-        function (err, article) {
-            if (err) return next(err);
-            res.json(article);
-        });
+    async.waterfall([
+        function(callback){
+            Article.findById(req.body._id, callback)
+        },
+        function(oldArticle, callback){
+            if(oldArticle){
+                Article.update(
+                    { _id: req.body._id },
+                    { $set: req.body },
+                    { new: true },
+                    function(err, newArticle){
+                        if(err) return callback(err);
+                        callback(null, oldArticle, newArticle);
+                    }
+                );
+            } else {
+                new Article(req.body).save(function(err, newArticle){
+                    if(err) return callback(err);
+                    callback(null, oldArticle, newArticle);
+                });
+            }
+        },
+        function(oldArticle, newArticle, callback){
+            if(oldArticle && oldArticle.backgroundPath != newArticle.backgroundPath){
+                require('fs').unlink(oldArticle.backgroundPath);
+            }
+            callback(null, newArticle);
+        }
+    ], function(err, article){
+        if(err) return next(err);
+        res.json(article);
+    });
 });
 
 router.post('/delete', checkAuth, function(req, res, next){
@@ -129,14 +152,14 @@ router.post('/findByUser', function(req, res, next){
 });
 
 router.post('/setUserRate', checkAuth, function(req, res, next){
-    if(!req.user) next(new errors.HttpError(403));
     Article.findById(req.body.id, function(err, article){
         if(err) return next(err);
         if(!article) return next(new errors.HttpError(404));
         article.addOrUpdateUserRate(req.user._id, parseInt(req.body.rate));
+        console.log(article.rating);
         article.save(function(err, article){
             if(err) return next(err);
-            res.json(article.rating);
+            res.json(Math.round(article.rating));
         });
     })
 });
