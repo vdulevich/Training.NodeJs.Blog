@@ -9,45 +9,75 @@
         <div class="form-group">
             <textarea rows="10" class="form-control" placeholder="Content..." name="content"  type="text"><%=content%></textarea>
         </div>
-        <div class="input-group">
+        <div class="form-group input-group">
             <span class="input-group-addon">
                 <input name="published" type="checkbox" <%=published ? "checked='checked'" : ""%> />
             </span>
             <span class="form-control">Publish</span>
         </div>
+        <div class="form-group input-group">
+            <div class="input-group-addon btn btn-success ch-file-upload">
+                <span>Background</span>
+                <input type="file" name="background" />
+            </div>
+            <label class="form-control"><%=backgroundFileName ? backgroundFileName : 'No file selected...'%></label>
+        </div>
+        <div class="form-group input-group">
+            <span class="input-group-addon">
+                Background style
+            </span>
+            <input class="form-control" name="backgroundStyle" type="text" value="<%=backgroundStyle || ''%>"/>
+        </div>
     </fieldset>
 </form>
 
 <script>
-    (function initArticleEdit(){
-        var form = $('#<%=formId%>');
-        var validator = form.validate({
-            rules: {
-                title: {
-                    required: true
-                },
-                content: {
-                    required: true
-                }
-            },
-            highlight: function(element) {
-                $(element).closest('.form-group').addClass('has-error');
-            },
-            unhighlight: function(element) {
-                $(element).closest('.form-group').removeClass('has-error');
-            },
-            submitHandler:function(form){
-                $(form).mask('Loading...');
-                $.ajax('/article/save', {
-                    type: "POST",
-                    data: $(form).serialize(),
-                    success: function (data) {
-                        $(form).trigger('articleSaved', data);
+    (function(){
+        var form = $('#<%=formId%>'),
+            file = form.find('input[type=file]');
+
+        function initHandlers(){
+            var validator = form.validate({
+                rules: {
+                    title: {
+                        required: true
+                    },
+                    content: {
+                        required: true
                     }
-                }).always(function () {
-                    $(form).unmask();
-                });
-            }
-        });
+                },
+                highlight: function(element) {
+                    $(element).closest('.form-group').addClass('has-error');
+                },
+                unhighlight: function(element) {
+                    $(element).closest('.form-group').removeClass('has-error');
+                },
+                submitHandler:function(form){
+                    $(form).mask('Loading...');
+                    var formData = new FormData(form);
+                    formData.append('background', file[0]);
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('post', '/article/save', true);
+                    xhr.send(formData);
+                    xhr.onreadystatechange = function() {
+                        $(form).unmask();
+                        if (xhr.readyState == 4) {
+                            if(xhr.status == 200) {
+                                $(form).trigger('articleSaved', JSON.parse(xhr.responseText));
+                            }
+                        }
+                    };
+                }
+            });
+
+            file.on('change',function(event){
+                var path = event.currentTarget.value.split('\\');
+                file.closest('.input-group')
+                        .find('.form-control')
+                        .html(path[path.length - 1]);
+            });
+        }
+
+        initHandlers();
     })();
 </script>

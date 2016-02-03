@@ -20,7 +20,7 @@
         (function initArticleEditDlg(){
             var dlg = $('#<%=dlgId%>');
             var form = dlg.find('form');
-            dlg.find('.btn-success').on('click', function(){
+            dlg.find('.modal-footer .btn-success').on('click', function(){
                 form.submit();
             });
             form.on('articleSaved', function(){

@@ -2,7 +2,9 @@ var mongoose = require('lib/mongoose');
 var async = require('async');
 var express = require('express');
 var errors = require('errors');
-var checkAuth = require('middleware/checkAuth');
+var checkAuth = require('middleware/checkAuth')
+var multer = require('multer');
+var upload  = multer({ dest: 'public/articlesbg' });
 var router = express.Router();
 var Profile = require('models/profile');
 var Article = require('models/article');
@@ -12,19 +14,29 @@ var User = require('models/user');
 router.get('/:id', function(req, res, next){
     Article.findById(req.params.id, function(err, article){
         if(err) return next(err);
-        res.render('article', { article: article, readonly: !(req.user && !article._user.equals(req.user._id)) });
+        res.render('article',
+            {
+                article: article,
+                readonly: !(req.user && !article._user.equals(req.user._id))
+            });
     })
 });
 
-router.post('/save', checkAuth, function(req, res, next){
+
+router.post('/save', checkAuth , upload.single('background'), function(req, res, next) {
     req.body._user = req.user._id;
     req.body.published = req.body.published || false;
+    if(req.file && req.file.path) {
+        req.body.backgroundPath = req.file.path;
+        req.body.backgroundFileName = req.file.originalname;
+        console.log(req.file);
+    }
     Article.findOneAndUpdate(
         { _id: req.body.id },
         { $set: req.body },
         { new: true, upsert: true },
-        function(err, article) {
-            if(err) return next(err);
+        function (err, article) {
+            if (err) return next(err);
             res.json(article);
         });
 });
@@ -90,7 +102,9 @@ router.post('/findFeedList', function(req, res, next){
                 readonly: !(req.user && !article._user._id.equals(req.user._id)),
                 rating: article.rating,
                 comments: article._comments.length,
-                created: article.created
+                created: article.created,
+                backgroundPath: article.backgroundPath || '',
+                backgroundStyle: article.backgroundStyle
             }
         }));
     });
@@ -107,7 +121,7 @@ router.post('/findByUser', function(req, res, next){
             return {
                 _id: article._id,
                 title: article.title,
-                content: article.content.substring(0, 200),
+                content: article.content ? article.content.substring(0, 200) : '',
                 published: article.published
             }
         }));

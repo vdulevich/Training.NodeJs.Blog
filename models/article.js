@@ -14,6 +14,15 @@ var schema = mongoose.Schema({
     published:{
         type: Boolean
     },
+    backgroundPath:{
+        type: String
+    },
+    backgroundStyle: {
+        type: String
+    },
+    backgroundFileName:{
+        type: String
+    },
     created: {
         type: Date,
         default: Date.now()

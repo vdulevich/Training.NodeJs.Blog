@@ -47,6 +47,22 @@ a:hover {
   }
 }
 
+.ch-file-upload{
+  overflow: hidden;
+  position: relative;
+}
+
+.ch-file-upload input[type=file]{
+  display: block;
+  width: 9999px;
+  height: 9999px;
+  right: 0px;
+  top: 0px;
+  position: absolute;
+  border: 0px;
+  opacity: 0;
+}
+
 /*-----Layout page-----*/
 
 .ch-container {

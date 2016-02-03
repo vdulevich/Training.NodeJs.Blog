@@ -9,7 +9,7 @@
     <input type="button" class="btn btn-default btn-link btn-block" value="Load more"/>
     <script type="text/html" class="hidden" id="<%=articlesFeedItemTemplateId%>">
        <div class="col-lg-6 ch-feed-list-item" data-readonly="${readonly}">
-           <div class="panel">
+           <div class="panel" style="background-image: url('${$item.background(backgroundPath)}'); ${backgroundStyle}">
             <div class="panel-heading">
                 <div class="row">
                 <div class="ch-feed-title col-lg-6">
@@ -73,6 +73,9 @@
                             var newArticles = $(articlesTpl.tmpl(data, {
                                 isSelected: function (rating, index) {
                                     return rating == index ? 'selected' : '';
+                                },
+                                background: function(backgroundPath){
+                                    return backgroundPath.replace('public\\','').replace(new RegExp("\\\\",'g'), '/')
                                 },
                                 created: function (created) {
                                     return new Date(created).format("dd-MM-yyyy");
