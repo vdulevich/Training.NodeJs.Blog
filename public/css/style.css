@@ -190,7 +190,7 @@ a:hover {
 .ch-data-empty-message{
   display: none;
   padding: 15px;
-  background-color: #f7f7f7;
+  background-color: #f3f3f3;
 }
 
 /*-----Profile page-----*/
@@ -205,38 +205,38 @@ a:hover {
   padding-bottom: 0px;
 }
 
-.ch-profile-actiles .list-group-item {
+.ch-profile-actiles-list .list-group-item {
   display: table;
   table-layout: fixed;
   width: 100%;
   padding: 10px;
 }
 
-.ch-profile-actiles .list-group-item > div {
+.ch-profile-actiles-list .list-group-item > div {
   display: table-cell;
   vertical-align: middle;
 }
 
-.ch-profile-actiles .content-col {
+.ch-profile-actiles-list .content-col {
   width: 100%;
 }
 
-.ch-profile-actiles .content-col p {
+.ch-profile-actiles-list .content-col p {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.ch-profile-actiles .edit-col{
+.ch-profile-actiles-list .edit-col{
   width: 50px;
   text-align: right;
 }
 
-.ch-profile-actiles .edit-col .glyphicon {
+.ch-profile-actiles-list .edit-col .glyphicon {
   padding-right: 10px ;
 }
 
-.ch-profile-actiles .edit-col .glyphicon:last-child{
+.ch-profile-actiles-list .edit-col .glyphicon:last-child{
   padding-right: 0px;
 }
 
@@ -339,7 +339,7 @@ a:hover {
 }
 
 .ch-comments-list .content-col {
-  background-color: #f7f7f7;
+  background-color: #f3f3f3;
   border-radius: 3px;
   padding: 0px 10px;
 }
@@ -366,7 +366,23 @@ a:hover {
   vertical-align: top;
 }
 
-/*--------Articles--------*/
+/*--------Profile Info --------*/
+
+.ch-profile-article-panel.ch-profile-article-panel--readonly .glyphicon-plus,
+.ch-profile-article-panel.ch-profile-article-panel--readonly .edit-col {
+  display: none;
+}
+
+.ch-profileinfo-panel .panel-body {
+  padding-bottom: 0px;
+}
+
+
+/*------Articles Panel------*/
+
+.ch-article-panel .panel-body {
+  min-height:100px;
+}
 
 .ch-article-panel .panel-heading {
   position: relative;
@@ -376,8 +392,4 @@ a:hover {
   position: absolute;
   right: 10px;
   top: 16px;
-}
-
-.ch-article-panel .panel-body{
-  min-height:100px;
 }
