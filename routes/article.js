@@ -35,8 +35,13 @@ router.post('/save', checkAuth , upload.single('background'), function(req, res,
             Article.findById(req.body._id, callback)
         },
         function(oldArticle, callback){
-            if(oldArticle){
-                Article.update(
+            if(!oldArticle){
+                (new Article(req.body)).save(function(err, newArticle){
+                    if(err) return callback(err);
+                    callback(null, oldArticle, newArticle);
+                });
+            } else if(oldArticle._user.equals(req.user._id)) {
+                Article.findByIdAndUpdate(
                     { _id: req.body._id },
                     { $set: req.body },
                     { new: true },
@@ -46,17 +51,17 @@ router.post('/save', checkAuth , upload.single('background'), function(req, res,
                     }
                 );
             } else {
-                new Article(req.body).save(function(err, newArticle){
-                    if(err) return callback(err);
-                    callback(null, oldArticle, newArticle);
-                });
+                callback(new errors.HttpError(403));
             }
         },
         function(oldArticle, newArticle, callback){
             if(oldArticle && oldArticle.backgroundPath != newArticle.backgroundPath){
-                require('fs').unlink(oldArticle.backgroundPath);
+                require('fs').unlink(oldArticle.backgroundPath, function(){
+                    callback(null, newArticle);
+                });
+            } else {
+                callback(null, newArticle);
             }
-            callback(null, newArticle);
         }
     ], function(err, article){
         if(err) return next(err);
