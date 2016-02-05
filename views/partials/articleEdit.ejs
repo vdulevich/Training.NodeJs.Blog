@@ -36,6 +36,12 @@
         var form = $('#<%=formId%>'),
             file = form.find('input[type=file]');
 
+        function getFormData(){
+            var formData = new FormData(form);
+            formData.append('background', file[0]);
+            return formData;
+        }
+
         function initHandlers(){
             var validator = form.validate({
                 rules: {
@@ -53,31 +59,17 @@
                     $(element).closest('.form-group').removeClass('has-error');
                 },
                 submitHandler:function(form){
-                    $(form).mask('Loading...');
                     var formData = new FormData(form);
                     formData.append('background', file[0]);
-                    var xhr = new XMLHttpRequest();
-                    xhr.open('post', '/article/save', true);
-                    xhr.send(formData);
-                    xhr.onreadystatechange = function() {
-                        $(form).unmask();
-                        if (xhr.readyState == 4) {
-                            if(xhr.status == 200) {
-                                $(form).trigger('articleSaved', JSON.parse(xhr.responseText));
-                            }
-                        }
-                    };
+                    $(form).trigger('submitHandler', formData);
                 }
             });
 
             file.on('change',function(event){
                 var path = event.currentTarget.value.split('\\');
-                file.closest('.input-group')
-                        .find('.form-control')
-                        .html(path[path.length - 1]);
+                file.closest('.input-group').find('.form-control').html(path[path.length - 1]);
             });
         }
-
         initHandlers();
     })();
 </script>

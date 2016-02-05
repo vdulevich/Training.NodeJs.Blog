@@ -1,14 +1,14 @@
 <% var dlgId = 'articleEditDlg'%>
 
-<div id="<%=dlgId%>" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="articleEditLabel">
+<div id="<%=dlgId%>" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="articleEditLabel">Edit Article</h4>
+                <h4 class="modal-title">Edit Article</h4>
             </div>
             <div class="modal-body">
-                <%-partial("../partials/articleEdit.ejs",{ title: title, content: content })%>
+                <%-partial("../partials/articleEdit.ejs")%>
             </div>
             <div class="modal-footer text-right">
                 <input class="btn btn-success" value="Save" type="button"/>
@@ -17,15 +17,33 @@
         </div>
     </div>
     <script type="text/javascript">
-        (function initArticleEditDlg(){
-            var dlg = $('#<%=dlgId%>');
-            var form = dlg.find('form');
-            dlg.find('.modal-footer .btn-success').on('click', function(){
-                form.submit();
-            });
-            form.on('articleSaved', function(){
-                dlg.modal('hide');
-            });
+        (function (){
+            var dlg = $('#<%=dlgId%>'),
+                form = dlg.find('form'),
+                save = dlg.find('.modal-footer .btn-success');
+
+            function initHandlers(){
+                save.on('click', function(){
+                    form.submit();
+                });
+
+                form.on('submitHandler', function(event, data){
+                    dlg.mask('Loading...');
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('post', '/article/save', true);
+                    xhr.send(data);
+                    xhr.onreadystatechange = function() {
+                        $(form).unmask();
+                        if (xhr.readyState == 4) {
+                            if(xhr.status == 200) {
+                                dlg.trigger('articleSaved', JSON.parse(xhr.responseText));
+                            }
+                        }
+                        dlg.unmask();
+                    };
+                });
+            }
+            initHandlers();
         })();
     </script>
 </div>

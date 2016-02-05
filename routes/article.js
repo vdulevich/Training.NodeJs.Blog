@@ -41,10 +41,10 @@ router.post('/save', checkAuth , upload.single('background'), function(req, res,
                     callback(null, oldArticle, newArticle);
                 });
             } else if(oldArticle._user.equals(req.user._id)) {
-                Article.findByIdAndUpdate(
+                Article.findOneAndUpdate(
                     { _id: req.body._id },
                     { $set: req.body },
-                    { new: true },
+                    { new: true, runValidators: true },
                     function(err, newArticle){
                         if(err) return callback(err);
                         callback(null, oldArticle, newArticle);
@@ -100,8 +100,7 @@ router.post('/findFeedList', function(req, res, next){
                     { '_user': { $in: profiles.map(function(profiles){ return profiles._user }) } }
                 ]
             }
-            Article
-                .find(
+            Article.find(
                     findOptions,
                     {},
                     {limit: pageSize, skip: startIndex, sort: {created: -1}}
@@ -115,7 +114,8 @@ router.post('/findFeedList', function(req, res, next){
                         model: 'Profile',
                         select: 'firstName lastName'
                     }
-                }).exec(callback)
+                })
+                .exec(callback)
         }
     ],
     function(err, articles){
@@ -143,7 +143,7 @@ router.post('/findByUser', function(req, res, next){
     if(!(req.user && req.user._id.equals(req.body.id))){
         findOptions.published = true;
     }
-    Article.find(findOptions, function(err, articles){
+    Article.find(findOptions, {}, {sort: {created: -1}}).exec(function(err, articles){
         if(err) return next(err);
         res.json(articles.map(function(article){
             return {
@@ -153,7 +153,7 @@ router.post('/findByUser', function(req, res, next){
                 published: article.published
             }
         }));
-    })
+    });
 });
 
 router.post('/setUserRate', checkAuth, function(req, res, next){

@@ -159,6 +159,8 @@ a:hover {
 
 .panel {
   border-radius: 0px;
+  box-shadow: 0px 0px 15px -5px black;
+  border: none;
 }
 
 .panel-default > .panel-heading{
@@ -210,6 +212,7 @@ a:hover {
   table-layout: fixed;
   width: 100%;
   padding: 10px;
+  margin-bottom: 10px;
 }
 
 .ch-profile-actiles-list .list-group-item > div {
@@ -225,6 +228,7 @@ a:hover {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  min-height: 60px;
 }
 
 .ch-profile-actiles-list .edit-col{
@@ -260,11 +264,53 @@ a:hover {
 
 .ch-feed-list .panel {
   margin-bottom: 0px;
+  border:none;
 }
 
 .ch-feed-list .panel-body {
   padding-top: 0px;
 
+}
+
+.ch-feed-list .panel-body{
+  position: relative;
+}
+
+.ch-feed-list .panel-body:before {
+  content: '';
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0.61+100 */
+  background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.61) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.61) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.61) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#9cffffff',GradientType=1 ); /* IE6-9 */
+  display: block;
+}
+
+.ch-feed-list .panel-body:after {
+  content: '';
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0.1+50 */
+  background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.1) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#1affffff',GradientType=0 ); /* IE6-9 */
+  display: block;
+}
+
+.ch-feed-list .panel-heading {
+}
+
+.ch-feed-list .panel-footer{
+  background-color: transparent;
 }
 
 @media (min-width: 1200px) {
@@ -277,6 +323,8 @@ a:hover {
   height: 130px;
   overflow: hidden;
   text-overflow: ellipsis;
+  position: relative;
+  z-index: 1;
 }
 
 .ch-feed-list .ch-feed-author {
@@ -285,9 +333,6 @@ a:hover {
   text-overflow: ellipsis;
 }
 
-.ch-feed-list .ch-feed-viewlink {
-  padding-left: 10px;
-}
 
 .ch-feed-list .ch-feed-rate strong{
   color: #b92c28;

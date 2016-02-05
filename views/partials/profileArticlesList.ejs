@@ -1,39 +1,45 @@
-<%var articlesPanelId = 'articlesList', articlesListItemTemplateId = 'articlesListItemTemplate'; %>
+<%var articlesContainerId = 'articlesContainer',
+      articlesListId= 'articlesList',
+      articlesListItemTemplateId = 'articlesListItemTemplate'; %>
 
-<div id="<%=articlesPanelId%>">
+<div id="<%=articlesContainerId%>">
+
     <div class="ch-profile-article-panel panel panel-default <%=readonly?'ch-profile-article-panel--readonly':''%>">
         <div class="panel-heading">
             Articles <a class="pull-right glyphicon glyphicon-plus"></a>
         </div>
-        <div class="ch-profile-actiles-list list-group">
-            <div class="ch-data-empty-message">No articles found.</div>
+        <div class="panel-body">
+            <div id="<%=articlesListId%>" class="ch-profile-actiles-list row">
+                <div class="ch-data-empty-message">No articles found.</div>
+            </div>
         </div>
     </div>
     <script id="<%=articlesListItemTemplateId%>" type="text/html">
-        <div class="list-group-item ${(published && !<%=readonly%> ? 'list-group-item-success':'')}">
-            <div class="content-col">
-                <span>
-                    <strong class="list-group-item-heading">${title}</strong>
-                    <a href="/article/${_id}">view article</a>
-                </span>
-                <p class="list-group-item-text">${content}</p>
-            </div>
-            <div class="edit-col">
-                <a class="glyphicon glyphicon-edit"></a>
-                <a class="glyphicon glyphicon-trash"
-                  data-confirm-button-class="btn-success"
-                  data-text="Do you really want to delete that article?"
-                  data-confirm-button="Yes I am"
-                  data-cancel-button="No"></a>
+        <div class="col-lg-4" data-readonly="${readonly}">
+            <div class="list-group-item ${(published && !<%=readonly%> ? 'list-group-item-success':'')}">
+                <div class="content-col">
+                    <span>
+                        <a href="/article/${_id}"><strong class="list-group-item-heading">${title}</strong></a>
+                    </span>
+                    <p class="list-group-item-text">${content}</p>
+                </div>
+                <div class="edit-col">
+                    <a class="glyphicon glyphicon-edit"></a>
+                    <a class="glyphicon glyphicon-trash"
+                      data-confirm-button-class="btn-success"
+                      data-text="Do you really want to delete that article?"
+                      data-confirm-button="Yes I am"
+                      data-cancel-button="No"></a>
+                </div>
             </div>
         </div>
     </script>
     <script type="text/javascript">
         (function (){
-            var articlesPanel = $('#<%=articlesPanelId%>'),
-                articlesTpl = $('#<%=articlesListItemTemplateId%>'),
-                articlesList = articlesPanel.find('.list-group'),
-                articleAddBtn = articlesPanel.find('.glyphicon-plus');
+            var articlesContainer = $('#<%=articlesContainerId%>'),
+                articlesTpl = articlesContainer.find('#<%=articlesListItemTemplateId%>'),
+                articlesList = articlesContainer.find('#<%=articlesListId%>'),
+                articleAddBtn = articlesContainer.find('.glyphicon-plus');
 
 
             function initHandlers(){
@@ -50,8 +56,6 @@
             };
 
             function databind(){
-                var articlesList = $('#<%=articlesPanelId%>').find('.list-group');
-                var articlesTpl = $('#<%=articlesListItemTemplateId%>');
                 $.ajax('/article/findByUser', {
                     type: "POST",
                     data: { id : '<%=user._id%>' },
@@ -68,57 +72,56 @@
             }
 
             function onAdd(){
-                articlesPanel.mask();
+                articlesContainer.mask();
                 $.ajax('/article/getEditDlg', {
                     type: "POST",
                     success: function (data) {
-                        $(data)
+                        var dlg = $(data)
                             .appendTo('body')
                             .modal()
                             .on('hidden.bs.modal', function () {
                                 $(this).remove();
                             })
                             .on('articleSaved', function(event, data){
-                                var row = articlesTpl.tmpl(data).appendTo(articlesList);
+                                var row = articlesTpl.tmpl(data).prependTo(articlesList);
                                 initListItemHandlers(row);
+                                dlg.modal('hide');
                             });
                     }
                 }).always(function () {
-                    articlesPanel.unmask();
+                    articlesContainer.unmask();
                 });
             }
 
             function onEdit(event){
                 var item = $.tmplItem($(event.target).closest('.list-group-item'));
-
-                articlesPanel.mask('Loading...');
+                articlesContainer.mask('Loading...');
                 $.ajax('/article/getEditDlg', {
                     type: "POST",
                     data: { id: item.data._id },
-                    statusCode: {
-                        200: function (data) {
-                            $(data)
-                            .appendTo('body')
-                            .modal()
-                            .on('hidden.bs.modal', function () {
-                                $(this).remove();
-                            })
-                            .on('articleSaved', function(event, data){
-                                item.data = data;
-                                item.update();
-                                initListItemHandlers($(item.nodes));
-                            });
-                        }
+                    success: function (data) {
+                        var dlg = $(data)
+                        .appendTo('body')
+                        .modal()
+                        .on('hidden.bs.modal', function () {
+                            $(this).remove();
+                        })
+                        .on('articleSaved', function(event, data){
+                            item.data = data;
+                            item.update();
+                            initListItemHandlers($(item.nodes));
+                            dlg.modal('hide');
+                        });
                     }
                 }).always(function () {
-                    articlesPanel.unmask();
+                    articlesContainer.unmask();
                 });
             }
 
             function onDelete(button){
                 var item = $.tmplItem(button.closest('.list-group-item'));
 
-                articlesPanel.mask('Loading...');
+                articlesContainer.mask('Loading...');
                 $.ajax('/article/delete', {
                     type: "POST",
                     data: { id: item.data._id },
@@ -126,7 +129,7 @@
                         200: function(){ $(item.nodes).remove(); }
                     }
                 }).always(function () {
-                    articlesPanel.unmask();
+                    articlesContainer.unmask();
                 });
             };
 

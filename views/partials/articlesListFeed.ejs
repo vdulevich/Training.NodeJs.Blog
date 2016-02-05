@@ -7,41 +7,44 @@
         <div class="ch-data-empty-message">No articles found.</div>
     </div>
     <input type="button" class="btn btn-default btn-link btn-block" value="Load more"/>
+
     <script type="text/html" class="hidden" id="<%=articlesFeedItemTemplateId%>">
-       <div class="col-lg-6 ch-feed-list-item" data-readonly="${readonly}">
-           <div class="panel" style="background-image: url('${$item.background(backgroundPath)}'); ${backgroundStyle}">
-            <div class="panel-heading">
-                <div class="row">
-                <div class="ch-feed-title col-lg-6">
-                    <strong class="panel-title">${title}</strong>
-                    <a class="ch-feed-viewlink" href="/article/${id}">view article</a>
+        <div class="col-lg-6 ch-feed-list-item" data-readonly="${readonly}">
+            <div class="panel" >
+                <div class="panel-heading">
+                    <div class="row">
+                    <div class="ch-feed-title col-lg-6">
+                        <a class="ch-feed-viewlink" href="/article/${id}"><strong class="panel-title">${title}</strong></a>
+                    </div>
+                    <div class="ch-feed-author col-lg-6">
+                        <span>Created by <a href="/profile/${userId}"><strong>${author}</strong></a></span>
+                    </div>
+                    </div>
                 </div>
-                <div class="ch-feed-author col-lg-6">
-                    <span>Created by <a href="/profile/${userId}"><strong>${author}</strong></a></span>
+                <div class="panel-body" style="background-image: url('${$item.background(backgroundPath)}'); ${backgroundStyle}">
+                    <p class="ch-feed-content">${content}</p>
                 </div>
-                </div>
-            </div>
-            <div class="panel-body">
-            <p class="ch-feed-content">${content}</p>
-            <div class="row">
-                <div class="ch-feed-title col-lg-6">
-                    ${$item.created(created)}
-                    <a class="ch-feed-viewlink" href="/article/${id}">comments (${comments})</a>
-                </div>
-                <div class="ch-feed-author col-lg-6">
-                    <div class="ch-feed-rate">
-                        <span>rating
-                            <strong>${parseFloat(rating).toFixed(1)}
-                                <span class="glyphicon glyphicon-star"></span>
-                            </strong>
-                        </span>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="ch-feed-title col-lg-6">
+                            ${$item.created(created)}
+                            <a class="ch-feed-viewlink" href="/article/${id}">comments (${comments})</a>
+                        </div>
+                        <div class="ch-feed-author col-lg-6">
+                            <div class="ch-feed-rate">
+                                <span>rating
+                                    <strong>${parseFloat(rating).toFixed(1)}
+                                        <span class="glyphicon glyphicon-star"></span>
+                                    </strong>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            </div>
         </div>
-       </div>
     </script>
+
     <script type="text/javascript">
         (function () {
             var articlesSearch = '<%=searchText%>',
@@ -68,9 +71,8 @@
                         pageSize: 5
                     },
                     success: function (data) {
-                        loading = false;
                         if (data.length != 0) {
-                            var newArticles = $(articlesTpl.tmpl(data, {
+                            $(articlesTpl.tmpl(data, {
                                 isSelected: function (rating, index) {
                                     return rating == index ? 'selected' : '';
                                 },
@@ -81,9 +83,6 @@
                                     return new Date(created).format("dd-mm-yyyy");
                                 }
                             }))
-                           /*.each(function(index, item){
-                               initRating($(item).find('select'), $.tmplItem(item).data);
-                           })*/
                            .appendTo(articlesList);
                         } else {
                             if(startIndex == 0){
@@ -96,29 +95,6 @@
                     articlesList.unmask();
                 })
             };
-
-            /*function initRating(ratingCtrl, data){
-                ratingCtrl.barrating({
-                    theme: 'bars-movie',
-                    readonly: data.readonly,
-                    onSelect: function (value, text, event) {
-                        if (typeof(event) !== 'undefined') {
-                            var item = $(event.target).closest('.ch-feed-list-item');
-                            id = $.tmplItem(item).data.id;
-                            item.mask('Loading...');
-                            $.ajax('/article/setUserRate', {
-                                type: "POST",
-                                data: {rate: value, id: id},
-                                success: function (data) {
-                                    $(event.target).closest('.ch-feed-rate').find('select').barrating('set', data);
-                                }
-                            }).always(function () {
-                                item.unmask();
-                            });
-                        }
-                    }
-                });
-            }*/
 
             initHandlers();
             databind();
