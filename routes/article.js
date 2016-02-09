@@ -6,19 +6,23 @@ var checkAuth = require('middleware/checkAuth')
 var multer = require('multer');
 var upload  = multer({ dest: 'public/articlesbg' });
 var router = express.Router();
-var Profile = require('models/profile');
+
 var Article = require('models/article');
-var User = require('models/user');
+var ArticleManager = require('managers/articleManager');
 
 
 router.get('/:id', function(req, res, next){
     Article.findById(req.params.id, function(err, article){
         if(err) return next(err);
-        res.render('article',
-            {
-                article: article,
-                readonly: !(req.user && !article._user.equals(req.user._id))
-            });
+        if(article) {
+            res.render('article',
+                {
+                    article: article,
+                    readonly: !(req.user && !article._user.equals(req.user._id))
+                });
+        } else {
+            next(errors.HttpError(404))
+        }
     })
 });
 
@@ -55,7 +59,9 @@ router.post('/save', checkAuth , upload.single('background'), function(req, res,
             }
         },
         function(oldArticle, newArticle, callback){
-            if(oldArticle && oldArticle.backgroundPath != newArticle.backgroundPath){
+            if(oldArticle &&
+               oldArticle.backgroundPath &&
+               oldArticle.backgroundPath != newArticle.backgroundPath) {
                 require('fs').unlink(oldArticle.backgroundPath, function(){
                     callback(null, newArticle);
                 });
@@ -79,63 +85,12 @@ router.post('/delete', checkAuth, function(req, res, next){
 
 router.post('/findFeedList', function(req, res, next){
     var searchText = req.body.searchText,
-        startIndex = parseInt(req.body.startIndex),
-        pageSize = parseInt(req.body.pageSize);
-    async.waterfall([
-        function(callback){
-            if(searchText) {
-                Profile
-                    .find({ $or : [{'firstName' : new RegExp(searchText, "i")}, {'lastName' : new RegExp(searchText, "i")}] })
-                    .select({ _user: 1})
-                    .exec(callback);
-            } else {
-                callback(null, []);
-            }
-        },
-        function(profiles, callback) {
-            var findOptions = { published : true };
-            if(searchText){
-                findOptions.$or = [
-                    {'title' : new RegExp(searchText, "i") },
-                    { '_user': { $in: profiles.map(function(profiles){ return profiles._user }) } }
-                ]
-            }
-            Article.find(
-                    findOptions,
-                    {},
-                    {limit: pageSize, skip: startIndex, sort: {created: -1}}
-                )
-                .populate({
-                    path: '_user',
-                    model: 'User',
-                    select: '_profile',
-                    populate: {
-                        path: '_profile',
-                        model: 'Profile',
-                        select: 'firstName lastName'
-                    }
-                })
-                .exec(callback)
-        }
-    ],
-    function(err, articles){
-        if(err) return next(err);
-        res.json(articles.map(function(article){
-            return {
-                id: article._id,
-                title: article.title,
-                content: article.content.substring(0, 200),
-                author: article._user._profile.fullName,
-                userId: article._user._id,
-                readonly: !(req.user && !article._user._id.equals(req.user._id)),
-                rating: article.rating,
-                comments: article._comments.length,
-                created: article.created,
-                backgroundPath: article.backgroundPath || '',
-                backgroundStyle: article.backgroundStyle
-            }
-        }));
-    });
+        startIndex = parseInt(req.body.startIndex);
+
+    (new ArticleManager()).findFeedList(searchText, startIndex, req.user, function(err, result) {
+        if(err) next(err);
+        res.json(result);
+    })
 });
 
 router.post('/findByUser', function(req, res, next){
@@ -150,7 +105,12 @@ router.post('/findByUser', function(req, res, next){
                 _id: article._id,
                 title: article.title,
                 content: article.content ? article.content.substring(0, 200) : '',
-                published: article.published
+                published: article.published && (req.user && article._user.equals(req.user._id)),
+                rating: article.rating,
+                comments: article._comments.length,
+                created: article.created,
+                backgroundPath: article.backgroundPath || '',
+                backgroundStyle: article.backgroundStyle || ''
             }
         }));
     });

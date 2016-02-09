@@ -1,9 +1,7 @@
 <%var articlesContainerId = 'articlesContainer',
-      articlesListId= 'articlesList',
-      articlesListItemTemplateId = 'articlesListItemTemplate'; %>
+      articlesListId= 'articlesList'; %>
 
 <div id="<%=articlesContainerId%>">
-
     <div class="ch-profile-article-panel panel panel-default <%=readonly?'ch-profile-article-panel--readonly':''%>">
         <div class="panel-heading">
             Articles <a class="pull-right glyphicon glyphicon-plus"></a>
@@ -14,32 +12,12 @@
             </div>
         </div>
     </div>
-    <script id="<%=articlesListItemTemplateId%>" type="text/html">
-        <div class="col-lg-4" data-readonly="${readonly}">
-            <div class="list-group-item ${(published && !<%=readonly%> ? 'list-group-item-success':'')}">
-                <div class="content-col">
-                    <span>
-                        <a href="/article/${_id}"><strong class="list-group-item-heading">${title}</strong></a>
-                    </span>
-                    <p class="list-group-item-text">${content}</p>
-                </div>
-                <div class="edit-col">
-                    <a class="glyphicon glyphicon-edit"></a>
-                    <a class="glyphicon glyphicon-trash"
-                      data-confirm-button-class="btn-success"
-                      data-text="Do you really want to delete that article?"
-                      data-confirm-button="Yes I am"
-                      data-cancel-button="No"></a>
-                </div>
-            </div>
-        </div>
-    </script>
     <script type="text/javascript">
         (function (){
             var articlesContainer = $('#<%=articlesContainerId%>'),
-                articlesTpl = articlesContainer.find('#<%=articlesListItemTemplateId%>'),
                 articlesList = articlesContainer.find('#<%=articlesListId%>'),
-                articleAddBtn = articlesContainer.find('.glyphicon-plus');
+                articleAddBtn = articlesContainer.find('.glyphicon-plus'),
+                itemTpl = <%-JSON.stringify(getTpl('articles/profileListItem.ejs'))%>;
 
 
             function initHandlers(){
@@ -51,23 +29,26 @@
                 var articleEdit = element.find('.glyphicon-edit'),
                     articleDelete = element.find('.glyphicon-trash');
 
-                articleEdit.on('click', onEdit);
-                articleDelete.confirm({ confirm: onDelete });
+                articleEdit.on('click', function(){ onEdit(element)} );
+                articleDelete.confirm({ confirm: function(){ onDelete(element) }});
             };
 
             function databind(){
+                articlesContainer.mask();
                 $.ajax('/article/findByUser', {
                     type: "POST",
                     data: { id : '<%=user._id%>' },
                     success:  function (data) {
-                        articlesTpl.tmpl(data).appendTo(articlesList);
+                        articlesList.html('');
+                        data.forEach(function(article){
+                            initListItemHandlers($(ejs.render(itemTpl, article)).appendTo(articlesList).wrap("<div class='col-lg-4'></div>"));
+                        })
                         if(data.length == 0){
                             articlesList.addClass('ch-data-empty');
                         }
-                        initHandlers();
                     }
                 }).always(function () {
-                    articlesList.unmask();
+                    articlesContainer.unmask();
                 })
             }
 
@@ -83,22 +64,21 @@
                                 $(this).remove();
                             })
                             .on('articleSaved', function(event, data){
-                                var row = articlesTpl.tmpl(data).prependTo(articlesList);
-                                initListItemHandlers(row);
                                 dlg.modal('hide');
-                            });
+                                databind();
+                            })
                     }
                 }).always(function () {
                     articlesContainer.unmask();
                 });
             }
 
-            function onEdit(event){
-                var item = $.tmplItem($(event.target).closest('.list-group-item'));
+            function onEdit(item){
+                var id = item.attr('data-id');
                 articlesContainer.mask('Loading...');
                 $.ajax('/article/getEditDlg', {
                     type: "POST",
-                    data: { id: item.data._id },
+                    data: { id: id },
                     success: function (data) {
                         var dlg = $(data)
                         .appendTo('body')
@@ -107,33 +87,29 @@
                             $(this).remove();
                         })
                         .on('articleSaved', function(event, data){
-                            item.data = data;
-                            item.update();
-                            initListItemHandlers($(item.nodes));
                             dlg.modal('hide');
-                        });
+                            databind();
+                        })
                     }
                 }).always(function () {
                     articlesContainer.unmask();
                 });
             }
 
-            function onDelete(button){
-                var item = $.tmplItem(button.closest('.list-group-item'));
-
+            function onDelete(item){
+                var id = item.attr('data-id');
                 articlesContainer.mask('Loading...');
                 $.ajax('/article/delete', {
                     type: "POST",
-                    data: { id: item.data._id },
-                    statusCode: {
-                        200: function(){ $(item.nodes).remove(); }
-                    }
+                    data: { id: id },
+                    success: function(){ databind(); }
                 }).always(function () {
                     articlesContainer.unmask();
                 });
             };
 
             databind();
+            initHandlers();
         })();
     </script>
 </div>

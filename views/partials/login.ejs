@@ -17,57 +17,61 @@
 </form>
 
 <script>
-    (function initLogin(){
+    (function(){
         var form = $('#<%=formId%>');
 
-        form[0].getEmailField = function(){
-            return $(form).find('[name="email"]');
-        }
+        function initHandlers() {
 
-        form[0].clear = function(){
-            form.find(".form-group input").val("");
-            form.find('.has-error').removeClass('has-error');
-            validator.resetForm();
-        }
-
-        var validator = form.validate({
-            rules: {
-                email: {
-                    required: true,
-                    email: true
-                },
-                password: {
-                    minlength: 3,
-                    maxlength: 15,
-                    required: true
-                }
-            },
-            highlight: function(element) {
-                $(element).closest('.form-group').addClass('has-error');
-            },
-            unhighlight: function(element) {
-                $(element).closest('.form-group').removeClass('has-error');
-            },
-            submitHandler:function(form){
-                $(form).mask('Loading...');
-                $.ajax('/login', {
-                    type: "POST",
-                    data: $(form).serialize(),
-                    statusCode: {
-                        200: function () {
-                            location.reload();
-                        },
-                        403: function (response) {
-                            validator.showErrors({
-                                "email": "",
-                                "password": "Invalid user or password"
-                            });
-                        }
-                    }
-                }).always(function () {
-                    $(form).unmask();
-                });
+            form[0].focus = function () {
+                $(form).find('[name="email"]').focus();
             }
-        });
+
+            form[0].clear = function () {
+                 form.find(".form-group input").val("");
+                 form.find('.has-error').removeClass('has-error');
+                 validator.resetForm();
+            }
+
+            var validator = form.validate({
+                rules: {
+                 email: {
+                     required: true,
+                     email: true
+                 },
+                 password: {
+                     minlength: 3,
+                     maxlength: 15,
+                     required: true
+                 }
+                },
+                highlight: function (element) {
+                    $(element).closest('.form-group').addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).closest('.form-group').removeClass('has-error');
+                },
+                submitHandler: function () {
+                    form.mask('Loading...');
+                    $.ajax('/login', {
+                         type: "POST",
+                         data: form.serialize(),
+                         statusCode: {
+                             200: function () {
+                                 location.reload();
+                             },
+                             403: function (response) {
+                                 validator.showErrors({
+                                     "email": "",
+                                     "password": "Invalid user or password"
+                                 });
+                             }
+                         }
+                        }).always(function () {
+                            form.unmask();
+                        });
+                    }
+            });
+        }
+        initHandlers();
     })();
 </script>

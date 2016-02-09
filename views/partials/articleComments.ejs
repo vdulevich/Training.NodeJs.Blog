@@ -3,23 +3,18 @@
 
 <div id="<%=commentsContainerId%>">
 
-    <div class="form-group">
-        <div class="ch-comments-list list-group">
-            <div class="ch-data-empty-message">No comments found.</div>
-        </div>
-
+    <div class="ch-comments-list list-group">
+        <div class="ch-data-empty-message">No comments found.</div>
     </div>
 
     <% if(!readonly) { %>
-    <div class="">
-        <form accept-charset="UTF-8" role="form">
-            <div class="form-group">
-                <input type="hidden" name="_article" value="<%=article._id%>"/>
-                <textarea name="content" class="form-control" style="height: 100px;"></textarea>
-            </div>
-        </form>
-        <input class="btn btn-success" value="Leave comment" type="button">
-    </div>
+    <form accept-charset="UTF-8" role="form">
+        <div class="form-group">
+            <input type="hidden" name="_article" value="<%=article._id%>"/>
+            <textarea name="content" class="form-control" style="height: 100px;"></textarea>
+        </div>
+    </form>
+    <input class="btn btn-success" value="Leave comment" type="button">
     <% } %>
 
     <script id="<%=commentItemTmplId%>" type="text/html">

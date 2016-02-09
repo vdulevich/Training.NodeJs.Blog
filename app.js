@@ -43,7 +43,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('middleware/sendHttpError'));
 app.use(require('middleware/loadUser'));
 app.use(require('middleware/loadTabName'));
-
+app.use(require('middleware/loadTemplates')('tpl'));
 
 app.use('/', index );
 app.use('/index', index );

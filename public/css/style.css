@@ -91,23 +91,31 @@ a:hover {
 }
 
 .ch-center {
-  padding: 10px;
-  background-color:#f9f9f9;
-  position: relative;
+  padding: 0px;
 }
 
-.ch-center::before {
-  content: '';
-  display: block;
-  border-radius: 6px 6px 0px 0px;
-  background-color:#f9f9f9;
-  position: absolute;
-  width: 100%;
-  height: 9999px;
-  z-index: -1;
-  top: 0px;
-  left: 0px;
+@media only screen and (min-width: 1200px) {
+  .ch-center {
+    padding: 10px;
+    background-color:#f9f9f9;
+    position: relative;
+  }
+
+  .ch-center::before {
+    content: '';
+    display: block;
+    border-radius: 6px 6px 0px 0px;
+    background-color:#f9f9f9;
+    position: absolute;
+    width: 100%;
+    height: 9999px;
+    z-index: -1;
+    top: 0px;
+    left: 0px;
+  }
 }
+
+
 
 .ch-footer {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#28a4c9+0,1f749b+100 */
@@ -164,13 +172,18 @@ a:hover {
 }
 
 .panel-default > .panel-heading{
-  padding: 8px 15px;
   border: none;
   border-radius: 0px;
 }
 
 .panel-body{
   padding: 8px 15px;
+}
+
+.panel-footer,
+.panel-default > .panel-footer{
+  border: none;
+  border-radius: 0px;
 }
 
 .form-group{
@@ -186,13 +199,14 @@ a:hover {
 
 .ch-data-empty .ch-data-empty-message{
   display: table-cell;
-  vertical-align: middle;;
+  vertical-align: middle;
 }
 
 .ch-data-empty-message{
   display: none;
   padding: 15px;
   background-color: #f3f3f3;
+  box-shadow: 0px 0px 15px -5px black;
 }
 
 /*-----Profile page-----*/
@@ -207,41 +221,20 @@ a:hover {
   padding-bottom: 0px;
 }
 
-.ch-profile-actiles-list .list-group-item {
-  display: table;
-  table-layout: fixed;
-  width: 100%;
-  padding: 10px;
+.ch-profile-actiles-list .panel {
   margin-bottom: 10px;
 }
 
-.ch-profile-actiles-list .list-group-item > div {
-  display: table-cell;
-  vertical-align: middle;
-}
-
-.ch-profile-actiles-list .content-col {
-  width: 100%;
-}
-
-.ch-profile-actiles-list .content-col p {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  min-height: 60px;
-}
-
-.ch-profile-actiles-list .edit-col{
-  width: 50px;
-  text-align: right;
-}
-
-.ch-profile-actiles-list .edit-col .glyphicon {
+.ch-profile-actiles-list .glyphicon {
   padding-right: 10px ;
 }
 
-.ch-profile-actiles-list .edit-col .glyphicon:last-child{
+.ch-profile-actiles-list .glyphicon:last-child{
   padding-right: 0px;
+}
+
+.ch-profile-actiles-list .panel-body{
+  height:70px;
 }
 
 /*-----Feed article list-----*/
@@ -267,9 +260,8 @@ a:hover {
   border:none;
 }
 
-.ch-feed-list .panel-body {
+/*.ch-feed-list .panel-body {
   padding-top: 0px;
-
 }
 
 .ch-feed-list .panel-body{
@@ -283,11 +275,11 @@ a:hover {
   right: 0px;
   bottom: 0px;
   left: 0px;
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0.61+100 */
-  background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.61) 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.61) 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.61) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#9cffffff',GradientType=1 ); /* IE6-9 */
+  !* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0.61+100 *!
+  background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.61) 100%); !* FF3.6-15 *!
+  background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.61) 100%); !* Chrome10-25,Safari5.1-6 *!
+  background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.61) 100%); !* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ *!
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#9cffffff',GradientType=1 ); !* IE6-9 *!
   display: block;
 }
 
@@ -298,16 +290,13 @@ a:hover {
   right: 0px;
   bottom: 0px;
   left: 0px;
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0.1+50 */
-  background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.1) 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#1affffff',GradientType=0 ); /* IE6-9 */
+  !* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0.1+50 *!
+  background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 100%); !* FF3.6-15 *!
+  background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.1) 100%); !* Chrome10-25,Safari5.1-6 *!
+  background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.1) 100%); !* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ *!
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#1affffff',GradientType=0 ); !* IE6-9 *!
   display: block;
-}
-
-.ch-feed-list .panel-heading {
-}
+}*/
 
 .ch-feed-list .panel-footer{
   background-color: transparent;
@@ -413,15 +402,22 @@ a:hover {
 
 /*--------Profile Info --------*/
 
+.ch-profileinfo-panel .panel-body {
+  padding-bottom: 0px;
+}
+
 .ch-profile-article-panel.ch-profile-article-panel--readonly .glyphicon-plus,
 .ch-profile-article-panel.ch-profile-article-panel--readonly .edit-col {
   display: none;
 }
 
-.ch-profileinfo-panel .panel-body {
-  padding-bottom: 0px;
+.ch-profile-article-panel{
+  min-height:100px;
 }
 
+.ch-profile-article-panel > .panel-body{
+  padding-bottom: 0px;
+}
 
 /*------Articles Panel------*/
 

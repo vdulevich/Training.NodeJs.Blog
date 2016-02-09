@@ -34,7 +34,8 @@
 <script>
     (function(){
         var form = $('#<%=formId%>'),
-            file = form.find('input[type=file]');
+            file = form.find('input[name=background]'),
+            style = form.find('input[name=backgroundStyle]');
 
         function getFormData(){
             var formData = new FormData(form);
@@ -68,6 +69,9 @@
             file.on('change',function(event){
                 var path = event.currentTarget.value.split('\\');
                 file.closest('.input-group').find('.form-control').html(path[path.length - 1]);
+                if(style.val().indexOf('color') < 0){
+                    style.val(style.val() + 'color:white;')
+                }
             });
         }
         initHandlers();

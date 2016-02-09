@@ -1,4 +1,3 @@
-
 (function ($) {
     var oldHandler = $.validator.prototype.showLabel;
     $.validator.prototype.showLabel = function(element, message){

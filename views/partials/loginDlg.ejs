@@ -18,29 +18,34 @@
 </div>
 
 <script type="text/javascript">
-    (function initLoginDlg(){
+    (function() {
         var dlgId = $('#<%=dlgId%>');
 
-        dlgId.bind('keypress', function(e) {
-            var keyCode = e.keyCode || e.which;
-            if(keyCode == 13){
+        function initHandlers(){
+            dlgId.bind('keypress', function(e) {
+                var keyCode = e.keyCode || e.which;
+                if(keyCode == 13){
+                    dlgId.find('form').submit();
+                }
+            });
+
+            dlgId.find('.btn').on('click', function(){
                 dlgId.find('form').submit();
-            }
-        });
+            });
 
-        dlgId.find('.btn').on('click', function(){
-            dlgId.find('form').submit();
-        });
+            dlgId.on('show.bs.modal', function (e) {
+                var form = $(e.currentTarget).find('form');
+                if(form[0].clear()) {
+                    form[0].clear();
+                }
+            });
 
-        dlgId.on('show.bs.modal', function (e) {
-            var form = $(e.currentTarget).find('form');
-            if(form[0].clear())
-                form[0].clear();
-        });
+            dlgId.on('shown.bs.modal', function (e) {
+                var form = $(e.currentTarget).find('form');
+                form[0].focus();
+            });
+        }
 
-        dlgId.on('shown.bs.modal', function (e) {
-            var form = $(e.currentTarget).find('form');
-            form[0].getEmailField().focus();
-        });
-    })();
+        initHandlers();
+    })()
 </script>

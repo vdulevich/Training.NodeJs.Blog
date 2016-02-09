@@ -1,0 +1,35 @@
+<%
+var background = function (backgroundPath){
+    return backgroundPath.replace('public\\','').replace(new RegExp("\\\\",'g'), '/')
+}
+var formatDate = function (created) {
+    return new Date(created).format("dd-mm-yyyy");
+}
+%>
+
+<div class="panel" data-id="<%=_id%>">
+    <div class="panel-heading clearfix">
+        <div class="pull-left">
+            <a class="ch-feed-viewlink" href="/article/<%=_id%>"><strong class="panel-title"><%=title%></strong></a>
+            <% if(published) {%>
+                <span class="glyphicon glyphicon-ok-circle" style="color:limegreen"></span>
+            <%}%>
+        </div>
+        <div class="pull-right">
+            <a class="glyphicon glyphicon-edit"></a>
+            <a class="glyphicon glyphicon-trash"
+               data-confirm-button-class="btn-success"
+               data-text="Do you really want to delete that article?"
+               data-confirm-button="Yes I am"
+               data-cancel-button="No"></a>
+        </div>
+    </div>
+    <div class="panel-body" style="background-image: url('<%=background(backgroundPath)%>'); <%=backgroundStyle%>">
+        <div class="ch-feed-content"><%=content%></div>
+    </div>
+    <div class="panel-footer">
+        <%=formatDate(created)%>
+        <a class="ch-feed-viewlink" href="/article/<%=_id%>">comments (<%=comments%>)</a>
+    </div>
+</div>
+
