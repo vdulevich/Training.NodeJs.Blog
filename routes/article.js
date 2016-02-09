@@ -106,6 +106,7 @@ router.post('/findByUser', function(req, res, next){
                 title: article.title,
                 content: article.content ? article.content.substring(0, 200) : '',
                 published: article.published && (req.user && article._user.equals(req.user._id)),
+                readonly:!(req.user && article._user.equals(req.user._id)),
                 rating: article.rating,
                 comments: article._comments.length,
                 created: article.created,

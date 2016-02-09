@@ -15,6 +15,7 @@ var formatDate = function (created) {
                 <span class="glyphicon glyphicon-ok-circle" style="color:limegreen"></span>
             <%}%>
         </div>
+        <% if(!readonly) {%>
         <div class="pull-right">
             <a class="glyphicon glyphicon-edit"></a>
             <a class="glyphicon glyphicon-trash"
@@ -23,9 +24,10 @@ var formatDate = function (created) {
                data-confirm-button="Yes I am"
                data-cancel-button="No"></a>
         </div>
+        <%}%>
     </div>
     <div class="panel-body" style="background-image: url('<%=background(backgroundPath)%>'); <%=backgroundStyle%>">
-        <div class="ch-feed-content"><%=content%></div>
+        <%=content%>
     </div>
     <div class="panel-footer">
         <%=formatDate(created)%>
