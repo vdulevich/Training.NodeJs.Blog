@@ -3,7 +3,7 @@ var errors = require('errors');
 var async = require('async');
 var Profile = require('models/profile');
 var Article = require('models/article');
-var User = require('models/user');
+
 
 var ArticleManager = function(){
 
@@ -11,7 +11,7 @@ var ArticleManager = function(){
 
 ArticleManager.pageSize = 5;
 
-ArticleManager.prototype.findFeedList = function(searchText, startIndex, user, callback){
+ArticleManager.prototype.findFeedList = function(searchText, startIndex, callback){
     async.waterfall
     ([
         function(callback){
@@ -32,11 +32,8 @@ ArticleManager.prototype.findFeedList = function(searchText, startIndex, user, c
                     {'_user': { $in: profiles.map(function(profiles){ return profiles._user }) } }
                 ]
             }
-            Article.find(
-                findOptions,
-                {},
-                {limit: ArticleManager.pageSize, skip: startIndex, sort: {created: -1}}
-                )
+            Article
+                .find(findOptions, {}, {limit: ArticleManager.pageSize, skip: startIndex, sort: {created: -1}})
                 .populate({
                     path: '_user',
                     model: 'User',
@@ -52,21 +49,46 @@ ArticleManager.prototype.findFeedList = function(searchText, startIndex, user, c
     ],
     function(err, articles){
         if(err) return callback(err);
-        callback(null, articles.map(function(article){
-            return {
-                    id: article._id,
-                    title: article.title,
-                    content: article.content.substring(0, 200),
-                    author: article._user._profile.fullName,
-                    userId: article._user._id,
-                    readonly: !(user && !article._user._id.equals(user._id)),
-                    rating: article.rating,
-                    comments: article._comments.length,
-                    created: article.created,
-                    backgroundPath: article.backgroundPath || '',
-                    backgroundStyle: article.backgroundStyle || ''
-                }
-        }));
+        callback(null, articles);
+    });
+}
+
+ArticleManager.prototype.save = function(article, callback){
+    async.waterfall([
+        function(callback){
+            Article.findById(article._id, callback)
+        },
+        function(oldArticle, callback){
+            if(!oldArticle){
+                (new Article(article)).save(function(err, newArticle){
+                    if(err) return callback(err);
+                    callback(null, oldArticle, newArticle);
+                });
+            } else if(oldArticle._user.equals(article._user)) {
+                Article.findOneAndUpdate(
+                    { _id: article._id },
+                    { $set: article },
+                    { new: true, runValidators: true },
+                    function(err, newArticle){
+                        if(err) return callback(err);
+                        callback(null, oldArticle, newArticle);
+                    }
+                );
+            } else {
+                callback(new errors.HttpError(403));
+            }
+        },
+        function(oldArticle, newArticle, callback){
+            if(oldArticle &&
+               oldArticle.backgroundPath &&
+               oldArticle.backgroundPath != newArticle.backgroundPath) {
+                require('fs').unlink(oldArticle.backgroundPath);
+            }
+            callback(null, newArticle);
+        }
+    ], function(err, article){
+        if(err) return next(err);
+        callback(null, article);
     });
 }
 

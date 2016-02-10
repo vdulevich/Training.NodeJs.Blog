@@ -1,6 +1,6 @@
 <%
     var background = function (backgroundPath){
-        return backgroundPath.replace('public\\','').replace(new RegExp("\\\\",'g'), '/')
+        return backgroundPath ? 'background-image: url("' + backgroundPath.replace('public\\','').replace(new RegExp("\\\\",'g'), '/') + '");' : '';
     }
     var formatDate = function (created) {
         return new Date(created).format("dd-mm-yyyy");
@@ -19,7 +19,7 @@
                 </div>
             </div>
         </div>
-        <div class="panel-body" style="background-image: url('<%=background(backgroundPath)%>'); <%=backgroundStyle%>">
+        <div class="panel-body" style="<%=background(backgroundPath)%> <%=backgroundStyle%>">
             <div class="ch-feed-content"><%=content%></div>
         </div>
         <div class="panel-footer">

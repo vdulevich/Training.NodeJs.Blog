@@ -246,7 +246,7 @@ a:hover {
 }
 
 .ch-feed-list .ch-feed-list-item{
-  padding: 0px 0px 10px 0px;
+  padding: 5px;
 }
 
 @media (min-width: 1200px) {
@@ -260,44 +260,6 @@ a:hover {
   margin-bottom: 0px;
   border:none;
 }
-
-/*.ch-feed-list .panel-body {
-  padding-top: 0px;
-}
-
-.ch-feed-list .panel-body{
-  position: relative;
-}
-
-.ch-feed-list .panel-body:before {
-  content: '';
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-  !* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0.61+100 *!
-  background: -moz-linear-gradient(left,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.61) 100%); !* FF3.6-15 *!
-  background: -webkit-linear-gradient(left,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.61) 100%); !* Chrome10-25,Safari5.1-6 *!
-  background: linear-gradient(to right,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.61) 100%); !* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ *!
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#9cffffff',GradientType=1 ); !* IE6-9 *!
-  display: block;
-}
-
-.ch-feed-list .panel-body:after {
-  content: '';
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
-  !* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,ffffff+100&1+0,0.1+50 *!
-  background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 100%); !* FF3.6-15 *!
-  background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.1) 100%); !* Chrome10-25,Safari5.1-6 *!
-  background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(255,255,255,0.1) 50%,rgba(255,255,255,0.1) 100%); !* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ *!
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#1affffff',GradientType=0 ); !* IE6-9 *!
-  display: block;
-}*/
 
 .ch-feed-list .panel-footer{
   background-color: transparent;

@@ -36,7 +36,7 @@
                         $(form).unmask();
                         if (xhr.readyState == 4) {
                             if(xhr.status == 200) {
-                                dlg.trigger('articleSaved', JSON.parse(xhr.responseText));
+                                dlg.trigger('articleSaved', xhr.responseText ? JSON.parse(xhr.responseText) : null);
                             }
                         }
                         dlg.unmask();

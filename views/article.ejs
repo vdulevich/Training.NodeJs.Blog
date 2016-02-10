@@ -42,12 +42,8 @@
                     $.ajax('/article/setUserRate', {
                         type: "POST",
                         data: {rate: value, id: '<%= article._id %>'},
-                        statusCode: {
-                            200: function (data) {
-                                articleRatingPlg.barrating('set', data);
-                            },
-                            403: function () {
-                            }
+                        success: function (data) {
+                            articleRatingPlg.barrating('set', data);
                         }
                     }).always(function () {
                         articleContainer.unmask();

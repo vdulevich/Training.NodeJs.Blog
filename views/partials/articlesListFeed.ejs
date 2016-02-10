@@ -13,7 +13,7 @@
                 articlesContainer = $('#<%= articlesFeedContainerId %>'),
                 articlesList = articlesContainer.find('#<%=articlesFeedListId%>'),
                 articleLoadBtn = articlesContainer.find('.btn'),
-                itemTpl = <%-JSON.stringify(getTpl('articles/feedListItem.ejs'))%>;
+                itemTpl = <%-JSON.stringify(getTpl('articles/feedItem.ejs'))%>;
 
             function initHandlers() {
                 articleLoadBtn.on('click', function () {
