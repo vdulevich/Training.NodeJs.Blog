@@ -34,6 +34,11 @@ a:hover {
   margin-bottom: 10px;
 }
 
+.loadmask-msg
+{
+  margin-top:-5px;
+}
+
 @media (min-width: 768px) {
   .navbar-text {
     margin-top: 15px;
@@ -284,7 +289,6 @@ a:hover {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
 
 .ch-feed-list .ch-feed-rate strong{
   color: #b92c28;
