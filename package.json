@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "prepublish" : "bower install",
     "start": "node bin/www.js"
   },
   "dependencies": {
@@ -22,19 +23,9 @@
     "app-root-path":"~1.0.0"
   },
   "main": "bin/www.js",
-  "bin": {
-    "training.nodejs.blog": "www.js"
-  },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vdulevich/Training.NodeJs.Blog.git"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/vdulevich/Training.NodeJs.Blog/issues"
-  },
   "homepage": "https://github.com/vdulevich/Training.NodeJs.Blog#readme",
-  "description": ""
 }
