@@ -52,7 +52,7 @@
                 },
                 submitHandler: function () {
                     form.mask('Loading...');
-                    $.ajax('/login', {
+                    $.ajax('/authentication/login', {
                          type: "POST",
                          data: form.serialize(),
                          statusCode: {

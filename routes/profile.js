@@ -31,10 +31,11 @@ function renderProfile(userId, req, res, callback){
 }
 
 router.post('/update', checkAuth, function(req, res, next){
-    var Profile = mongoose.models.Profile;
     Profile.findOneAndUpdate({_id: req.body._id}, req.body, {new: true},
         function(err, profile, resp) {
-            if(err) return next(err);
+            if(err) {
+                return next(err);
+            }
             res.json(profile);
         });
 });
@@ -44,8 +45,10 @@ router.post('/getEditDlg', function(req, res, next){
         path: '_user',
         model: 'User'
     }).exec(function(err, profile) {
-        if(err) return next(err);
-        res.render('partials/profileInfoEditDlg.ejs', { user: profile._user, profile: profile});
+        if(err) {
+            return next(err);
+        }
+        res.render('partials/profile/profileInfoEditDlg.ejs', { user: profile._user, profile: profile});
     });
 });
 

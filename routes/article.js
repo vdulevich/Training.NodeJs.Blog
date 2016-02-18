@@ -10,18 +10,20 @@ var Article = require('models/article');
 var ArticleManager = require('managers/articleManager');
 
 
-router.get('/:id', function(req, res, next){
+router.get('/:id', function(req, res, next) {
     Article.findById(req.params.id, function(err, article){
-        if(err) return next(err);
+        if(err) {
+            return next(err);
+        }
         if(article && article.published) {
             res.render('article', {
                 article: article,
                 readonly: !(req.user && !article._user.equals(req.user._id))
             });
         } else {
-            next(errors.HttpError(404))
+            next(errors.HttpError(404));
         }
-    })
+    });
 });
 
 router.post('/save', checkAuth, upload.single('background'), function(req, res, next) {
@@ -34,7 +36,7 @@ router.post('/save', checkAuth, upload.single('background'), function(req, res, 
     (new ArticleManager()).save(req.body, function(err, result){
         if(err) next(err);
         res.end();
-    })
+    });
 });
 
 router.post('/delete', checkAuth, function(req, res, next){
@@ -50,7 +52,9 @@ router.post('/findFeedList', function(req, res, next){
         startIndex = parseInt(req.body.startIndex);
 
     (new ArticleManager()).findFeedList(searchText, startIndex, function(err, result) {
-        if(err) next(err);
+        if(err) {
+            next(err);
+        }
         res.json(result.map(function(article){
             return {
                 id: article._id,
@@ -64,9 +68,9 @@ router.post('/findFeedList', function(req, res, next){
                 created: article.created,
                 backgroundPath: article.backgroundPath || '',
                 backgroundStyle: article.backgroundStyle || ''
-            }
-        }))
-    })
+            };
+        }));
+    });
 });
 
 router.post('/findByUser', function(req, res, next){
@@ -75,7 +79,9 @@ router.post('/findByUser', function(req, res, next){
         findOptions.published = true;
     }
     Article.find(findOptions, {}, {sort: {created: -1}}).exec(function(err, articles){
-        if(err) return next(err);
+        if(err) {
+            return next(err);
+        }
         res.json(articles.map(function(article){
             return {
                 _id: article._id,
@@ -88,28 +94,34 @@ router.post('/findByUser', function(req, res, next){
                 created: article.created,
                 backgroundPath: article.backgroundPath || '',
                 backgroundStyle: article.backgroundStyle || ''
-            }
+            };
         }));
     });
 });
 
 router.post('/setUserRate', checkAuth, function(req, res, next){
     Article.findById(req.body.id, function(err, article){
-        if(err) return next(err);
-        if(!article) return next(new errors.HttpError(404));
-
+        if(err) {
+            return next(err);
+        }
+        if(!article) {
+            return next(new errors.HttpError(404));
+        }
         article.addOrUpdateUserRate(req.user._id, parseInt(req.body.rate));
         article.save(function(err, article){
             if(err) return next(err);
             res.json(Math.round(article.rating));
         });
-    })
+    });
 });
 
 router.post('/getEditDlg', function(req, res, next){
     Article.findById(req.body.id, function(err, article) {
-        if(err) return next(err);
-        res.render('partials/articleEditDlg.ejs', article || new Article({title: '', content: ''}));
+        if(err) {
+            return next(err);
+        }
+
+        res.render('partials/article/articleEditDlg.ejs', article || new Article({title: '', content: ''}));
     });
 });
 

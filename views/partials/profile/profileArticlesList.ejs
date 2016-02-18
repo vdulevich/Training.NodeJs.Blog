@@ -7,7 +7,7 @@
             Articles <a class="pull-right glyphicon glyphicon-plus"></a>
         </div>
         <div class="panel-body">
-            <div id="<%=articlesListId%>" class="ch-profile-actiles-list row">
+            <div id="<%=articlesListId%>" class="ch-profile-actiles-list">
                 <div class="ch-data-empty-message">No articles found.</div>
             </div>
         </div>
@@ -39,11 +39,14 @@
                     type: "POST",
                     data: { id : '<%=user._id%>' },
                     success:  function (data) {
-                        articlesList.html('');
-                        data.forEach(function(article){
-                            initListItemHandlers($(ejs.render(itemTpl, article)).appendTo(articlesList).wrap("<div class='col-lg-4'></div>"));
-                        })
-                        if(data.length == 0){
+                        if(data.length > 0) {
+                            articlesList.html('');
+                            var articlesListRow = articlesList.wrap("<div class='row'></div>");
+                            data.forEach(function (article) {
+                                initListItemHandlers($(ejs.render(itemTpl, article)).appendTo(articlesListRow).wrap("<div class='col-lg-4'></div>"));
+                            })
+                        }
+                        else {
                             articlesList.addClass('ch-data-empty');
                         }
                     }

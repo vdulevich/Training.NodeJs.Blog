@@ -120,8 +120,6 @@ a:hover {
   }
 }
 
-
-
 .ch-footer {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#28a4c9+0,1f749b+100 */
   background: #28a4c9; /* Old browsers */
@@ -200,18 +198,21 @@ a:hover {
 .ch-data-empty{
   display: table;
   width: 100%;
+  min-height:30px;
 }
 
 .ch-data-empty .ch-data-empty-message{
   display: table-cell;
   vertical-align: middle;
+  padding: 15px;
+}
+
+.panel-body .ch-data-empty .ch-data-empty-message {
+  padding: 0px;
 }
 
 .ch-data-empty-message{
   display: none;
-  padding: 15px;
-  background-color: #f3f3f3;
-  box-shadow: 0px 0px 15px -5px black;
 }
 
 /*-----Profile page-----*/
@@ -227,7 +228,8 @@ a:hover {
 }
 
 .ch-profile-actiles-list .panel {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  margin-top: 5px;
 }
 
 .ch-profile-actiles-list .glyphicon {
@@ -247,10 +249,9 @@ a:hover {
 
 .ch-feed-list{
   margin-bottom: 0px;
-  min-height: 60px;
 }
 
-.ch-feed-list .ch-feed-list-item{
+.ch-feed-list .ch-feed-list-item {
   padding: 5px;
 }
 
@@ -326,7 +327,6 @@ a:hover {
 /*-------Comments---------*/
 
 .ch-comments-list{
-  margin-bottom: 0px;
   min-height:40px;
 }
 
@@ -376,14 +376,6 @@ a:hover {
 .ch-profile-article-panel.ch-profile-article-panel--readonly .glyphicon-plus,
 .ch-profile-article-panel.ch-profile-article-panel--readonly .edit-col {
   display: none;
-}
-
-.ch-profile-article-panel{
-  min-height:100px;
-}
-
-.ch-profile-article-panel > .panel-body{
-  padding-bottom: 0px;
 }
 
 /*------Articles Panel------*/

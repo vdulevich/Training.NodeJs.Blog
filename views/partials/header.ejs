@@ -53,14 +53,14 @@
     </nav>
 </div>
 
-<div id="<%=loginModalWrapperId%>"><%-partial("../partials/loginDlg.ejs") %></div>
-<div id="<%=signupModalWrapperId%>"><%-partial("../partials/signupDlg.ejs") %></div>
+<div id="<%=loginModalWrapperId%>"><%-partial("authentication/loginDlg.ejs") %></div>
+<div id="<%=signupModalWrapperId%>"><%-partial("authentication/signupDlg.ejs") %></div>
 
 <script type="text/javascript">
     $(document).ready(function(){
         $('#<%=logoutId%>').confirm({ confirm: function(){
             $('body').mask('Loading...');
-            $.post('/logout', function() {
+            $.post('/authentication/logout', function() {
                 window.location = '/';
             }).always(function(){ $('body').unmask();} );
         }});

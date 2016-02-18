@@ -11,19 +11,25 @@ commentManager.prototype.create = function(data, callback){
     async.waterfall([
         function(callback){
             (new Comment(data)).save(function(err, comment){
-                if(err) return callback(err);
+                if(err) {
+                    return callback(err);
+                }
                 callback(null, comment);
             });
         },
         function(comment, callback){
             Article.findById(comment._article, function(err, article){
-                if(err) callback(err);
+                if(err) {
+                    callback(err);
+                }
                 article._comments.push(comment._id);
                 article.save(function(err, article){
-                    if(err) callback(err);
+                    if(err) {
+                        callback(err);
+                    }
                     callback(null, comment);
-                })
-            })
+                });
+            });
         },
         function(comment, callback) {
             Comment.populate(comment, {
@@ -35,12 +41,30 @@ commentManager.prototype.create = function(data, callback){
                     model: 'Profile',
                     select: 'firstName lastName'
                 }
-            }, callback)
+            }, callback);
         }
-    ],function(err, comment){
-        if(err) return callback(err);
+    ], function(err, comment){
+        if(err) {
+            return callback(err);
+        }
         callback(null, comment);
-    })
+    });
+}
+
+commentManager.prototype.findByArticleId = function(articleId, callback){
+    Comment
+        .find({_article: articleId })
+        .populate({
+            path: '_user',
+            model: 'User',
+            select: '_profile',
+            populate: {
+                path: '_profile',
+                model: 'Profile',
+                select: 'firstName lastName'
+            }
+        })
+        .exec(callback);
 }
 
 module .exports = commentManager;

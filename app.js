@@ -10,9 +10,7 @@ var sessionStore = require('lib/sessionStore');
 var errors = require('errors');
 
 var index = require('routes/index');
-var login = require('routes/login');
-var logout = require('routes/logout');
-var signup = require('routes/signup');
+var login = require('routes/authentication');
 var profile = require('routes/profile');
 var article = require('routes/article');
 var comment = require('routes/comment');
@@ -47,9 +45,7 @@ app.use(require('middleware/loadTemplates')('tpl'));
 
 app.use('/', index );
 app.use('/index', index );
-app.use('/login', login );
-app.use('/logout', logout);
-app.use('/signup', signup);
+app.use('/authentication', login );
 app.use('/profile', profile);
 app.use('/article', article);
 app.use('/comment', comment);

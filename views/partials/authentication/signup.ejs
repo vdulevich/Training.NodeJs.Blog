@@ -43,7 +43,7 @@
                     required: true,
                     email: true,
                     remote: {
-                        url: "/signup/validate",
+                        url: "/authentication/signup/validate",
                         type: "post",
                         data: {
                             email: function() {
@@ -87,16 +87,11 @@
             },
             submitHandler: function (form) {
                 $(form).mask('Loading...');
-                $.ajax('/signup', {
+                $.ajax('/authentication/signup', {
                     type: "POST",
                     data: $(form).serialize(),
-                    statusCode: {
-                        200: function () {
-                            location.reload();
-                        },
-                        403: function (response) {
-
-                        }
+                    success: function () {
+                        location.reload();
                     }
                 }).always(function () {
                     $(form).unmask();
