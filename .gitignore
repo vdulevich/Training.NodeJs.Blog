@@ -35,3 +35,5 @@ node_modules
 public/articlesbg
 
 public/temp
+
+public/vendor
