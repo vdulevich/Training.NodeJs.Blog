@@ -1,14 +1,17 @@
 var express = require('express');
 var checkAuth = require('middleware/checkAuth');
 var router = express.Router();
-var Comment = require('models/comment');
 var CommentManager = require('managers/commentManager');
 
 
 router.post('/create', checkAuth, function(req, res, next){
-    var data = req.body;
-    data._user = req.user._id;
+    'use strict';
 
+    var data = {
+        _user : req.user._id,
+        _article : req.body.articleId,
+        content : req.body.comment
+    };
     (new CommentManager()).create(data, function(err, comment){
         if(err) {
             return next(err);

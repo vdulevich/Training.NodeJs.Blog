@@ -44,4 +44,16 @@ profileManager.prototype.signup = function(data, callback){
     ],callback);
 }
 
+profileManager.prototype.getByUserId = function(userId, callback){
+    Profile.findOne({_user: userId}).populate({
+        path: '_user',
+        model: 'User'
+    }).exec(function(err, profile) {
+        if(err) {
+            return callback(err);
+        }
+        callback(null, profile);
+    });
+};
+
 module.exports = profileManager;

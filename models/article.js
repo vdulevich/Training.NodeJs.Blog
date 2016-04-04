@@ -4,39 +4,44 @@ var async = require('async');
 var Rate = require('models/rate');
 
 var schema = mongoose.Schema({
-    title:{
-        type: String,
-        required: true,
+        title:{
+            type: String,
+            required: true,
+        },
+        content: {
+            type: String
+        },
+        published:{
+            type: Boolean
+        },
+        backgroundPath:{
+            type: String
+        },
+        backgroundStyle: {
+            type: String
+        },
+        backgroundFileName:{
+            type: String
+        },
+        created: {
+            type: Date,
+            default: Date.now()
+        },
+        rates: [Rate],
+        _comments: [{
+            type: mongoose.Schema.ObjectId,
+            ref: 'Comment',
+            required:true
+        }],
+        _user: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'User',
+            required:true
+        }
     },
-    content: {
-        type: String
-    },
-    published:{
-        type: Boolean
-    },
-    backgroundPath:{
-        type: String
-    },
-    backgroundStyle: {
-        type: String
-    },
-    backgroundFileName:{
-        type: String
-    },
-    created: {
-        type: Date,
-        default: Date.now()
-    },
-    rates: [Rate],
-    _comments: [{
-        type: mongoose.Schema.ObjectId,
-        ref: 'Comment',
-        required:true
-    }],
-    _user: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required:true
+    {
+        toJSON: {
+        virtuals: true
     }
 });
 

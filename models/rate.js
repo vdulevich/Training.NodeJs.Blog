@@ -17,11 +17,11 @@ var schema = mongoose.Schema({
     },
 });
 
-/*
+
 if(mongoose.models.Rate){
     module.exports = mongoose.models.Rate;
 } else {
     module.exports = mongoose.model('Rate', schema);
-}*/
+}
 
 module.exports = schema;

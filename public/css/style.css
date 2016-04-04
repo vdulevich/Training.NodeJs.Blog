@@ -217,14 +217,24 @@ a:hover {
 
 /*-----Profile page-----*/
 
+.ch-profileinfo-panel .panel-body {
+  padding-bottom: 0px;
+}
+
 .ch-profileinfo-panel .form-group .form-control{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.ch-profileinfo-panel .panel-body{
-  padding-bottom: 0px;
+.ch-profileinfo-panel.ch-profileinfo-panel--readonly .glyphicon-edit{
+  display: none;
+}
+
+.ch-profile-article-panel.ch-profile-article-panel--readonly .glyphicon-plus,
+.ch-profile-article-panel.ch-profile-article-panel--readonly .glyphicon-edit,
+.ch-profile-article-panel.ch-profile-article-panel--readonly .glyphicon-trash{
+  display: none;
 }
 
 .ch-profile-actiles-list .panel {
@@ -244,6 +254,13 @@ a:hover {
   height:70px;
   overflow: hidden;
 }
+
+
+  .ch-profile-actiles-list .col-lg-4{
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+
 
 /*-----Feed article list-----*/
 
@@ -327,7 +344,11 @@ a:hover {
 /*-------Comments---------*/
 
 .ch-comments-list{
-  min-height:40px;
+
+}
+
+.ch-comments-list .ch-data-empty .ch-data-empty-message{
+  padding: 0px;
 }
 
 .ch-comments-list .photo-col {
@@ -342,7 +363,7 @@ a:hover {
 .ch-comments-list .content-col {
   background-color: #f3f3f3;
   border-radius: 3px;
-  padding: 0px 10px;
+  padding: 5px 10px;
 }
 
 .ch-comments-list .content-col p {
@@ -365,17 +386,6 @@ a:hover {
 .ch-comments-list .ch-comments-list-item > div{
   display: table-cell;
   vertical-align: top;
-}
-
-/*--------Profile Info --------*/
-
-.ch-profileinfo-panel .panel-body {
-  padding-bottom: 0px;
-}
-
-.ch-profile-article-panel.ch-profile-article-panel--readonly .glyphicon-plus,
-.ch-profile-article-panel.ch-profile-article-panel--readonly .edit-col {
-  display: none;
 }
 
 /*------Articles Panel------*/

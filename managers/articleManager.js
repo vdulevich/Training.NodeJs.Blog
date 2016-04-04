@@ -11,7 +11,7 @@ var ArticleManager = function(){
 
 ArticleManager.pageSize = 5;
 
-ArticleManager.prototype.findFeedList = function(searchText, startIndex, callback){
+ArticleManager.prototype.findFeedList = function(searchText, startIndex, pageSize, callback){
     async.waterfall
     ([
         function(callback){
@@ -29,11 +29,11 @@ ArticleManager.prototype.findFeedList = function(searchText, startIndex, callbac
             if(searchText){
                 findOptions.$or = [
                     {'title' : new RegExp(searchText, "i") },
-                    {'_user': { $in: profiles.map(function(profiles){ return profiles._user }) } }
-                ]
+                    {'_user': { $in: profiles.map(function(profiles){ return profiles._user; }) } }
+                ];
             }
             Article
-                .find(findOptions, {}, {limit: ArticleManager.pageSize, skip: startIndex, sort: {created: -1}})
+                .find(findOptions, {}, {limit: pageSize, skip: startIndex, sort: {created: -1}})
                 .populate({
                     path: '_user',
                     model: 'User',
@@ -44,7 +44,7 @@ ArticleManager.prototype.findFeedList = function(searchText, startIndex, callbac
                         select: 'firstName lastName'
                     }
                 })
-                .exec(callback)
+                .exec(callback);
         }
     ],
     function(err, articles){
@@ -56,7 +56,7 @@ ArticleManager.prototype.findFeedList = function(searchText, startIndex, callbac
 ArticleManager.prototype.save = function(article, callback){
     async.waterfall([
         function(callback){
-            Article.findById(article._id, callback)
+            Article.findById(article._id, callback);
         },
         function(oldArticle, callback){
             if(!oldArticle){

@@ -56,7 +56,6 @@ router.post('/signup/validate', function(req, res, next){
         if(err) {
             return next(err);
         }
-        console.log(user);
         res.end(user ? 'false': 'true');
     });
 });

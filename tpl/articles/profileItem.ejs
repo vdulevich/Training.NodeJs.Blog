@@ -16,14 +16,14 @@ var formatDate = function (created) {
             <%}%>
         </div>
         <% if(!readonly) {%>
-        <div class="pull-right">
-            <a class="glyphicon glyphicon-edit"></a>
-            <a class="glyphicon glyphicon-trash"
-               data-confirm-button-class="btn-success"
-               data-text="Do you really want to delete that article?"
-               data-confirm-button="Yes I am"
-               data-cancel-button="No"></a>
-        </div>
+            <div class="pull-right">
+                <a class="glyphicon glyphicon-edit"></a>
+                <a class="glyphicon glyphicon-trash"
+                   data-confirm-button-class="btn-success"
+                   data-text="Do you really want to delete that article?"
+                   data-confirm-button="Yes I am"
+                   data-cancel-button="No"></a>
+            </div>
         <%}%>
     </div>
     <div class="panel-body" style="<%=background(backgroundPath)%> <%=backgroundStyle%>">
