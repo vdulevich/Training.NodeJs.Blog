@@ -7,13 +7,13 @@
     </div>
 
     <% if(!readonly) { %>
-    <form accept-charset="UTF-8" role="form">
-        <div class="form-group">
-            <input type="hidden" name="_article" value="<%=article._id%>"/>
-            <textarea name="content" class="form-control" style="height: 100px;"></textarea>
-        </div>
-    </form>
-    <input class="btn btn-success" value="Leave comment" type="button">
+        <form accept-charset="UTF-8" role="form">
+            <div class="form-group">
+                <input type="hidden" name="articleId" value="<%=article._id%>"/>
+                <textarea name="comment" class="form-control" style="height: 100px;"></textarea>
+            </div>
+        </form>
+        <input class="btn btn-success" value="Leave comment" type="button">
     <% } %>
 
     <script id="<%=commentItemTmplId%>" type="text/html">

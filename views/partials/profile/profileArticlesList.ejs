@@ -43,6 +43,7 @@
                             articlesList.html('');
                             var articlesListRow = articlesList.wrap("<div class='row'></div>");
                             data.forEach(function (article) {
+                                article.readonly = <%=readonly%>;
                                 initListItemHandlers($(ejs.render(itemTpl, article)).appendTo(articlesListRow).wrap("<div class='col-lg-4'></div>"));
                             })
                         }

@@ -10,18 +10,18 @@ var Article = require('models/article');
 var ArticleManager = require('managers/articleManager');
 
 
-router.get('/:id', function(req, res, next) {
-    Article.findById(req.params.id, function(err, article){
+router.post('/getArticleViewData', function(req, res, next) {
+    Article.findById(req.body.id, function(err, article){
         if(err) {
             return next(err);
         }
         if(article && article.published) {
-            res.render('article', {
+            res.json({
                 article: article,
                 readonly: !(req.user && !article._user.equals(req.user._id))
             });
         } else {
-            next(errors.HttpError(404));
+            return next(errors.HttpError(404));
         }
     });
 });
@@ -35,7 +35,7 @@ router.post('/save', checkAuth, upload.single('background'), function(req, res, 
     }
     (new ArticleManager()).save(req.body, function(err, result){
         if(err) next(err);
-        res.end();
+        res.json(result);
     });
 });
 
@@ -49,9 +49,10 @@ router.post('/delete', checkAuth, function(req, res, next){
 
 router.post('/findFeedList', function(req, res, next){
     var searchText = req.body.searchText,
-        startIndex = parseInt(req.body.startIndex);
+        startIndex = parseInt(req.body.startIndex),
+        pageSize = parseInt(req.body.pageSize);
 
-    (new ArticleManager()).findFeedList(searchText, startIndex, function(err, result) {
+    (new ArticleManager()).findFeedList(searchText, startIndex, pageSize, function(err, result) {
         if(err) {
             next(err);
         }
@@ -74,8 +75,9 @@ router.post('/findFeedList', function(req, res, next){
 });
 
 router.post('/findByUser', function(req, res, next){
-    var findOptions = { _user: req.body.id || req.user };
-    if(!(req.user && req.user._id.equals(req.body.id))){
+    var findOptions = { _user: req.body.id || (req.user ? req.user._id : null) };
+
+    if(!(req.user && req.user._id.equals(findOptions._user))){
         findOptions.published = true;
     }
     Article.find(findOptions, {}, {sort: {created: -1}}).exec(function(err, articles){
@@ -88,7 +90,6 @@ router.post('/findByUser', function(req, res, next){
                 title: article.title,
                 content: article.content ? article.content.substring(0, 200) : '',
                 published: article.published && (req.user && article._user.equals(req.user._id)),
-                readonly:!(req.user && article._user.equals(req.user._id)),
                 rating: article.rating,
                 comments: article._comments.length,
                 created: article.created,
@@ -120,9 +121,27 @@ router.post('/getEditDlg', function(req, res, next){
         if(err) {
             return next(err);
         }
-
         res.render('partials/article/articleEditDlg.ejs', article || new Article({title: '', content: ''}));
     });
 });
+
+ router.get('/:id', function(req, res, next) {
+     'use strict';
+
+     Article.findById(req.params.id, function (err, article) {
+         if (err) {
+             return next(err);
+         }
+         if (article && article.published) {
+             res.render('article', {
+                 article: article,
+                 readonly: !(req.user && !article._user.equals(req.user._id))
+             });
+         } else {
+             next(errors.HttpError(404));
+         }
+     });
+ });
+
 
 module.exports = router;
