@@ -54,7 +54,7 @@ router.post('/findFeedList', function(req, res, next){
 
     (new ArticleManager()).findFeedList(searchText, startIndex, pageSize, function(err, result) {
         if(err) {
-            next(err);
+            return next(err);
         }
         res.json(result.map(function(article){
             return {
@@ -125,7 +125,7 @@ router.post('/getEditDlg', function(req, res, next){
     });
 });
 
- router.get('/:id', function(req, res, next) {
+ /*router.get('/:id', function(req, res, next) {
      'use strict';
 
      Article.findById(req.params.id, function (err, article) {
@@ -141,7 +141,7 @@ router.post('/getEditDlg', function(req, res, next){
              next(errors.HttpError(404));
          }
      });
- });
+ });*/
 
 
 module.exports = router;

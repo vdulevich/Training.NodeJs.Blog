@@ -48,7 +48,9 @@ ArticleManager.prototype.findFeedList = function(searchText, startIndex, pageSiz
         }
     ],
     function(err, articles){
-        if(err) return callback(err);
+        if(err) {
+            return callback(err);
+        }
         callback(null, articles);
     });
 }
@@ -87,7 +89,9 @@ ArticleManager.prototype.save = function(article, callback){
             callback(null, newArticle);
         }
     ], function(err, article){
-        if(err) return next(err);
+        if(err) {
+            return next(err);
+        }
         callback(null, article);
     });
 }

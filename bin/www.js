@@ -5,10 +5,9 @@
  */
 
 var app = require('app');
-var debug = require('debug')('chart:server');
 var http = require('http');
 var config = require('config');
-
+//var approot = require('app-root-path');
 
 /**
  * Get port from environment and store in Express.
@@ -40,9 +39,7 @@ function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -64,9 +61,9 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
+  /*var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+    : 'port ' + addr.port;*/
 }
+

@@ -20,6 +20,10 @@ a:hover {
   color: white;
 }
 
+.nav-divider{
+  padding: 0px 5px;
+}
+
 .error {
   color: #b92c28;
 }
@@ -308,7 +312,7 @@ a:hover {
   text-overflow: ellipsis;
 }
 
-.ch-feed-list .ch-feed-rate strong{
+.ch-feed-list .ch-feed-rate strong {
   color: #b92c28;
 }
 .ch-feed-list .ch-feed-rate .glyphicon {
@@ -330,7 +334,6 @@ a:hover {
 }
 
 /* Bar rate style*/
-
 .br-theme-bars-movie .br-widget a {
   display: block;
   width: 20px;

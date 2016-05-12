@@ -25,7 +25,7 @@ router.post('/login', function(req, res, next){
             req.session.cookie.expires = false; // Cookie expires at end of session
         }
         req.session.user = user._id.toString();
-        res.end('');
+        res.json(user);
     });
 });
 
@@ -47,7 +47,7 @@ router.post('/signup', function(req, res, next){
             }
         }
         req.session.user = profile._user.toString();
-        res.end('');
+        res.json(profile._user);
     });
 });
 
