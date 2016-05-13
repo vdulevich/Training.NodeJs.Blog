@@ -5,10 +5,10 @@ var Article = require('models/article');
 var ArticleManager = require('managers/articleManager');
 
 module.exports = {
-    name: 'loadFeedArticles',
+    name: 'loadFeedListArticles',
     create: function (req, resource, params, body, config, callback) {
-        var searchText = '',//req.body.searchText,
-            startIndex = 0,//parseInt(params.startIndex),
+        var searchText = params.searchText,
+            startIndex = parseInt(params.startIndex),
             pageSize = 5;//parseInt(params.pageSize);
 
         (new ArticleManager()).findFeedList(searchText, startIndex, pageSize, function(err, result) {

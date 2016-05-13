@@ -2,7 +2,7 @@
 
 var React = require("react");
 var Link = require("react-router").Link;
-var browserHistory = require('react-router').browserHistory;
+var articlesFeedListActions = require("frontend/actions/articlesFeedListActions");
 var loginActions = require("frontend/actions/loginActions");
 var LoginStore = require("frontend/stores/loginStore");
 
@@ -14,7 +14,7 @@ var HeaderComponent = React.createClass({
         getStore: React.PropTypes.func,
         router: React.PropTypes.object
     },
-    menuTree: [{ title: 'Home', to: { pathname: '/', query: { search: undefined } } }, { title: 'Profile', to: { pathname: '/profile' } }, { title: 'Article', to: { pathname: '/article/id' } }],
+    menuTree: [{ title: 'Home', to: { pathname: '/' } }, { title: 'Profile', to: { pathname: '/profile' } }, { title: 'Article', to: { pathname: '/article/id' } }],
     getInitialState: function getInitialState() {
         return this.getStoreState();
     },
@@ -51,7 +51,7 @@ var HeaderComponent = React.createClass({
     },
     handelSearch: function handelSearch(e) {
         e.preventDefault();
-        browserHistory.push('/?search=' + this.refs._searchText.value);
+        this.context.executeAction(articlesFeedListActions.search, this.refs._searchText.value);
     },
     render: function render() {
         var currentMenuItems = this.menuTreeMapFn(this.menuTree);

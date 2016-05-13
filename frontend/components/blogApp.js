@@ -6,8 +6,8 @@ var FooterComponent = require('frontend/components/controls/footer');
 var LoginFormDialogComponent = require('frontend/components/authentication/loginFormDialog');
 var LoginStore = require("frontend/stores/loginStore");
 
-var Layout = React.createClass({
-    displayName: 'Layout',
+var BlogApp = React.createClass({
+    displayName: 'BlogApp',
 
     contextTypes: {
         executeAction: React.PropTypes.func,
@@ -74,4 +74,4 @@ var Layout = React.createClass({
     }
 });
 
-module.exports = Layout;
+module.exports = BlogApp;

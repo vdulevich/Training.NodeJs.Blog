@@ -19,13 +19,22 @@ var ArticlesFeedListComponent = React.createClass({
     componentDidMount: function componentDidMount() {
         this.context.getStore(ArticlesFeedListStore).addChangeListener(this.handleStoreChange);
     },
+    componentDidUpdate: function componentDidUpdate() {
+        if (this.state.loading) {
+            $(this.refs._loadMoreBtn).mask();
+        } else {
+            $(this.refs._loadMoreBtn).unmask();
+        }
+    },
+
     componentWillUnmount: function componentWillUnmount() {
         this.context.getStore(ArticlesFeedListStore).removeChangeListener(this.handleStoreChange);
     },
     getStoreState: function getStoreState() {
         return {
             data: this.context.getStore(ArticlesFeedListStore).getAll(),
-            full: this.context.getStore(ArticlesFeedListStore).getIsFull()
+            full: this.context.getStore(ArticlesFeedListStore).getIsFull(),
+            loading: this.context.getStore(ArticlesFeedListStore).getIsLoading()
         };
     },
     handleStoreChange: function handleStoreChange() {
@@ -33,17 +42,10 @@ var ArticlesFeedListComponent = React.createClass({
     },
 
     handelOnLoading: function handelOnLoading() {
-        //$(this.refs._loadMoreBtn).mask();
-    },
-    handelOnChange: function handelOnChange() {
-        /*this.setState({
-            data : articlesFeedListStore.getAll(),
-            full: articlesFeedListStore.getIsFull()
-        });
-        $(this.refs._loadMoreBtn).unmask();*/
+        $(this.refs._loadMoreBtn).mask();
     },
     handleLoadMore: function handleLoadMore() {
-        //articlesFeedListActions.loadMoreArticles();
+        this.context.executeAction(ArticlesFeedListActions.fetchArticles);
     },
     render: function render() {
         var articleNodes = this.state.data.map(function (article) {

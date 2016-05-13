@@ -6,7 +6,7 @@ var LoginFormDialogComponent = require('frontend/components/authentication/login
 var LoginStore = require("frontend/stores/loginStore");
 
 
-var Layout = React.createClass({
+var BlogApp = React.createClass({
     contextTypes: {
         executeAction: React.PropTypes.func,
         getStore: React.PropTypes.func,
@@ -60,4 +60,4 @@ var Layout = React.createClass({
     }
 });
 
-module.exports = Layout;
+module.exports = BlogApp;

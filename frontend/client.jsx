@@ -12,7 +12,7 @@ function RenderApp(appEl, context){
         React.createElement(
             FluxibleComponent,
             { context: context.getComponentContext() },
-            React.createElement(ReactRouter.Router, {routes: context.getComponent(), history: browserHistory })
+            React.createElement(ReactRouter.Router, { routes: context.getComponent(), history: browserHistory })
         ),
         appEl
     );

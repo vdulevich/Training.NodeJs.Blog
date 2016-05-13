@@ -1,6 +1,6 @@
 var React = require("react");
 var Link = require("react-router").Link;
-var browserHistory = require('react-router').browserHistory
+var articlesFeedListActions = require("frontend/actions/articlesFeedListActions");
 var loginActions = require("frontend/actions/loginActions");
 var LoginStore = require("frontend/stores/loginStore");
 
@@ -11,7 +11,7 @@ var HeaderComponent = React.createClass({
         router: React.PropTypes.object
     },
     menuTree : [
-        { title: 'Home', to: { pathname: '/' , query: { search: undefined } } },
+        { title: 'Home', to: { pathname: '/' } },
         { title: 'Profile', to: { pathname: '/profile' } },
         { title: 'Article', to: { pathname: '/article/id' } }
     ],
@@ -37,12 +37,12 @@ var HeaderComponent = React.createClass({
     },
     menuTreeMapFn: function(menuTree){
         return menuTree.map(function(menuLeaf) {
-            return (<li key={menuLeaf.title}><Link className="nav-link" activeClassName="nav-selected" to={menuLeaf.to} >{menuLeaf.title}</Link></li>)
+            return (<li key={menuLeaf.title}><Link className="nav-link" activeClassName="nav-selected" to={menuLeaf.to}>{menuLeaf.title}</Link></li>)
         });
     },
     handelSearch: function (e) {
         e.preventDefault();
-        browserHistory.push('/?search=' + this.refs._searchText.value);
+        this.context.executeAction(articlesFeedListActions.search, this.refs._searchText.value);
     },
     render: function(){
         var currentMenuItems = this.menuTreeMapFn(this.menuTree);

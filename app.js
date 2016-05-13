@@ -9,14 +9,9 @@ var historyMemory  = require('history').createMemoryHistory();
 var FluxibleComponent = require('fluxible-addons-react/FluxibleComponent');
 var flexApp = require('frontend/app');
 var loadData = require('frontend/actions/loadDataActions').loadData;
+var changeRoute = require('frontend/actions/navigateActions').changeRoute;
 var serialize = require('serialize-javascript');
-var LoginService = require('frontend/services/login');
-var LoadUserService = require('frontend/services/loadUser');
-var LoadFeedArticles = require('frontend/services/loadFeedArticles');
-var fetchrPlugin = flexApp.getPlugin('FetchrPlugin');
-fetchrPlugin.registerService(LoginService);
-fetchrPlugin.registerService(LoadUserService);
-fetchrPlugin.registerService(LoadFeedArticles);
+var fetchrPlugin = require('lib/fetchrPlugin')(flexApp);
 
 var express = require('express');
 var path = require('path');
@@ -74,7 +69,7 @@ app.use('/api/article', article);
 app.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
 
 app.use(function(req, res, next){
-    var location = historyMemory.createLocation(req.path);
+    var location = historyMemory.createLocation(req.url);
     match({ routes: routes, location: location },
         function(error, redirectLocation, renderProps) {
             if (redirectLocation) {
@@ -83,6 +78,7 @@ app.use(function(req, res, next){
             else if (renderProps) {
                 var context = flexApp.createContext({ req: req });
 
+                context.executeAction(changeRoute, renderProps);
                 context.executeAction(loadData, {}, function (err) {
                     if (err) {
                         if (err.statusCode && err.statusCode === 404) {
@@ -95,7 +91,7 @@ app.use(function(req, res, next){
                     var exposed = 'window.App=' + serialize(flexApp.dehydrate(context)) + ';';
                     var markupElement = React.createElement(
                         FluxibleComponent,
-                        {context: context.getComponentContext()},
+                        { context: context.getComponentContext() },
                         React.createElement(RouterContext, renderProps));
 
                     res.render("./page",
