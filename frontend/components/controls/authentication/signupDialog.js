@@ -5,13 +5,15 @@ var DialogComponent = require("dialog");
 var SignupFormComponent = require("signupForm");
 
 var SignupFormDialogComponent = React.createClass({
-    handelSubmit: function () {
+    displayName: "SignupFormDialogComponent",
+
+    handelSubmit: function handelSubmit() {
 
         this.refs._dialog.mask();
         $.ajax('/authentication/signup', {
             type: "POST",
             data: this.refs._form.getData(),
-            success: function () {
+            success: function success() {
                 location.reload();
             }
         }).always(function () {
@@ -19,21 +21,21 @@ var SignupFormDialogComponent = React.createClass({
         }.bind(this));
     },
 
-    handleDialogShow: function () {
+    handleDialogShow: function handleDialogShow() {
         this.refs._form.clear();
     },
 
-    handleDialogShown: function () {
+    handleDialogShown: function handleDialogShown() {
         this.refs._form.focus();
     },
 
-    handleDialogResult: function (result) {
+    handleDialogResult: function handleDialogResult(result) {
         if (result === 'success') {
             this.refs._form.submit();
         }
     },
 
-    render: function () {
+    render: function render() {
         return React.createElement(
             DialogComponent,
             { onDialogResult: this.handleDialogResult,

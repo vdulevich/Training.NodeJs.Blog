@@ -1,10 +1,13 @@
 'use strict';
 
 var React = require("react");
+var Link = require("react-router").Link;
 
 var ArticlesFeedListItemComponent = React.createClass({
-    getBackgroundUrl: function () {},
-    render: function () {
+    displayName: "ArticlesFeedListItemComponent",
+
+    getBackgroundUrl: function getBackgroundUrl() {},
+    render: function render() {
         var dateformat = require("dateformat");
         return React.createElement(
             "div",
@@ -39,8 +42,8 @@ var ArticlesFeedListItemComponent = React.createClass({
                                 null,
                                 "Created by ",
                                 React.createElement(
-                                    "a",
-                                    { target: "_self", href: "/profile/{{article.userId}}" },
+                                    Link,
+                                    { to: '/profile/' + this.props.article.userId },
                                     React.createElement(
                                         "strong",
                                         null,

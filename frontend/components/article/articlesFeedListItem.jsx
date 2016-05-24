@@ -1,5 +1,6 @@
 'use strict';
 var React = require("react");
+var Link = require("react-router").Link;
 
 
 var ArticlesFeedListItemComponent = React.createClass({
@@ -17,7 +18,7 @@ var ArticlesFeedListItemComponent = React.createClass({
                                 <a className="ch-feed-viewlink" target="_self" href="/article/{this.props.article.id}"><strong className="panel-title">{this.props.article.title}</strong></a>
                             </div>
                             <div className="ch-feed-author col-lg-6">
-                                <span>Created by <a target="_self" href="/profile/{{article.userId}}"><strong>{this.props.article.author}</strong></a></span>
+                                <span>Created by <Link to={'/profile/' + this.props.article.userId}><strong>{this.props.article.author}</strong></Link></span>
                             </div>
                         </div>
                     </div>

@@ -2,9 +2,10 @@
 
 var React = require("react");
 var Link = require("react-router").Link;
-var articlesFeedListActions = require("frontend/actions/articlesFeedListActions");
-var loginActions = require("frontend/actions/loginActions");
-var LoginStore = require("frontend/stores/loginStore");
+var IndexLink = require("react-router").IndexLink;
+var articlesFeedActions = require("frontend/actions/articlesFeedActions");
+var authActions = require("frontend/actions/authActions");
+var ApplicationStore = require("frontend/stores/applicationStore");
 
 var HeaderComponent = React.createClass({
     displayName: "HeaderComponent",
@@ -14,19 +15,18 @@ var HeaderComponent = React.createClass({
         getStore: React.PropTypes.func,
         router: React.PropTypes.object
     },
-    menuTree: [{ title: 'Home', to: { pathname: '/' } }, { title: 'Profile', to: { pathname: '/profile' } }, { title: 'Article', to: { pathname: '/article/id' } }],
     getInitialState: function getInitialState() {
         return this.getStoreState();
     },
     componentDidMount: function componentDidMount() {
-        this.context.getStore(LoginStore).addChangeListener(this.handleStoreChange);
+        this.context.getStore(ApplicationStore).addChangeListener(this.handleStoreChange);
     },
     componentWillUnmount: function componentWillUnmount() {
-        this.context.getStore(LoginStore).removeChangeListener(this.handleStoreChange);
+        this.context.getStore(ApplicationStore).removeChangeListener(this.handleStoreChange);
     },
     getStoreState: function getStoreState() {
         return {
-            loggedUser: this.context.getStore(LoginStore).getLoggedUser()
+            loggedUser: this.context.getStore(ApplicationStore).getUser()
         };
     },
     handleStoreChange: function handleStoreChange() {
@@ -34,24 +34,41 @@ var HeaderComponent = React.createClass({
     },
 
     handleLoginBtn: function handleLoginBtn() {
-        this.context.executeAction(loginActions.loginOpen);
+        this.context.executeAction(authActions.loginOpen);
     },
-    menuTreeMapFn: function menuTreeMapFn(menuTree) {
-        return menuTree.map(function (menuLeaf) {
-            return React.createElement(
-                "li",
-                { key: menuLeaf.title },
-                React.createElement(
-                    Link,
-                    { className: "nav-link", activeClassName: "nav-selected", to: menuLeaf.to },
-                    menuLeaf.title
-                )
-            );
-        });
+    menuTreeMapFn: function menuTreeMapFn() {
+        return [React.createElement(
+            "li",
+            { key: "/" },
+            React.createElement(
+                IndexLink,
+                { className: "nav-link", activeClassName: "nav-selected", to: "/" },
+                "Home"
+            )
+        ), React.createElement(
+            "li",
+            { key: "Profile" },
+            React.createElement(
+                Link,
+                { className: "nav-link", activeClassName: "nav-selected", to: this.getProfilePath() },
+                "Profile"
+            )
+        ), React.createElement(
+            "li",
+            { key: "Article" },
+            React.createElement(
+                Link,
+                { className: "nav-link", activeClassName: "nav-selected", to: "/article/id" },
+                "Article"
+            )
+        )];
+    },
+    getProfilePath: function getProfilePath() {
+        return '/profile/' + this.props.params.userId;
     },
     handelSearch: function handelSearch(e) {
         e.preventDefault();
-        this.context.executeAction(articlesFeedListActions.search, this.refs._searchText.value);
+        this.context.executeAction(articlesFeedActions.search, this.refs._searchText.value);
     },
     render: function render() {
         var currentMenuItems = this.menuTreeMapFn(this.menuTree);

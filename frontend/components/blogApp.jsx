@@ -2,8 +2,7 @@
 var React = require("react");
 var HeaderComponent = require('frontend/components/controls/header');
 var FooterComponent = require('frontend/components/controls/footer');
-var LoginFormDialogComponent = require('frontend/components/authentication/loginFormDialog');
-var LoginStore = require("frontend/stores/loginStore");
+var LoginDialogComponent = require('frontend/components/controls/authentication/loginDialog');
 
 
 var BlogApp = React.createClass({
@@ -12,35 +11,11 @@ var BlogApp = React.createClass({
         getStore: React.PropTypes.func,
         router: React.PropTypes.object
     },
-    /*getInitialState:function(){
-        return this.getStoreState();
-    },
-    componentDidMount:function() {
-        this.context.getStore(LoginStore).addChangeListener(this.handleStoreChange);
-    },
-    componentWillUnmount:function(){
-        this.context.getStore(LoginStore).removeChangeListener(this.handleStoreChange);
-    },
-    componentDidUpdate : function(){
-        if(this.state.loginOpen){
-            this.refs._loginDlg.refs._dialog.modal();
-        } else {
-            this.refs._loginDlg.refs._dialog.hide();
-        }
-    },
-    getStoreState () {
-        return {
-            loginOpen: this.context.getStore(LoginStore).getLoginOpen()
-        }
-    },
-    handleStoreChange () {
-        this.setState(this.getStoreState());
-    },*/
     render: function(){
         return (
             <div style={{height: '100%'}}>
                 <div>
-                    <LoginFormDialogComponent ref="_loginDlg" style={{display: 'none'}}/>
+                    <LoginDialogComponent ref="_loginDlg" style={{display: 'none'}}/>
                 </div>
                 <div style={{height: '100%'}}>
                     <div class="ch-wrapper">

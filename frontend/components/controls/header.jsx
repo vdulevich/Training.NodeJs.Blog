@@ -1,8 +1,9 @@
 var React = require("react");
 var Link = require("react-router").Link;
-var articlesFeedListActions = require("frontend/actions/articlesFeedListActions");
-var loginActions = require("frontend/actions/loginActions");
-var LoginStore = require("frontend/stores/loginStore");
+var IndexLink = require("react-router").IndexLink;
+var articlesFeedActions = require("frontend/actions/articlesFeedActions");
+var authActions = require("frontend/actions/authActions");
+var ApplicationStore = require("frontend/stores/applicationStore");
 
 var HeaderComponent = React.createClass({
     contextTypes: {
@@ -10,39 +11,39 @@ var HeaderComponent = React.createClass({
         getStore: React.PropTypes.func,
         router: React.PropTypes.object
     },
-    menuTree : [
-        { title: 'Home', to: { pathname: '/' } },
-        { title: 'Profile', to: { pathname: '/profile' } },
-        { title: 'Article', to: { pathname: '/article/id' } }
-    ],
     getInitialState: function(){
         return this.getStoreState();
     },
     componentDidMount:function() {
-        this.context.getStore(LoginStore).addChangeListener(this.handleStoreChange);
+        this.context.getStore(ApplicationStore).addChangeListener(this.handleStoreChange);
     },
     componentWillUnmount:function(){
-        this.context.getStore(LoginStore).removeChangeListener(this.handleStoreChange);
+        this.context.getStore(ApplicationStore).removeChangeListener(this.handleStoreChange);
     },
     getStoreState () {
         return {
-            loggedUser: this.context.getStore(LoginStore).getLoggedUser()
+            loggedUser: this.context.getStore(ApplicationStore).getUser()
         }
     },
     handleStoreChange () {
         this.setState(this.getStoreState());
     },
     handleLoginBtn: function(){
-        this.context.executeAction(loginActions.loginOpen);
+        this.context.executeAction(authActions.loginOpen);
     },
-    menuTreeMapFn: function(menuTree){
-        return menuTree.map(function(menuLeaf) {
-            return (<li key={menuLeaf.title}><Link className="nav-link" activeClassName="nav-selected" to={menuLeaf.to}>{menuLeaf.title}</Link></li>)
-        });
+    menuTreeMapFn: function(){
+        return [
+            <li key="/"><IndexLink className="nav-link" activeClassName="nav-selected" to="/">Home</IndexLink></li>,
+            <li key='Profile'><Link className="nav-link" activeClassName="nav-selected" to={this.getProfilePath()}>Profile</Link></li>,
+            <li key='Article'><Link className="nav-link" activeClassName="nav-selected" to='/article/id'>Article</Link></li>
+        ];
+    },
+    getProfilePath: function(){
+        return '/profile/' + this.props.params.userId;
     },
     handelSearch: function (e) {
         e.preventDefault();
-        this.context.executeAction(articlesFeedListActions.search, this.refs._searchText.value);
+        this.context.executeAction(articlesFeedActions.search, this.refs._searchText.value);
     },
     render: function(){
         var currentMenuItems = this.menuTreeMapFn(this.menuTree);
@@ -87,7 +88,7 @@ var HeaderComponent = React.createClass({
                             </div>
                             <div class="navbar-form navbar-right" role="search">
                                 <form onSubmit={this.handelSearch} class="form-group input-group">
-                                    <input ref="_searchText" defaultValue={this.state.searchText} class="form-control" placeholder="search text..."/>
+                                    <input ref="_searchText" defaultValue={this.state.searchText} className="form-control" placeholder="search text..."/>
                                     <span class="input-group-btn">
                                         <button type="submit" class="btn btn-default">Search</button>
                                     </span>

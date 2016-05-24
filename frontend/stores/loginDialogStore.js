@@ -2,53 +2,45 @@
 var createStore = require('fluxible/addons').createStore;
 var actionsNames = require('frontend/constants').actions;
 
-
 var LoginStore = createStore({
     storeName: 'LoginStore',
 
     initialize: function () {
-        this.loggedUser = null;
-        this.loginState = null;
-        this.loginOpened = false;
+        this.state = null;
+        this.opened = false;
     },
     _handleLoginDialog: function(state){
-        this.loginOpened = state;
+        this.opened = state;
         this.emitChange();
     },
     _handleLoginRequest: function(){
-        this.loginState = 'pending';
+        this.state = 'pending';
         this.emitChange();
     },
     _handleLoginSuccess: function(data){
-        this.loggedUser = data;
-        this.loginState = 'success';
-        this.loginOpened = false;
+        this.state = 'success';
+        this.opened = false;
         this.emitChange();
     },
     _handleLoginFailed: function(){
-        this.loginState = 'failed';
+        this.state = 'failed';
         this.emitChange();
     },
-    getLoggedUser : function() {
-        return this.loggedUser;
-    },
     getLoginState : function(){
-        return this.loginState;
+        return this.state;
     },
     getLoginOpen : function(){
-        return this.loginOpened;
+        return this.opened;
     },
     dehydrate: function () {
         return {
-            loggedUser: this.loggedUser,
-            loginState: this.loginState,
-            loginOpened: this.loginOpened
+            state: this.state,
+            opened: this.opened
         };
     },
     rehydrate: function (state) {
-        this.loggedUser = state.loggedUser;
-        this.loginState = state.loginState;
-        this.loginOpened = state.loginOpened;
+        this.state = state.state;
+        this.opened = state.opened;
     }
 });
 

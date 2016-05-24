@@ -1,7 +1,6 @@
 "use strict";
 var actionsNames = require('frontend/constants').actions;
 
-
 module.exports = {
     loginOpen: function(context, payload, done){
         context.dispatch(actionsNames.AUTH_LOGIN_DIALOG, true);
@@ -15,6 +14,14 @@ module.exports = {
             if(err){
                 context.dispatch(actionsNames.AUTH_LOGIN_FAILED);
             } else {
+                context.dispatch(actionsNames.AUTH_LOGIN_SUCCESS, response);
+            }
+            done();
+        });
+    },
+    loadUser: function(context, payload, done){
+        context.service.create('loadUser', {}, payload, function(err, response){
+            if(!err){
                 context.dispatch(actionsNames.AUTH_LOGIN_SUCCESS, response);
             }
             done();

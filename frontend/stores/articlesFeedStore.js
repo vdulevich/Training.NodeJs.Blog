@@ -2,31 +2,31 @@
 var createStore = require('fluxible/addons').createStore;
 var actionsNames = require('frontend/constants').actions;
 
-
 var ArticlesStore = createStore({
-    storeName: 'ArticlesStore',
+    storeName: 'ArticlesFeedStore',
     initialize: function () {
         this.articles = [];
-        this.full = false;
+        this.startIndex = 0;
+        this.loaded = false;
         this.loading = false;
         this.pageSize = 5;
     },
-
     getAll: function(){
         return this.articles;
     },
-    getIsFull : function(){
-        return this.full;
+    getIsLoaded : function(){
+        return this.loaded;
     },
     getIsLoading: function(){
         return this.loading;
     },
     getStartIndex: function(){
-        return this.articles.length > 0 ? this.articles.length : 0;
+        return this.startIndex;
     },
     _handleFeedListSuccess: function(data) {
-        this.full = data.length < this.pageSize;
-        this.articles = this.articles.concat(this.full ? data : data.slice(0, data.length - 1));
+        this.loaded = data.length < this.pageSize;
+        this.articles = this.articles.concat(this.loaded ? data : data.slice(0, data.length - 1));
+        this.startIndex = this.articles.length;
         this.loading = false;
         this.emitChange();
     },
@@ -45,12 +45,16 @@ var ArticlesStore = createStore({
     dehydrate: function () {
         return {
             articles: this.articles,
-            full: this.full
+            loaded: this.loaded,
+            loading: this.loading,
+            startIndex: this.startIndex
         };
     },
     rehydrate: function (state) {
         this.articles = state.articles;
-        this.full = state.full;
+        this.loaded = state.loaded;
+        this.loading = state.loading;
+        this.startIndex = state.startIndex;
     }
 });
 

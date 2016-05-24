@@ -1,17 +1,19 @@
 'use strict';
 var fetchrPlugin  = require('fluxible-plugin-fetchr');
 var Fluxible = require('fluxible');
-var LoginStore = require('frontend/stores/loginStore');
-var ArticlesStore = require('frontend/stores/articlesStore');
+var LoginDialogStore = require('frontend/stores/loginDialogStore');
+var ArticlesFeedStore = require('frontend/stores/articlesFeedStore');
 var ApplicationStore = require('frontend/stores/applicationStore');
+var ProfileInfoStore = require('frontend/stores/profileInfoStore');
 var Routes = require('frontend/routes');
 
 var app = new Fluxible({
     component: Routes,
     stores:[
-        LoginStore,
-        ArticlesStore,
-        ApplicationStore
+        ApplicationStore,
+        LoginDialogStore,
+        ArticlesFeedStore,
+        ProfileInfoStore
     ]
 });
 app.plug(fetchrPlugin({ xhrPath: '/_api' }));

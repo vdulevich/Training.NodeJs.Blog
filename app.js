@@ -8,8 +8,8 @@ var routes = require('frontend/routes');
 var historyMemory  = require('history').createMemoryHistory();
 var FluxibleComponent = require('fluxible-addons-react/FluxibleComponent');
 var flexApp = require('frontend/app');
-var loadData = require('frontend/actions/loadDataActions').loadData;
-var changeRoute = require('frontend/actions/navigateActions').changeRoute;
+var loadData = require('frontend/actions/preloadActions').loadData;
+var changeRoute = require('frontend/actions/routeActions').changeRoute;
 var serialize = require('serialize-javascript');
 var fetchrPlugin = require('lib/fetchrPlugin')(flexApp);
 
@@ -27,9 +27,9 @@ var _ = require('underscore');
 
 /*var index = require('routes/index');
 var profile = require('routes/profile');
-var comment = require('routes/comment');*/
+var comment = require('routes/comment');
 var login = require('routes/authentication');
-var article = require('routes/article');
+var article = require('routes/article');*/
 
 var app = express();
 
@@ -61,9 +61,9 @@ app.use(require('middleware/loadUser'));
 app.use('/index', index );
 app.use('/authentication', login );
 app.use('/profile', profile);
-app.use('/comment', comment);*/
+app.use('/comment', comment);
 app.use('/api/authentication', login );
-app.use('/api/article', article);
+app.use('/api/article', article);*/
 
 
 app.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
@@ -78,7 +78,7 @@ app.use(function(req, res, next){
             else if (renderProps) {
                 var context = flexApp.createContext({ req: req });
 
-                context.executeAction(changeRoute, renderProps);
+                context.executeAction(changeRoute, { params: renderProps.params, location: renderProps.location });
                 context.executeAction(loadData, {}, function (err) {
                     if (err) {
                         if (err.statusCode && err.statusCode === 404) {

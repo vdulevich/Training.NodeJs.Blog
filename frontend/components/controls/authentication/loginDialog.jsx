@@ -1,9 +1,9 @@
 'use strict';
 var React = require("react");
 var DialogComponent = require("frontend/components/controls/dialog");
-var LoginFormComponent = require("frontend/components/authentication/loginForm");
-var loginActions = require("frontend/actions/loginActions");
-var LoginStore = require("frontend/stores/loginStore");
+var LoginFormComponent = require("frontend/components/controls/authentication/loginForm");
+var authActions = require("frontend/actions/authActions");
+var loginDialogStore = require("frontend/stores/loginDialogStore");
 var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 var LoginFormDialogComponent = React.createClass({
@@ -15,10 +15,10 @@ var LoginFormDialogComponent = React.createClass({
         return this.getStoreState();
     },
     componentDidMount:function(){
-        this.context.getStore(LoginStore).addChangeListener(this.handleStoreChange);
+        this.context.getStore(loginDialogStore).addChangeListener(this.handleStoreChange);
     },
     componentWillUnmount:function() {
-        this.context.getStore(LoginStore).removeChangeListener(this.handleStoreChange);
+        this.context.getStore(loginDialogStore).removeChangeListener(this.handleStoreChange);
     },
     shouldComponentUpdate: function(nextProps, nextState){
         return PureRenderMixin.shouldComponentUpdate.bind(this)(nextProps, nextState)
@@ -47,22 +47,22 @@ var LoginFormDialogComponent = React.createClass({
     },
     getStoreState () {
         return {
-            loginState: this.context.getStore(LoginStore).getLoginState(),
-            loginOpen: this.context.getStore(LoginStore).getLoginOpen()
+            loginState: this.context.getStore(loginDialogStore).getLoginState(),
+            loginOpen: this.context.getStore(loginDialogStore).getLoginOpen()
         }
     },
     handleStoreChange () {
         this.setState(this.getStoreState());
     },
     handelSubmit: function(){
-        this.context.executeAction(loginActions.login, this.refs._form.getData());
+        this.context.executeAction(authActions.login, this.refs._form.getData());
     },
     handleDialogShown:function(){
         this.refs._form.clear();
         this.refs._form.focus();
     },
     handleDialogHidden: function(e){
-        this.context.executeAction(loginActions.loginHide);
+        this.context.executeAction(authActions.loginHide);
     },
     handleDialogResult: function(result){
         if(result === 'success'){
