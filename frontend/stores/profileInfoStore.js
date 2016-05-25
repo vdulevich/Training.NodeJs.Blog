@@ -1,6 +1,7 @@
 "use strict";
 var createStore = require('fluxible/addons').createStore;
 var actionsNames = require('frontend/constants').actions;
+var ApplicationStore = require('frontend/stores/applicationStore');
 
 var ProfileInfoStore = createStore({
     storeName:'ProfileInfoStore',

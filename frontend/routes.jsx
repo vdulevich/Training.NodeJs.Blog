@@ -17,7 +17,7 @@ module.exports =
     (
         <Router>
             <Route path="/" component={BlogApp} onChange={onChange}>
-                <IndexRoute name="feed" component={IndexPage}></IndexRoute>
+                <IndexRoute name="index" component={IndexPage}></IndexRoute>
                 <Route name="article" path="article/:articleId" component={ArticlePage}></Route>
                 <Route name="profile" path="profile(/:userId)" component={ProfilePage}></Route>
             </Route>

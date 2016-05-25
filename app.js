@@ -78,8 +78,9 @@ app.use(function(req, res, next){
             else if (renderProps) {
                 var context = flexApp.createContext({ req: req });
 
-                context.executeAction(changeRoute, { params: renderProps.params, location: renderProps.location });
-                context.executeAction(loadData, {}, function (err) {
+                //context.executeAction(changeRoute, renderProps);
+                //context.executeAction(loadData, {}, function (err) {
+                context.executeAction(changeRoute, renderProps, function(err) {
                     if (err) {
                         if (err.statusCode && err.statusCode === 404) {
                             return next();

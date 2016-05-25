@@ -20,7 +20,7 @@ module.exports = React.createElement(
     React.createElement(
         Route,
         { path: '/', component: BlogApp, onChange: onChange },
-        React.createElement(IndexRoute, { name: 'feed', component: IndexPage }),
+        React.createElement(IndexRoute, { name: 'index', component: IndexPage }),
         React.createElement(Route, { name: 'article', path: 'article/:articleId', component: ArticlePage }),
         React.createElement(Route, { name: 'profile', path: 'profile(/:userId)', component: ProfilePage })
     )

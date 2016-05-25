@@ -5,13 +5,10 @@ var authActions = require('frontend/actions/authActions');
 
 var actions = {
     loadData: function(context, payload, done){
-        var loadUser = new Promise(function(resolve, reject) {
-            context.executeAction(authActions.loadUser, {}, resolve);
-        });
-        var loadFeedList = new Promise(function(resolve, reject) {
-            context.executeAction(articlesFeedActions.load, {}, resolve);
-        });
-        Promise.all([loadUser, loadFeedList]).then(function(){ done(); }).catch(done);
+        Promise.all([
+            context.executeAction(authActions.loadUser, {}),
+            context.executeAction(articlesFeedActions.load, {})])
+        .then(function(){ done(); }).catch(done);
     }
 };
 

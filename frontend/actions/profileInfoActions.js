@@ -1,47 +1,41 @@
 "use strict";
 var actionsNames = require('frontend/constants').actions;
-var ApplicationStore = require('frontend/stores/applicationStore');
 var ProfileInfoStore = require('frontend/stores/profileInfoStore');
+var Promise = require("promise");
 
 var ProfileActions = {
     loadProfile: function(context, payload, done){
-        var applicationStore = context.getStore(ApplicationStore);
-        var profileInfoStore = context.getStore(ProfileInfoStore);
-        var userId = applicationStore.getParams().userId != null ?
-            applicationStore.getParams().userId :
-            applicationStore.getUserId();
-
-        if(profileInfoStore.getUser()._id !== userId) {
-            context.dispatch(actionsNames.PROFILE_INFO_REQUEST);
-            context.service.create('loadProfile', { userId: userId }, {}, function (err, response) {
-                if (err) {
-                    context.dispatch(actionsNames.PROFILE_INFO_FAILED);
-                } else {
-                    context.dispatch(actionsNames.PROFILE_INFO_SUCCESS, response);
-                }
-                done();
-            });
-        } else {
+        context.dispatch(actionsNames.PROFILE_INFO_REQUEST);
+        context.service.create('loadProfile', { userId: payload }, {}, function (err, response) {
+            if (err) {
+                context.dispatch(actionsNames.PROFILE_INFO_FAILED);
+            } else {
+                context.dispatch(actionsNames.PROFILE_INFO_SUCCESS, response);
+            }
             done();
-        }
+        });
     },
     loadArticles: function(context, payload, done){
-        var applicationStore = context.getStore(ApplicationStore);
+        context.dispatch(actionsNames.PROFILE_ARTICLES_REQUEST);
+        context.service.create('loadArticlesByUserId', { userId: payload }, {}, function (err, response) {
+            if (err) {
+                context.dispatch(actionsNames.PROFILE_ARTICLES_FAILED);
+            } else {
+                context.dispatch(actionsNames.PROFILE_ARTICLES_SUCCESS, { articles: response });
+            }
+            done();
+        });
+    },
+    load: function(context, payload, done){
         var profileInfoStore = context.getStore(ProfileInfoStore);
-        var userId = applicationStore.getParams().userId != null ?
-            applicationStore.getParams().userId :
-            applicationStore.getUserId();
-
-        if(profileInfoStore.getUser()._id !== userId) {
-            context.dispatch(actionsNames.PROFILE_ARTICLES_REQUEST);
-            context.service.create('loadArticlesByUserId', { userId: userId }, {}, function (err, response) {
-                if (err) {
-                    context.dispatch(actionsNames.PROFILE_ARTICLES_FAILED);
-                } else {
-                    context.dispatch(actionsNames.PROFILE_ARTICLES_SUCCESS, { articles: response, userId : userId});
-                }
-                done();
-            });
+        if(profileInfoStore.getUser()._id !== payload) {
+            new Promise
+                .all([
+                    context.executeAction(ProfileActions.loadArticles, payload),
+                    context.executeAction(ProfileActions.loadProfile, payload)]
+                )
+                .then(function(){ done(); })
+                .catch(done);
         } else {
             done();
         }

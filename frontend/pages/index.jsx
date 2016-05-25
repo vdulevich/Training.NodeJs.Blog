@@ -13,7 +13,6 @@ var IndexComponent = React.createClass({
     },
     componentDidMount:function() {
         this.context.getStore(ArticlesFeedStore).addChangeListener(this.handleStoreChange);
-        this.context.executeAction(articlesFeedActions.init);
     },
     componentWillUnmount:function(){
         this.context.getStore(ArticlesFeedStore).removeChangeListener(this.handleStoreChange);
@@ -38,7 +37,8 @@ var IndexComponent = React.createClass({
                 loaded={this.state.loaded}
                 articles={this.state.articles}
                 handleLoadMore={this.handleLoadMore}>
-            </ArticlesFeedList>);
+            </ArticlesFeedList>
+        );
     }
 });
 module.exports = IndexComponent;

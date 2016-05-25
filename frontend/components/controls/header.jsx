@@ -1,7 +1,7 @@
 var React = require("react");
 var Link = require("react-router").Link;
 var IndexLink = require("react-router").IndexLink;
-var articlesFeedActions = require("frontend/actions/articlesFeedActions");
+var browserHistory = require('react-router').browserHistory;
 var authActions = require("frontend/actions/authActions");
 var ApplicationStore = require("frontend/stores/applicationStore");
 
@@ -32,18 +32,22 @@ var HeaderComponent = React.createClass({
         this.context.executeAction(authActions.loginOpen);
     },
     menuTreeMapFn: function(){
-        return [
-            <li key="/"><IndexLink className="nav-link" activeClassName="nav-selected" to="/">Home</IndexLink></li>,
-            <li key='Profile'><Link className="nav-link" activeClassName="nav-selected" to={this.getProfilePath()}>Profile</Link></li>,
-            <li key='Article'><Link className="nav-link" activeClassName="nav-selected" to='/article/id'>Article</Link></li>
-        ];
-    },
-    getProfilePath: function(){
-        return '/profile/' + this.props.params.userId;
+        var links = [];
+        links.push(<li key="/"><IndexLink className="nav-link" activeClassName="nav-selected" to="/">Home</IndexLink></li>);
+        if(this.props.params.userId != null){
+            links.push(<li key='Profile'><Link className="nav-link" activeClassName="nav-selected" to={'/profile/' + this.props.params.userId}>Profile</Link></li>)
+        }
+        else if(this.state.loggedUser != null){
+            links.push(<li key='Profile'><Link className="nav-link" activeClassName="nav-selected" to={'/profile/' + this.state.loggedUser._id}>Profile</Link></li>)
+        }
+        if(this.props.params.articleId != null) {
+            links.push(<li key='Article'><Link className="nav-link" activeClassName="nav-selected" to={'/article/' + this.props.params.articleId}>Article</Link></li>);
+        }
+        return links;
     },
     handelSearch: function (e) {
         e.preventDefault();
-        this.context.executeAction(articlesFeedActions.search, this.refs._searchText.value);
+        browserHistory.push('/?search=' + this.refs._searchText.value);
     },
     render: function(){
         var currentMenuItems = this.menuTreeMapFn(this.menuTree);
@@ -68,7 +72,7 @@ var HeaderComponent = React.createClass({
                                 { this.state.loggedUser
                                     ? (
                                         <span>
-                                            <Link to={{pathname: '/profile'}} className="navbar-link">Welcome&nbsp;<strong>{this.state.loggedUser.email}</strong></Link>
+                                            <Link to={{pathname: '/profile/'+ this.state.loggedUser._id}} className="navbar-link">Welcome&nbsp;<strong>{this.state.loggedUser.email}</strong></Link>
                                             <span className="nav-divider" />
                                             <a className="navbar-link"
                                                 data-text="Do you really want to logout?"

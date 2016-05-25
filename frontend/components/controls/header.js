@@ -3,7 +3,7 @@
 var React = require("react");
 var Link = require("react-router").Link;
 var IndexLink = require("react-router").IndexLink;
-var articlesFeedActions = require("frontend/actions/articlesFeedActions");
+var browserHistory = require('react-router').browserHistory;
 var authActions = require("frontend/actions/authActions");
 var ApplicationStore = require("frontend/stores/applicationStore");
 
@@ -37,7 +37,8 @@ var HeaderComponent = React.createClass({
         this.context.executeAction(authActions.loginOpen);
     },
     menuTreeMapFn: function menuTreeMapFn() {
-        return [React.createElement(
+        var links = [];
+        links.push(React.createElement(
             "li",
             { key: "/" },
             React.createElement(
@@ -45,30 +46,44 @@ var HeaderComponent = React.createClass({
                 { className: "nav-link", activeClassName: "nav-selected", to: "/" },
                 "Home"
             )
-        ), React.createElement(
-            "li",
-            { key: "Profile" },
-            React.createElement(
-                Link,
-                { className: "nav-link", activeClassName: "nav-selected", to: this.getProfilePath() },
-                "Profile"
-            )
-        ), React.createElement(
-            "li",
-            { key: "Article" },
-            React.createElement(
-                Link,
-                { className: "nav-link", activeClassName: "nav-selected", to: "/article/id" },
-                "Article"
-            )
-        )];
-    },
-    getProfilePath: function getProfilePath() {
-        return '/profile/' + this.props.params.userId;
+        ));
+        if (this.props.params.userId != null) {
+            links.push(React.createElement(
+                "li",
+                { key: "Profile" },
+                React.createElement(
+                    Link,
+                    { className: "nav-link", activeClassName: "nav-selected", to: '/profile/' + this.props.params.userId },
+                    "Profile"
+                )
+            ));
+        } else if (this.state.loggedUser != null) {
+            links.push(React.createElement(
+                "li",
+                { key: "Profile" },
+                React.createElement(
+                    Link,
+                    { className: "nav-link", activeClassName: "nav-selected", to: '/profile/' + this.state.loggedUser._id },
+                    "Profile"
+                )
+            ));
+        }
+        if (this.props.params.articleId != null) {
+            links.push(React.createElement(
+                "li",
+                { key: "Article" },
+                React.createElement(
+                    Link,
+                    { className: "nav-link", activeClassName: "nav-selected", to: '/article/' + this.props.params.articleId },
+                    "Article"
+                )
+            ));
+        }
+        return links;
     },
     handelSearch: function handelSearch(e) {
         e.preventDefault();
-        this.context.executeAction(articlesFeedActions.search, this.refs._searchText.value);
+        browserHistory.push('/?search=' + this.refs._searchText.value);
     },
     render: function render() {
         var currentMenuItems = this.menuTreeMapFn(this.menuTree);
@@ -118,7 +133,7 @@ var HeaderComponent = React.createClass({
                                 null,
                                 React.createElement(
                                     Link,
-                                    { to: { pathname: '/profile' }, className: "navbar-link" },
+                                    { to: { pathname: '/profile/' + this.state.loggedUser._id }, className: "navbar-link" },
                                     "Welcome ",
                                     React.createElement(
                                         "strong",

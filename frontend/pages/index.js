@@ -17,7 +17,6 @@ var IndexComponent = React.createClass({
     },
     componentDidMount: function componentDidMount() {
         this.context.getStore(ArticlesFeedStore).addChangeListener(this.handleStoreChange);
-        this.context.executeAction(articlesFeedActions.init);
     },
     componentWillUnmount: function componentWillUnmount() {
         this.context.getStore(ArticlesFeedStore).removeChangeListener(this.handleStoreChange);

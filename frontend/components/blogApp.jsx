@@ -4,7 +4,6 @@ var HeaderComponent = require('frontend/components/controls/header');
 var FooterComponent = require('frontend/components/controls/footer');
 var LoginDialogComponent = require('frontend/components/controls/authentication/loginDialog');
 
-
 var BlogApp = React.createClass({
     contextTypes: {
         executeAction: React.PropTypes.func,

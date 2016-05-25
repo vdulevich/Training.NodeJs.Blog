@@ -2,7 +2,6 @@
 
 var React = require("react");
 var ProfileInfo = require("frontend/components/profile/profileInfo");
-/*var ProfileArticles = require("frontend/components/profile/profileArticles");*/
 var ArticlesFeedList = require("frontend/components/article/articlesFeedList");
 var ProfileInfoStore = require("frontend/stores/profileInfoStore.js");
 var actions = require('frontend/actions/profileInfoActions');
@@ -12,15 +11,14 @@ var ProfilePage = React.createClass({
 
     contextTypes: {
         executeAction: React.PropTypes.func,
-        getStore: React.PropTypes.func
+        getStore: React.PropTypes.func,
+        router: React.PropTypes.object
     },
     getInitialState: function getInitialState() {
         return this.getStoreState();
     },
     componentDidMount: function componentDidMount() {
         this.context.getStore(ProfileInfoStore).addChangeListener(this.handleStoreChange);
-        this.context.executeAction(actions.loadArticles);
-        this.context.executeAction(actions.loadProfile);
     },
     componentWillUnmount: function componentWillUnmount() {
         this.context.getStore(ProfileInfoStore).removeChangeListener(this.handleStoreChange);

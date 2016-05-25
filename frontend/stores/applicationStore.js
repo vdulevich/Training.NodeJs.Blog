@@ -10,7 +10,7 @@ var ApplicationStore = createStore({
         this.profile = null;
     },
     _handleNavigate: function (route) {
-        this.route = route;
+        this.route = { params : route.params, location: route.location };
         this.emitChange();
     },
     _handleLoginSuccess: function(data){

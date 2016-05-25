@@ -2,6 +2,7 @@
 
 var React = require("react");
 var ArticlesFeedListItemComponent = require("frontend/components/article/articlesFeedListItem");
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 var ArticlesFeedListComponent = React.createClass({
     displayName: "ArticlesFeedListComponent",
@@ -12,6 +13,9 @@ var ArticlesFeedListComponent = React.createClass({
         } else {
             $(this.refs._loadMoreBtn).unmask();
         }
+    },
+    shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+        return PureRenderMixin.shouldComponentUpdate.bind(this)(nextProps, nextState);
     },
     handleLoadMore: function handleLoadMore() {
         if (this.props.handleLoadMore != null) {

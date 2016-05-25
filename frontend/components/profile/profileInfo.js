@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require("react");
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 var ProfileInfo = React.createClass({
     displayName: 'ProfileInfo',
@@ -17,6 +18,9 @@ var ProfileInfo = React.createClass({
                 $(this.refs._panel).unmask();
                 break;
         }
+    },
+    shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+        return PureRenderMixin.shouldComponentUpdate.bind(this)(nextProps, nextState);
     },
     handleModeChange: function handleModeChange() {
         if (this.state.mode == 'read') {
