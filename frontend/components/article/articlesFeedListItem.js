@@ -25,8 +25,8 @@ var ArticlesFeedListItemComponent = React.createClass({
                             "div",
                             { className: "ch-feed-title col-lg-6" },
                             React.createElement(
-                                "a",
-                                { className: "ch-feed-viewlink", target: "_self", href: "/article/{this.props.article.id}" },
+                                Link,
+                                { to: "/article/" + this.props.article.id, className: "ch-feed-viewlink" },
                                 React.createElement(
                                     "strong",
                                     { className: "panel-title" },

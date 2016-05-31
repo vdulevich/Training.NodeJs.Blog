@@ -8,10 +8,11 @@ var routes = require('frontend/routes');
 var historyMemory  = require('history').createMemoryHistory();
 var FluxibleComponent = require('fluxible-addons-react/FluxibleComponent');
 var flexApp = require('frontend/app');
-var loadData = require('frontend/actions/preloadActions').loadData;
-var changeRoute = require('frontend/actions/routeActions').changeRoute;
+var authActions = require('frontend/actions/authActions');
+var routeActions = require('frontend/actions/routeActions');
 var serialize = require('serialize-javascript');
 var fetchrPlugin = require('lib/fetchrPlugin')(flexApp);
+var Promise = require("promise");
 
 var express = require('express');
 var path = require('path');
@@ -76,12 +77,10 @@ app.use(function(req, res, next){
                 res.redirect(302, redirectLocation.pathname + redirectLocation.search);
             }
             else if (renderProps) {
-                var context = flexApp.createContext({ req: req });
 
-                //context.executeAction(changeRoute, renderProps);
-                //context.executeAction(loadData, {}, function (err) {
-                context.executeAction(changeRoute, renderProps, function(err) {
+                var errorHandler = function(err){
                     if (err) {
+                        console.log('Error in app.js preload actions', err);
                         if (err.statusCode && err.statusCode === 404) {
                             return next();
                         }
@@ -89,19 +88,29 @@ app.use(function(req, res, next){
                             return next(err);
                         }
                     }
-                    var exposed = 'window.App=' + serialize(flexApp.dehydrate(context)) + ';';
-                    var markupElement = React.createElement(
-                        FluxibleComponent,
-                        { context: context.getComponentContext() },
-                        React.createElement(RouterContext, renderProps));
+                }
 
-                    res.render("./page",
-                        {
-                            appHtml: ReactDOMServer.renderToStaticMarkup(markupElement),
-                            appState: exposed
-                        }
-                    );
-                });
+                var context = flexApp.createContext({ req: req });
+                Promise.all([
+                    context.executeAction(authActions.loadUser),
+                    context.executeAction(routeActions.change, renderProps)
+                ])
+                .then(
+                    function() {
+                        var exposed = 'window.App=' + serialize(flexApp.dehydrate(context)) + ';';
+                        var markupElement = React.createElement(
+                            FluxibleComponent,
+                            { context: context.getComponentContext() },
+                            React.createElement(RouterContext, renderProps));
+                        res.render("./page",
+                            {
+                                appHtml: ReactDOMServer.renderToStaticMarkup(markupElement),
+                                appState: exposed
+                            }
+                        );
+                    },
+                    errorHandler)
+                .catch(errorHandler);
             } else {
                 next();
             }

@@ -55,6 +55,34 @@ ArticleManager.prototype.findFeedList = function(searchText, startIndex, pageSiz
     });
 }
 
+
+ArticleManager.prototype.findByUserId = function(userId, published, callback){
+    var findOptions = {
+        _user: userId
+    };
+    if(published != null) {
+        findOptions.published = published;
+    }
+    Article
+        .find(findOptions, {}, { sort: {created: -1} })
+        .populate({
+            path: '_user',
+            model: 'User',
+            select: '_profile',
+            populate: {
+                path: '_profile',
+                model: 'Profile',
+                select: 'firstName lastName'
+            }
+            })
+        .exec(function(err, articles){
+            if(err) {
+                return callback(err);
+            }
+            callback(null, articles);
+        });
+};
+
 ArticleManager.prototype.save = function(article, callback){
     async.waterfall([
         function(callback){

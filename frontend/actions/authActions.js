@@ -23,6 +23,8 @@ module.exports = {
         context.service.create('loadUser', {}, payload, function(err, response){
             if(!err){
                 context.dispatch(actionsNames.AUTH_LOGIN_SUCCESS, response);
+            } else {
+                console.log('Error in loadUser', err);
             }
             done();
         });

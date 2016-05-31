@@ -17,6 +17,9 @@ var ApplicationStore = createStore({
         this.user = data;
         this.emitChange();
     },
+    _handleSave: function(payload){
+
+    },
     getParams: function(){
         return this.route ? this.route.params : {};
     },
@@ -49,5 +52,6 @@ var ApplicationStore = createStore({
 ApplicationStore.handlers = {};
 ApplicationStore.handlers[actionsNames.CHANGE_ROUTE] = '_handleNavigate';
 ApplicationStore.handlers[actionsNames.AUTH_LOGIN_SUCCESS] = '_handleLoginSuccess';
+ApplicationStore.handlers[actionsNames.SAVE] = "_handleSave";
 
 module.exports = ApplicationStore;

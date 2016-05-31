@@ -38,6 +38,7 @@ var ProfileInfo = React.createClass({
         if (this.props.handleSave != null) {
             this.props.handleSave(this.state.profileEdit);
         }
+        this.handleModeChange();
     },
     render: function render() {
         return React.createElement(
@@ -185,8 +186,20 @@ var ProfileInfo = React.createClass({
             this.state.mode == 'edit' ? React.createElement(
                 'div',
                 { className: 'panel-footer clearfix' },
-                React.createElement('input', { onClick: this.handleModeChange, className: 'btn btn-sm btn-default pull-right', value: 'Cancel', type: 'button' }),
-                React.createElement('input', { onClick: this.handleSave, className: 'btn btn-sm btn-success pull-right', value: 'Save', type: 'button' })
+                React.createElement(
+                    'div',
+                    { className: 'pull-right btn-toolbar' },
+                    React.createElement(
+                        'button',
+                        { type: 'button', onClick: this.handleSave, className: 'btn btn-sm btn-primary' },
+                        'Save'
+                    ),
+                    React.createElement(
+                        'button',
+                        { type: 'button', onClick: this.handleModeChange, className: 'btn btn-sm btn-default' },
+                        'Cancel'
+                    )
+                )
             ) : ''
         );
     }

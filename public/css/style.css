@@ -191,7 +191,12 @@ a:hover {
 .panel-footer{
   border: none;
   border-radius: 0px;
-  padding: 8px 10px;
+}
+
+.panel-footer .btn.btn-sm
+{
+  margin-top: -5px;
+  margin-bottom: -5px;
 }
 
 .form-group{
@@ -270,7 +275,7 @@ a:hover {
 /*-----Feed article list-----*/
 
 .ch-feed-list{
-  margin: 0px;
+  margin: 0px -5px;
 }
 
 .ch-feed-list .ch-feed-list-item {

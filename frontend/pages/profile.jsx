@@ -2,7 +2,7 @@ var React = require("react");
 var ProfileInfo = require("frontend/components/profile/profileInfo")
 var ArticlesFeedList = require("frontend/components/article/articlesFeedList");
 var ProfileInfoStore = require("frontend/stores/profileInfoStore.js");
-var actions = require('frontend/actions/profileInfoActions');
+var profileInfoActions = require('frontend/actions/profileInfoActions');
 
 var ProfilePage = React.createClass({
     contextTypes: {
@@ -23,8 +23,7 @@ var ProfilePage = React.createClass({
         this.setState(this.getStoreState());
     },
     handleSave:function(profile){
-        this.context.executeAction(actions.save, profile);
-        this.handleModeChange();
+        this.context.executeAction(profileInfoActions.save, profile);
     },
     getStoreState: function(){
         return {
@@ -40,7 +39,8 @@ var ProfilePage = React.createClass({
                 <ProfileInfo
                     profile={this.state.profile}
                     user={this.state.user}
-                    loading={this.state.loading.profile}>
+                    loading={this.state.loading.profile}
+                    handleSave={this.handleSave}>
                 </ProfileInfo>
                 <ArticlesFeedList
                     articles={this.state.articles}

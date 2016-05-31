@@ -5,7 +5,7 @@ var Article = require('models/article');
 
 module.exports = [
     {
-        name: 'loadFeed',
+        name: 'loadArticlesByFeedOptions',
         create: function (req, resource, params, body, config, callback) {
             var searchText = params.searchText,
                 startIndex = parseInt(params.startIndex),
@@ -35,12 +35,12 @@ module.exports = [
     {
         name: 'loadArticlesByUserId',
         create: function (req, resource, params, body, config, callback) {
-            var findOptions = { _user: params.userId || (req.user ? req.user._id : null) };
-
-            if(!(req.user && req.user._id.equals(findOptions._user))){
-                findOptions.published = true;
+            var userId = params.userId || (req.user ? req.user._id : null);
+            var published = null;
+            if(!(req.user && req.user._id.equals(userId))){
+                published = true;
             }
-            Article.find(findOptions, {}, {sort: {created: -1}}).exec(function(err, articles){
+            (new ArticleManager()).findByUserId(userId, published, function(err, articles){
                 if(err) {
                     return callback(err);
                 }
@@ -52,7 +52,8 @@ module.exports = [
                         published: article.published && (req.user && article._user.equals(req.user._id)),
                         rating: article.rating,
                         comments: article._comments.length,
-                        created: article.created,
+                        author: article._user._profile.fullName,
+                        userId: article._user._id,
                         backgroundPath: article.backgroundPath || '',
                         backgroundStyle: article.backgroundStyle || ''
                     };

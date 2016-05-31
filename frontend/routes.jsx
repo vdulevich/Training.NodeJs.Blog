@@ -10,7 +10,7 @@ var ProfilePage = require('frontend/pages/profile');
 var routeActions = require("frontend/actions/routeActions");
 
 function onChange(prevState, nextState){
-    context.getActionContext().executeAction(routeActions.changeRoute, nextState);
+    context.getActionContext().executeAction(routeActions.change, nextState);
 }
 
 module.exports =

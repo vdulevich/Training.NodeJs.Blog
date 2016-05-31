@@ -34,6 +34,12 @@ var ProfileInfoStore = createStore({
         this.loading.profile = false;
         this.emitChange();
     },
+    _handleSave: function(payload){
+        if(payload.entity === "profile") {
+            this.initialize();
+            this.emitChange();
+        }
+    },
     getIsLoading: function(){
         return this.loading;
     },
@@ -55,7 +61,7 @@ var ProfileInfoStore = createStore({
     },
     rehydrate: function(state){
         this.articles = state.articles;
-        this.userId = state.user;
+        this.user = state.user;
         this.profile = state.profile;
     }
 });
@@ -65,5 +71,7 @@ ProfileInfoStore.handlers[actionsNames.PROFILE_ARTICLES_SUCCESS] = "_handleProfi
 ProfileInfoStore.handlers[actionsNames.PROFILE_ARTICLES_REQUEST] = "_handleProfileArticlesRequest";
 ProfileInfoStore.handlers[actionsNames.PROFILE_INFO_SUCCESS] = "_handleProfileInfoSuccess";
 ProfileInfoStore.handlers[actionsNames.PROFILE_INFO_REQUEST] = "_handleProfileInfoRequest";
+ProfileInfoStore.handlers[actionsNames.SAVE] = "_handleSave";
+
 
 module.exports = ProfileInfoStore;

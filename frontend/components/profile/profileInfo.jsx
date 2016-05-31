@@ -35,6 +35,7 @@ var ProfileInfo = React.createClass({
         if(this.props.handleSave != null) {
             this.props.handleSave(this.state.profileEdit);
         }
+        this.handleModeChange();
     },
     render: function(){
         return (
@@ -94,8 +95,10 @@ var ProfileInfo = React.createClass({
                 {
                     this.state.mode == 'edit' ?
                         (<div className="panel-footer clearfix">
-                            <input onClick={this.handleModeChange} className="btn btn-sm btn-default pull-right" value="Cancel" type="button"/>
-                            <input onClick={this.handleSave} className="btn btn-sm btn-success pull-right" value="Save" type="button"/>
+                            <div class="pull-right btn-toolbar">
+                                <button type="button" onClick={this.handleSave} className="btn btn-sm btn-primary">Save</button>
+                                <button type="button" onClick={this.handleModeChange} className="btn btn-sm btn-default">Cancel</button>
+                            </div>
                         </div>)
                     : ('')
                 }

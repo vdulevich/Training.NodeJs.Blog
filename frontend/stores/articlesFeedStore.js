@@ -6,31 +6,35 @@ var ArticlesStore = createStore({
     storeName: 'ArticlesFeedStore',
     initialize: function () {
         this.articles = [];
-        this.startIndex = 0;
-        this.loaded = false;
+        this.isFull = false;
         this.loading = false;
         this.pageSize = 5;
+        this.init = false;
     },
     getAll: function(){
         return this.articles;
     },
-    getIsLoaded : function(){
-        return this.loaded;
+    getIsInit: function(){
+        return this.init;
+    },
+    getIsFull : function(){
+        return this.isFull;
     },
     getIsLoading: function(){
         return this.loading;
     },
     getStartIndex: function(){
-        return this.startIndex;
+        return this.articles.length;
     },
     _handleFeedListSuccess: function(data) {
-        this.loaded = data.length < this.pageSize;
-        this.articles = this.articles.concat(this.loaded ? data : data.slice(0, data.length - 1));
-        this.startIndex = this.articles.length;
+        this.init = true;
+        this.isFull = data.length < this.pageSize;
+        this.articles = this.articles.concat(this.isFull ? data : data.slice(0, data.length - 1));
         this.loading = false;
         this.emitChange();
     },
     _handleFeedListFailed: function(){
+        this.init = true;
         this.loading = false;
         this.emitChange();
     },
@@ -42,19 +46,25 @@ var ArticlesStore = createStore({
         this.initialize();
         this.emitChange();
     },
+    _handleSave: function(payload){
+        if(payload.entity === "profile") {
+            this.initialize();
+            this.emitChange();
+        }
+    },
     dehydrate: function () {
         return {
             articles: this.articles,
-            loaded: this.loaded,
+            isFull: this.isFull,
             loading: this.loading,
-            startIndex: this.startIndex
+            init : this.init
         };
     },
     rehydrate: function (state) {
         this.articles = state.articles;
-        this.loaded = state.loaded;
+        this.isFull = state.isFull;
         this.loading = state.loading;
-        this.startIndex = state.startIndex;
+        this.init = state.init;
     }
 });
 
@@ -63,5 +73,6 @@ ArticlesStore.handlers[actionsNames.ARTICLES_FEED_REQUEST] = '_handleFeedListReq
 ArticlesStore.handlers[actionsNames.ARTICLES_FEED_FAILED] = '_handleFeedListFailed';
 ArticlesStore.handlers[actionsNames.ARTICLES_FEED_SUCCESS] = '_handleFeedListSuccess';
 ArticlesStore.handlers[actionsNames.ARTICLES_FEED_CLEAR] = '_handleFeedListClear';
+ArticlesStore.handlers[actionsNames.SAVE] = "_handleSave";
 
 module.exports = ArticlesStore;

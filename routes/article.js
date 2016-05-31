@@ -34,7 +34,9 @@ router.post('/save', checkAuth, upload.single('background'), function(req, res, 
         req.body.backgroundFileName = req.file.originalname;
     }
     (new ArticleManager()).save(req.body, function(err, result){
-        if(err) next(err);
+        if(err) {
+            next(err);
+        }
         res.json(result);
     });
 });

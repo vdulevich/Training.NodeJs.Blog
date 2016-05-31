@@ -1,9 +1,9 @@
 "use strict";
+var Promise = require("promise");
 var actionsNames = require('frontend/constants').actions;
 var ProfileInfoStore = require('frontend/stores/profileInfoStore');
-var Promise = require("promise");
 
-var ProfileActions = {
+var ProfileInfoActions = {
     loadProfile: function(context, payload, done){
         context.dispatch(actionsNames.PROFILE_INFO_REQUEST);
         context.service.create('loadProfile', { userId: payload }, {}, function (err, response) {
@@ -31,8 +31,8 @@ var ProfileActions = {
         if(profileInfoStore.getUser()._id !== payload) {
             new Promise
                 .all([
-                    context.executeAction(ProfileActions.loadArticles, payload),
-                    context.executeAction(ProfileActions.loadProfile, payload)]
+                    context.executeAction(ProfileInfoActions.loadArticles, payload),
+                    context.executeAction(ProfileInfoActions.loadProfile, payload)]
                 )
                 .then(function(){ done(); })
                 .catch(done);
@@ -40,16 +40,18 @@ var ProfileActions = {
             done();
         }
     },
-    save: function(context, payload, done){
+    save: function(context, payload, done) {
+        context.dispatch(actionsNames.SAVE, { entity: "profile", id: payload._id });
         context.service.create('saveProfile', payload, {}, function (err, response) {
             if (err) {
                 context.dispatch(actionsNames.PROFILE_INFO_FAILED);
+                done();
             } else {
                 context.dispatch(actionsNames.PROFILE_INFO_SUCCESS, response);
+                ProfileInfoActions.loadArticles(context, response._user._id, done);
             }
-            done();
         });
     }
 };
 
-module.exports = ProfileActions;
+module.exports = ProfileInfoActions;

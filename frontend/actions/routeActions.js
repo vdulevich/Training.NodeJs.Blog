@@ -2,9 +2,10 @@
 var actionsNames = require('frontend/constants').actions;
 var articlesFeedActions = require("frontend/actions/articlesFeedActions");
 var profileInfoActions = require('frontend/actions/profileInfoActions');
+var ApplicationStore = require('frontend/stores/applicationStore');
 
-module.exports = {
-    changeRoute: function (context, payload, done) {
+var RouteActions = {
+    change: function (context, payload, done) {
         context.dispatch(actionsNames.CHANGE_ROUTE, payload);
         switch (payload.routes[2].name)
         {
@@ -12,13 +13,11 @@ module.exports = {
                 if(payload.location.query.search != null){
                     context.executeAction(articlesFeedActions.search, payload.location.query.search, done);
                 } else {
-                    context.executeAction(articlesFeedActions.load, {}, done);
+                    context.executeAction(articlesFeedActions.init, {}, done);
                 }
                 break;
             case "profile":
-                if(payload.params.userId != null){
-                    context.executeAction(profileInfoActions.load, payload.params.userId, done);
-                }
+                context.executeAction(profileInfoActions.load, payload.params.userId, done);
                 break;
             case "article":
                 done();
@@ -26,5 +25,11 @@ module.exports = {
             default:
                 done();
         }
+    },
+    reload: function(context, payload, done){
+        var applicationStore = context.getStore(ApplicationStore);
+        context.executeAction(RouteActions.change, applicationStore.getState().route);
     }
 };
+
+module.exports = RouteActions;
