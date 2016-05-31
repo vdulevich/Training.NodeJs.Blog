@@ -5,6 +5,7 @@ var LoginDialogStore = require('frontend/stores/loginDialogStore');
 var ArticlesFeedStore = require('frontend/stores/articlesFeedStore');
 var ApplicationStore = require('frontend/stores/applicationStore');
 var ProfileInfoStore = require('frontend/stores/profileInfoStore');
+var ArticleViewStore = require('frontend/stores/articleViewStore');
 var Routes = require('frontend/routes');
 
 var app = new Fluxible({
@@ -13,7 +14,8 @@ var app = new Fluxible({
         ApplicationStore,
         LoginDialogStore,
         ArticlesFeedStore,
-        ProfileInfoStore
+        ProfileInfoStore,
+        ArticleViewStore
     ]
 });
 app.plug(fetchrPlugin({ xhrPath: '/_api' }));

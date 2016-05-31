@@ -1,7 +1,11 @@
+"use strict";
+
 var React = require("react");
 
 var FooterComponent = React.createClass({
-    render: function () {
+    displayName: "FooterComponent",
+
+    render: function render() {
         return React.createElement(
             "div",
             { className: "ch-footer" },

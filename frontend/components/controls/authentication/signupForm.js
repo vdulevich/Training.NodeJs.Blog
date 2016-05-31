@@ -3,7 +3,9 @@
 var React = require("react");
 
 var SignupFormComponent = React.createClass({
-    componentDidMount: function () {
+    displayName: "SignupFormComponent",
+
+    componentDidMount: function componentDidMount() {
         var form = $(this.refs._form),
             self = this;
 
@@ -16,7 +18,7 @@ var SignupFormComponent = React.createClass({
                         url: "/authentication/signup/validate",
                         type: "post",
                         data: {
-                            email: function () {
+                            email: function email() {
                                 return form.find('[name=email]').val();
                             }
                         }
@@ -49,37 +51,37 @@ var SignupFormComponent = React.createClass({
                     remote: "Email address already in use. Please use other email."
                 }
             },
-            highlight: function (element) {
+            highlight: function highlight(element) {
                 $(element).closest('.form-group').addClass('has-error');
             },
-            unhighlight: function (element) {
+            unhighlight: function unhighlight(element) {
                 $(element).closest('.form-group').removeClass('has-error');
             },
             submitHandler: this.props.onSubmit
         });
     },
-    handelKeyDown: function (e) {
+    handelKeyDown: function handelKeyDown(e) {
         var keyCode = e.keyCode || e.which;
         if (keyCode === 13) {
             this.submit();
         }
     },
-    getData: function () {
+    getData: function getData() {
         return $(this.refs._form).serialize();
     },
-    focus: function () {
+    focus: function focus() {
         this.refs._firstName.focus();
     },
-    clear: function () {
+    clear: function clear() {
         var form = $(this.refs._form);
         form.find(".form-group input").val("");
         form.find('.has-error').removeClass('has-error');
         this.refs._validator.resetForm();
     },
-    submit: function () {
+    submit: function submit() {
         $(this.refs._form).submit();
     },
-    render: function () {
+    render: function render() {
         return React.createElement(
             "form",
             { ref: "_form", onKeyDown: this.handelKeyDown, acceptCharset: "UTF-8", role: "form" },

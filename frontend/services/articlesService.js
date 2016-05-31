@@ -61,4 +61,22 @@ module.exports = [
             });
         }
     },
+    {
+        name: 'loadArticlesById',
+        create: function (req, resource, params, body, config, callback) {
+            if(params.id == null){
+                return callback(errors.HttpError(404));
+            }
+            Article.findById(params.id, function(err, article){
+                if(err) {
+                    return callback(err);
+                }
+                if(article != null && article.published) {
+                    callback(null, article);
+                } else {
+                    return callback(errors.HttpError(404));
+                }
+            });
+        }
+    }
 ];

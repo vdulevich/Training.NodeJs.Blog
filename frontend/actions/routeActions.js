@@ -2,6 +2,7 @@
 var actionsNames = require('frontend/constants').actions;
 var articlesFeedActions = require("frontend/actions/articlesFeedActions");
 var profileInfoActions = require('frontend/actions/profileInfoActions');
+var articleViewActions = require('frontend/actions/articleViewActions');
 var ApplicationStore = require('frontend/stores/applicationStore');
 
 var RouteActions = {
@@ -20,7 +21,7 @@ var RouteActions = {
                 context.executeAction(profileInfoActions.load, payload.params.userId, done);
                 break;
             case "article":
-                done();
+                context.executeAction(articleViewActions.load, payload.params.articleId, done);
                 break;
             default:
                 done();

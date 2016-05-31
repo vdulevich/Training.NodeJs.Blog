@@ -2,7 +2,6 @@
 var React = require("react");
 var Link = require("react-router").Link;
 
-
 var ArticlesFeedListItemComponent = React.createClass({
     getBackgroundUrl: function () {
 
@@ -15,7 +14,7 @@ var ArticlesFeedListItemComponent = React.createClass({
                     <div className="panel-heading">
                         <div className="row">
                             <div className="ch-feed-title col-lg-6">
-                                <Link to={"/article/" + this.props.article.id} className="ch-feed-viewlink"><strong className="panel-title">{this.props.article.title}</strong></Link>
+                                <Link to={"/article/" + this.props.article._id} className="ch-feed-viewlink"><strong className="panel-title">{this.props.article.title}</strong></Link>
                             </div>
                             <div className="ch-feed-author col-lg-6">
                                 <span>Created by <Link to={'/profile/' + this.props.article.userId}><strong>{this.props.article.author}</strong></Link></span>
