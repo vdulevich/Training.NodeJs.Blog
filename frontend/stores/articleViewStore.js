@@ -26,16 +26,20 @@ var ArticleViewStore = createStore({
         this.emitChange();
     },
     _handleCommentsRequest: function(){
-        this.comments.article = true;
+        this.loading.comments = true;
         this.emitChange();
     },
     _handleCommentsFailed: function(){
-        this.comments.article = false;
+        this.loading.comments = false;
         this.emitChange();
     },
     _handleCommentsSuccess: function(data){
-        this.comments.article = false;
+        this.loading.comments = false;
         this.comments = data;
+        this.emitChange();
+    },
+    _handleCommentSaveSuccess:function(data){
+        this.comments.push(data);
         this.emitChange();
     },
     _handleSave: function(payload){
@@ -69,6 +73,10 @@ ArticleViewStore.handlers[actionsNames.ARTICLE_LOAD_SUCCESS] = '_handleArticleSu
 ArticleViewStore.handlers[actionsNames.COMMENTS_LOAD_REQUEST] = '_handleCommentsRequest';
 ArticleViewStore.handlers[actionsNames.COMMENTS_LOAD_FAILED] = '_handleCommentsFailed';
 ArticleViewStore.handlers[actionsNames.COMMENTS_LOAD_SUCCESS] = '_handleCommentsSuccess';
+
+ArticleViewStore.handlers[actionsNames.COMMENT_SAVE_REQUEST] = '_handleCommentsRequest';
+ArticleViewStore.handlers[actionsNames.COMMENT_SAVE_FAILED] = '_handleCommentsFailed';
+ArticleViewStore.handlers[actionsNames.COMMENT_SAVE_SUCCESS] = '_handleCommentSaveSuccess';
 
 ArticleViewStore.handlers[actionsNames.SAVE] = "_handleSave";
 

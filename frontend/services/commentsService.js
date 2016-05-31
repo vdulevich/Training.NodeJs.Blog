@@ -12,5 +12,21 @@ module.exports = [
                 callback(null, comments);
             });
         }
+    },
+    {
+        name:'saveComment',
+        create: function(req, resource, params, body, config, callback){
+            var data = {
+                _user : req.user._id,
+                _article : params.articleId,
+                content : params.comment
+            };
+            (new CommentManager()).create(data, function(err, comment){
+                if(err) {
+                    return callback(err);
+                }
+                callback(null, comment);
+            });
+        }
     }
 ];

@@ -39,6 +39,18 @@ var ArticleViewActions = {
             done();
         }
     },
+    saveComment: function(context, payload, done){
+        context.dispatch(actionsNames.SAVE, { entity: "comment", id: payload._id });
+        context.dispatch(actionsNames.COMMENT_SAVE_REQUEST);
+        context.service.create('saveComment', payload, {}, function (err, response) {
+            if (err) {
+                context.dispatch(actionsNames.COMMENT_SAVE_FAILED);
+            } else {
+                context.dispatch(actionsNames.COMMENT_SAVE_SUCCESS, response);
+            }
+            done();
+        });
+    }
 };
 
 module.exports = ArticleViewActions;

@@ -18,7 +18,7 @@ var ArticlesViewComponent = React.createClass({
     },
     rawMarkup: function(content) {
         return {
-            __html: marked(content)
+            __html: marked(content != null ? content : '')
         };
     },
     render: function() {
@@ -26,7 +26,7 @@ var ArticlesViewComponent = React.createClass({
             <div ref="_panel" className="panel panel-default ch-article-panel">
                 <div class="panel-heading clearfix">
                     <strong>{this.props.article.title}</strong>
-                    <a onClick={this.handleModeChange} className="glyphicon glyphicon-edit pull-right"></a>
+                    { this.props.mode == 'read' ? null : (<a onClick={this.handleModeChange} className="glyphicon glyphicon-edit pull-right"></a>) }
                 </div>
                 <div class="panel-body">
                     <div dangerouslySetInnerHTML={this.rawMarkup(this.props.article.content)}></div>

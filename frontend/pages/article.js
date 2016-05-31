@@ -1,9 +1,11 @@
 "use strict";
 
 var React = require("react");
+var ApplicationStore = require('frontend/stores/applicationStore');
 var ArticleViewStore = require("frontend/stores/articleViewStore");
 var ArticleViewComponent = require("frontend/components/article/articleView");
 var ArticleCommentsComponent = require("frontend/components/article/articleComments");
+var articleViewActions = require("frontend/actions/articleViewActions");
 
 var ArticlePage = React.createClass({
     displayName: "ArticlePage",
@@ -25,6 +27,9 @@ var ArticlePage = React.createClass({
         this.setState(this.getStoreState());
     },
 
+    handleCommentSave: function handleCommentSave(e) {
+        this.context.executeAction(articleViewActions.saveComment, e);
+    },
     getStoreState: function getStoreState() {
         return this.context.getStore(ArticleViewStore).getState();
     },
@@ -32,8 +37,15 @@ var ArticlePage = React.createClass({
         return React.createElement(
             "div",
             null,
-            React.createElement(ArticleViewComponent, { ref: "_article", article: this.state.article }),
-            React.createElement(ArticleCommentsComponent, { comments: this.state.comments })
+            React.createElement(ArticleViewComponent, {
+                ref: "_article",
+                article: this.state.article,
+                mode: 'write' }),
+            React.createElement(ArticleCommentsComponent, {
+                article: this.state.article,
+                comments: this.state.comments,
+                mode: 'write',
+                handleSave: this.handleCommentSave })
         );
     }
 });

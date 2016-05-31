@@ -75,8 +75,8 @@ var ArticlesFeedListItemComponent = React.createClass({
                             dateformat(this.props.article.created, "dd-mm-yyyy"),
                             " ",
                             React.createElement(
-                                "a",
-                                { target: "_self", className: "ch-feed-viewlink", href: "/article/{this.props.article.id}" },
+                                Link,
+                                { to: "/article/" + this.props.article._id },
                                 "comments (",
                                 this.props.article.comments,
                                 ")"

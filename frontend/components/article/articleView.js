@@ -19,7 +19,7 @@ var ArticlesViewComponent = React.createClass({
     },
     rawMarkup: function rawMarkup(content) {
         return {
-            __html: marked(content)
+            __html: marked(content != null ? content : '')
         };
     },
     render: function render() {
@@ -37,7 +37,7 @@ var ArticlesViewComponent = React.createClass({
                         null,
                         this.props.article.title
                     ),
-                    React.createElement('a', { onClick: this.handleModeChange, className: 'glyphicon glyphicon-edit pull-right' })
+                    this.props.mode == 'read' ? null : React.createElement('a', { onClick: this.handleModeChange, className: 'glyphicon glyphicon-edit pull-right' })
                 ),
                 React.createElement(
                     'div',
