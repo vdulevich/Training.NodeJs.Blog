@@ -1,6 +1,6 @@
 var React = require("react");
-var ApplicationStore = require('frontend/stores/applicationStore');
 var ArticleViewStore = require("frontend/stores/articleViewStore");
+var ArticleTitle = require('frontend/components/article/acticleTitle');
 var ArticleViewComponent = require("frontend/components/article/articleView");
 var ArticleCommentsComponent = require("frontend/components/article/articleComments");
 var articleViewActions = require("frontend/actions/articleViewActions");
@@ -33,16 +33,12 @@ var ArticlePage = React.createClass({
     },
     render: function(){
         return (<div>
-            <div className="ch-article-title">
-                <div class="container title-wrap">
-                    <div className="title-content-wrap">
-                        <span className="title-content">{this.state.article.title}</span>
-                        <a onClick={this.handleModeChange} className="glyphicon glyphicon-edit pull-right"></a>
-                    </div>
-                </div>
-            </div>
-            <ArticleViewComponent className="ch-bg-f9 ch-article container"
-                ref="_article"
+            <ArticleTitle
+                article={this.state.article}
+                handleSave = {this.handleArticleSave}
+                mode={'read'}/>
+            <ArticleViewComponent
+                className="ch-bg-f9 ch-article container"
                 article={this.state.article}
                 handleSave = {this.handleArticleSave}
                 mode={'read'} />

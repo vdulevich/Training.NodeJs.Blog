@@ -1,8 +1,8 @@
 "use strict";
 
 var React = require("react");
-var ApplicationStore = require('frontend/stores/applicationStore');
 var ArticleViewStore = require("frontend/stores/articleViewStore");
+var ArticleTitle = require('frontend/components/article/acticleTitle');
 var ArticleViewComponent = require("frontend/components/article/articleView");
 var ArticleCommentsComponent = require("frontend/components/article/articleComments");
 var articleViewActions = require("frontend/actions/articleViewActions");
@@ -40,26 +40,12 @@ var ArticlePage = React.createClass({
         return React.createElement(
             "div",
             null,
-            React.createElement(
-                "div",
-                { className: "ch-article-title" },
-                React.createElement(
-                    "div",
-                    { className: "container title-wrap" },
-                    React.createElement(
-                        "div",
-                        { className: "title-content-wrap" },
-                        React.createElement(
-                            "span",
-                            { className: "title-content" },
-                            this.state.article.title
-                        ),
-                        React.createElement("a", { onClick: this.handleModeChange, className: "glyphicon glyphicon-edit pull-right" })
-                    )
-                )
-            ),
-            React.createElement(ArticleViewComponent, { className: "ch-bg-f9 ch-article container",
-                ref: "_article",
+            React.createElement(ArticleTitle, {
+                article: this.state.article,
+                handleSave: this.handleArticleSave,
+                mode: 'read' }),
+            React.createElement(ArticleViewComponent, {
+                className: "ch-bg-f9 ch-article container",
                 article: this.state.article,
                 handleSave: this.handleArticleSave,
                 mode: 'read' }),

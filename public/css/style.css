@@ -434,12 +434,24 @@ a:hover {
   min-width: 200px;
 }
 
+.ch-article-title .title-content-wrap::after{
+    content: '';
+    position: absolute;
+    top:0px;
+    right:0px;
+    left: 0px;
+    bottom: 0px;
+    background-color: whitesmoke;
+    opacity: 0.5;
+}
+
 .ch-article-title .title-content{
   font-size: 16px;
   color: white;
+    z-index: 1;
 }
 
-.ch-article-title .title-content::after{
+/*.ch-article-title .title-content::after{
   content: '';
   position: absolute;
   top:0px;
@@ -448,7 +460,7 @@ a:hover {
   bottom: 0px;
   background-color: whitesmoke;
   opacity: 0.5;
-}
+}*/
 
 .ch-article-panel{
   position: relative;

@@ -4,10 +4,10 @@ var React = require("react");
 var marked = require('marked');
 var PureRenderMixin = require('react-addons-pure-render-mixin');
 
-var ArticlesViewComponent = React.createClass({
-    displayName: 'ArticlesViewComponent',
+var ArticlesTitleComponent = React.createClass({
+    displayName: 'ArticlesTitleComponent',
 
-    editorId: 'articleContentEditorId',
+    editorId: 'articleTitleEditorId',
     editor: null,
     getInitialState: function getInitialState() {
         return { mode: this.props.mode };
@@ -16,14 +16,6 @@ var ArticlesViewComponent = React.createClass({
         this.updateArticleEditMode();
     },
     componentDidUpdate: function componentDidUpdate() {
-        switch (this.props.loading) {
-            case true:
-                $(this.refs._panel).mask();
-                break;
-            case false:
-                $(this.refs._panel).unmask();
-                break;
-        }
         this.updateArticleEditMode();
     },
     updateArticleEditMode: function updateArticleEditMode() {
@@ -70,13 +62,13 @@ var ArticlesViewComponent = React.createClass({
         }
     },
     handleCancel: function handleCancel() {
-        $('#' + this.editorId).innerHTML = this.rawMarkup(this.props.article.content).__html;
+        $('#' + this.editorId).innerHTML = this.rawMarkup(this.props.article.title).__html;
         this.handleModeChange();
     },
     handleSave: function handleSave() {
         if (this.props.handleSave) {
             var article = JSON.parse(JSON.stringify(this.props.article));
-            article.content = this.editor.getData();
+            article.title = this.editor.getData();
             this.props.handleSave(article);
         }
         this.handleModeChange();
@@ -84,39 +76,22 @@ var ArticlesViewComponent = React.createClass({
     render: function render() {
         return React.createElement(
             'div',
-            { className: this.props.className },
+            { className: 'ch-article-title' },
             React.createElement(
                 'div',
-                { ref: '_panel', className: 'panel panel-default ch-article-panel' },
-                React.createElement('a', { onClick: this.handleModeChange, className: 'glyphicon glyphicon-edit pull-right' }),
+                { className: 'container title-wrap' },
                 React.createElement(
                     'div',
-                    { className: 'panel-body' },
-                    React.createElement('div', { id: this.editorId,
+                    { className: 'title-content-wrap' },
+                    React.createElement('div', { className: 'title-content',
+                        id: this.editorId,
                         contentEditable: this.state.mode == 'edit' ? true : false,
-                        dangerouslySetInnerHTML: this.rawMarkup(this.props.article.content) })
-                ),
-                this.state.mode == 'edit' ? React.createElement(
-                    'div',
-                    { className: 'panel-footer clearfix' },
-                    React.createElement(
-                        'div',
-                        { className: 'pull-right btn-toolbar' },
-                        React.createElement(
-                            'button',
-                            { type: 'button', onClick: this.handleSave, className: 'btn btn-sm btn-primary' },
-                            'Save'
-                        ),
-                        React.createElement(
-                            'button',
-                            { type: 'button', onClick: this.handleCancel, className: 'btn btn-sm btn-default' },
-                            'Cancel'
-                        )
-                    )
-                ) : ''
+                        dangerouslySetInnerHTML: this.rawMarkup(this.props.article.title) }),
+                    React.createElement('a', { onClick: this.handleModeChange, className: 'glyphicon glyphicon-edit pull-right' })
+                )
             )
         );
     }
 });
 
-module.exports = ArticlesViewComponent;
+module.exports = ArticlesTitleComponent;

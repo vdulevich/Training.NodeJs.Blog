@@ -89,7 +89,6 @@ module.exports = [
             }
             params._user = req.user._id;
             params.published = params.published || false;
-            console.log(params);
             /* if(req.file && req.file.path) {
                 req.params.backgroundPath = req.file.path;
                 req.params.backgroundFileName = req.file.originalname;
