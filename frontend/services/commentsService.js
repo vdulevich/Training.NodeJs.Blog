@@ -1,4 +1,5 @@
 'use strict';
+var errors = require('errors');
 var CommentManager = require('managers/commentManager');
 
 module.exports = [
@@ -16,6 +17,9 @@ module.exports = [
     {
         name:'saveComment',
         create: function(req, resource, params, body, config, callback){
+            if(req.user == null){
+                return callback(errors.HttpError(404));
+            }
             var data = {
                 _user : req.user._id,
                 _article : params.articleId,

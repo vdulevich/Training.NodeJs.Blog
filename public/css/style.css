@@ -28,7 +28,7 @@ a:hover {
   color: #b92c28;
 }
 
-.navbar-nav{
+.navbar-nav {
   margin-top: 0px;
   margin-bottom: 0px;
 }
@@ -56,32 +56,12 @@ a:hover {
   }
 }
 
-.ch-file-upload{
-  overflow: hidden;
-  position: relative;
-}
-
-.ch-file-upload input[type=file]{
-  display: block;
-  width: 9999px;
-  height: 9999px;
-  right: 0px;
-  top: 0px;
-  position: absolute;
-  border: 0px;
-  opacity: 0;
-}
-
 /*-----Layout page-----*/
-
-.ch-container {
-  padding-right: 0px;
-  padding-left: 0px;
-  height: 100%;
-  position: relative;
+.ch-modals{
+  display: none;
 }
 
-.ch-wrapper{
+.ch-wrapper {
   height: auto !important;
   min-height: 100%;
   margin-bottom: -50px;
@@ -99,18 +79,13 @@ a:hover {
   }
 }
 
-.ch-center {
-  padding: 0px;
-}
-
 @media only screen and (min-width: 1200px) {
-  .ch-center {
-    padding: 10px;
+  .ch-bg-f9 {
     background-color:#f9f9f9;
     position: relative;
   }
 
-  .ch-center::before {
+  .ch-bg-f9::before {
     content: '';
     display: block;
     border-radius: 6px 6px 0px 0px;
@@ -124,6 +99,22 @@ a:hover {
   }
 }
 
+.container--header {
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.container--content {
+  padding-top: 10px;
+}
+
+@media only screen and (max-width: 532px) {
+  .container {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+}
+
 .ch-footer {
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#28a4c9+0,1f749b+100 */
   background: #28a4c9; /* Old browsers */
@@ -131,7 +122,6 @@ a:hover {
   background: -webkit-linear-gradient(top,  #28a4c9 0%,#1f749b 100%); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom,  #28a4c9 0%,#1f749b 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#28a4c9', endColorstr='#1f749b',GradientType=0 ); /* IE6-9 */
-
   height: 50px;
   color:white;
   padding: 10px;
@@ -176,6 +166,7 @@ a:hover {
   border-radius: 0px;
   box-shadow: 0px 0px 15px -5px black;
   border: none;
+  margin-bottom: 10px;
 }
 
 .panel-heading{
@@ -275,7 +266,8 @@ a:hover {
 /*-----Feed article list-----*/
 
 .ch-feed-list{
-  margin: 0px -5px;
+  margin-right:-5px;
+  margin-left: -5px;
 }
 
 .ch-feed-list .ch-feed-list-item {
@@ -355,17 +347,13 @@ a:hover {
 
 }
 
-.ch-comments-list{
-
-}
-
 .ch-comments-list .ch-data-empty .ch-data-empty-message{
   padding: 0px;
 }
 
 .ch-comments-list .photo-col {
-  padding-right: 10px;
-  width: 50px;
+  padding-right: 5px;
+  width: 45px;
 }
 
 .ch-comments-list .photo-col img {
@@ -379,13 +367,21 @@ a:hover {
 }
 
 .ch-comments-list .content-col p {
-  min-height:50px;
+  min-height:25px;
   padding-top: 5px;
 }
 
 .ch-comments-list .content-col-header{
   border-bottom: 1px solid lightgray;
   padding: 3px 0px;
+}
+
+.ch-comments-list .content-col-header .user{
+  font-size: 13px;
+}
+
+.ch-comments-list .content-col-header .time{
+  font-size:12px;
 }
 
 .ch-comments-list .ch-comments-list-item {
@@ -402,6 +398,62 @@ a:hover {
 
 /*------Articles Panel------*/
 
+.ch-article {
+  padding: 0px;
+}
+
+.ch-article .glyphicon-edit {
+  position: absolute;
+  top: -22px;
+  right: 5px;
+  color: white;
+}
+
+.ch-article-title {
+  height: 250px;
+  background-color: black;
+}
+
+.ch-article-title .glyphicon-edit{
+  position: absolute;
+  top: -22px;
+  right: 5px;
+  color: white;
+}
+
+.ch-article-title .title-wrap {
+  position: relative;
+  height: 100%;
+  padding: 0px;
+}
+
+.ch-article-title .title-content-wrap {
+  position: absolute;
+  bottom: 0px;
+  padding: 12px;
+  min-width: 200px;
+}
+
+.ch-article-title .title-content{
+  font-size: 16px;
+  color: white;
+}
+
+.ch-article-title .title-content::after{
+  content: '';
+  position: absolute;
+  top:0px;
+  right:0px;
+  left: 0px;
+  bottom: 0px;
+  background-color: whitesmoke;
+  opacity: 0.5;
+}
+
+.ch-article-panel{
+  position: relative;
+}
+
 .ch-article-panel .panel-body {
   min-height:100px;
 }
@@ -410,8 +462,24 @@ a:hover {
   position: relative;
 }
 
-.ch-article-panel .ch-article-raiting {
-  position: absolute;
-  right: 10px;
-  top: 16px;
+a.cke_button.cke_button__save {
+  background-color: #337ab7;
+  margin: -2px;
+  height: 22px;
+}
+
+.cke_button_label.cke_button__save_label{
+  padding-top: 2px;
+  padding-right: 2px;
+  color: white;
+}
+
+.cke_button_icon.cke_button__save_icon,
+.cke_button_icon.cke_button__cancel_icon {
+  display:none;
+}
+
+.cke_button_label.cke_button__save_label,
+.cke_button_label.cke_button__cancel_label {
+  display: block;
 }

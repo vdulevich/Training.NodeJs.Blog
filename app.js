@@ -24,7 +24,6 @@ var session = require('express-session');
 var config = require('config');
 var sessionStore = require('lib/sessionStore');
 var errors = require('errors');
-var _ = require('underscore');
 
 /*var index = require('routes/index');
 var profile = require('routes/profile');

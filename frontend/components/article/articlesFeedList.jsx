@@ -28,7 +28,7 @@ var ArticlesFeedListComponent = React.createClass({
             )
         });
         return (
-            <div>
+            <div className={this.props.className}>
                 <div className="ch-feed-list">{articleNodes}</div>
                 <input ref="_loadMoreBtn" onClick={this.handleLoadMore}
                        disabled={this.props.loaded}

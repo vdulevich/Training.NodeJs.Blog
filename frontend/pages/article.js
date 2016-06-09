@@ -30,6 +30,9 @@ var ArticlePage = React.createClass({
     handleCommentSave: function handleCommentSave(e) {
         this.context.executeAction(articleViewActions.saveComment, e);
     },
+    handleArticleSave: function handleArticleSave(e) {
+        this.context.executeAction(articleViewActions.saveArticle, e);
+    },
     getStoreState: function getStoreState() {
         return this.context.getStore(ArticleViewStore).getState();
     },
@@ -37,14 +40,32 @@ var ArticlePage = React.createClass({
         return React.createElement(
             "div",
             null,
-            React.createElement(ArticleViewComponent, {
+            React.createElement(
+                "div",
+                { className: "ch-article-title" },
+                React.createElement(
+                    "div",
+                    { className: "container title-wrap" },
+                    React.createElement(
+                        "div",
+                        { className: "title-content-wrap" },
+                        React.createElement(
+                            "span",
+                            { className: "title-content" },
+                            this.state.article.title
+                        ),
+                        React.createElement("a", { onClick: this.handleModeChange, className: "glyphicon glyphicon-edit pull-right" })
+                    )
+                )
+            ),
+            React.createElement(ArticleViewComponent, { className: "ch-bg-f9 ch-article container",
                 ref: "_article",
                 article: this.state.article,
-                mode: 'write' }),
-            React.createElement(ArticleCommentsComponent, {
+                handleSave: this.handleArticleSave,
+                mode: 'read' }),
+            React.createElement(ArticleCommentsComponent, { className: "ch-bg-f9 container",
                 article: this.state.article,
                 comments: this.state.comments,
-                mode: 'write',
                 handleSave: this.handleCommentSave })
         );
     }

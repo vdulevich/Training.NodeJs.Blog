@@ -118,7 +118,7 @@ ArticleManager.prototype.save = function(article, callback){
         }
     ], function(err, article){
         if(err) {
-            return next(err);
+            return callback(err);
         }
         callback(null, article);
     });

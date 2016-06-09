@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require("react");
+
 var LoginFormComponent = React.createClass({
     displayName: 'LoginFormComponent',
 

@@ -36,7 +36,7 @@ var IndexComponent = React.createClass({
     },
 
     render: function render() {
-        return React.createElement(ArticlesFeedList, {
+        return React.createElement(ArticlesFeedList, { className: "ch-bg-f9 container container--content",
             loading: this.state.loading,
             loaded: this.state.loaded,
             articles: this.state.articles,

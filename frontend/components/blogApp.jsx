@@ -13,22 +13,18 @@ var BlogApp = React.createClass({
     render: function(){
         return (
             <div style={{height: '100%'}}>
-                <div>
-                    <LoginDialogComponent ref="_loginDlg" style={{display: 'none'}}/>
+                <div class="ch-modals">
+                    <LoginDialogComponent ref="_loginDlg"/>
                 </div>
-                <div style={{height: '100%'}}>
-                    <div class="ch-wrapper">
-                        <div class="ch-header">
-                            <div class="container">
-                                <HeaderComponent params={this.props.params} location={this.props.location}/>
-                            </div>
-                        </div>
-                        <div class="ch-center container">
-                            {this.props.children}
+                <div class="ch-wrapper">
+                    <div class="ch-header">
+                        <div class="container container--header">
+                            <HeaderComponent params={this.props.params} location={this.props.location}/>
                         </div>
                     </div>
-                    <FooterComponent/>
+                    {this.props.children}
                 </div>
+                <FooterComponent/>
             </div>
         );
     }

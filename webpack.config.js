@@ -1,15 +1,13 @@
 'use strict';
 var path = require('path');
 var webpack = require('webpack');
-var NODE_ENV = process.env.NODE_ENV || 'development';
+var NODE_ENV = process.env.NODE_ENV || 'development';//'production';
 
 module.exports = {
     devtool: NODE_ENV === 'development' ? 'cheap-inline-module-source-map' : null,
     context: path.join(__dirname, '/frontend'),
     entry: {
-        client: [
-            './client.js'
-        ]
+        client: ['./client.js']
     },
     output: {
         path: path.join(__dirname, "public/js/bundles"),
@@ -26,20 +24,17 @@ module.exports = {
             NODE_ENV: JSON.stringify(NODE_ENV)
         }),
         new webpack.NoErrorsPlugin(),
-        new webpack.optimize.CommonsChunkPlugin({
+      /*  new webpack.optimize.CommonsChunkPlugin({
             name: "common",
             filename: "common.bundle.js",
             minChunks: 3
-        }),
+        }),*/
     ],
     resolve: {
         path: __dirname,
         modulesDirectories: [
             '',
-            'node_modules',
-            /*'frontend/components/layout',
-            'frontend/components/controls',
-            'frontend/components/authentication'*/
+            'node_modules'
         ],
         /*alias: {
             "jquery": "jquery/dist/jquery.js",

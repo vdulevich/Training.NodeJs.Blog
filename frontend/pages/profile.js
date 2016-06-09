@@ -40,7 +40,7 @@ var ProfilePage = React.createClass({
     render: function render() {
         return React.createElement(
             "div",
-            null,
+            { className: "ch-bg-f9 container container--content" },
             React.createElement(ProfileInfo, {
                 profile: this.state.profile,
                 user: this.state.user,

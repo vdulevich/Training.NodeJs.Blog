@@ -32,7 +32,7 @@ var ArticlesFeedListComponent = React.createClass({
         });
         return React.createElement(
             "div",
-            null,
+            { className: this.props.className },
             React.createElement(
                 "div",
                 { className: "ch-feed-list" },

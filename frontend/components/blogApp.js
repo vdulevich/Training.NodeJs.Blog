@@ -19,32 +19,24 @@ var BlogApp = React.createClass({
             { style: { height: '100%' } },
             React.createElement(
                 'div',
-                null,
-                React.createElement(LoginDialogComponent, { ref: '_loginDlg', style: { display: 'none' } })
+                { className: 'ch-modals' },
+                React.createElement(LoginDialogComponent, { ref: '_loginDlg' })
             ),
             React.createElement(
                 'div',
-                { style: { height: '100%' } },
+                { className: 'ch-wrapper' },
                 React.createElement(
                     'div',
-                    { className: 'ch-wrapper' },
+                    { className: 'ch-header' },
                     React.createElement(
                         'div',
-                        { className: 'ch-header' },
-                        React.createElement(
-                            'div',
-                            { className: 'container' },
-                            React.createElement(HeaderComponent, { params: this.props.params, location: this.props.location })
-                        )
-                    ),
-                    React.createElement(
-                        'div',
-                        { className: 'ch-center container' },
-                        this.props.children
+                        { className: 'container container--header' },
+                        React.createElement(HeaderComponent, { params: this.props.params, location: this.props.location })
                     )
                 ),
-                React.createElement(FooterComponent, null)
-            )
+                this.props.children
+            ),
+            React.createElement(FooterComponent, null)
         );
     }
 });

@@ -35,7 +35,7 @@ var ProfilePage = React.createClass({
     },
     render: function(){
         return (
-            <div>
+            <div className="ch-bg-f9 container container--content">
                 <ProfileInfo
                     profile={this.state.profile}
                     user={this.state.user}

@@ -25,6 +25,30 @@ var ArticlesCommentsComponent = React.createClass({
             });
         }
     },
+    timeSince: function timeSince(date) {
+        var seconds = Math.floor((new Date() - date) / 1000);
+        var interval = Math.floor(seconds / 31536000);
+        if (interval > 1) {
+            return interval + " years";
+        }
+        interval = Math.floor(seconds / 2592000);
+        if (interval > 1) {
+            return interval + " months";
+        }
+        interval = Math.floor(seconds / 86400);
+        if (interval > 1) {
+            return interval + " days";
+        }
+        interval = Math.floor(seconds / 3600);
+        if (interval > 1) {
+            return interval + " hours";
+        }
+        interval = Math.floor(seconds / 60);
+        if (interval > 1) {
+            return interval + " minutes";
+        }
+        return Math.floor(seconds) + " seconds";
+    },
     render: function render() {
         var dateformat = require("dateformat");
         var comments = this.props.comments.map(function (comment) {
@@ -42,10 +66,9 @@ var ArticlesCommentsComponent = React.createClass({
                     React.createElement(
                         "div",
                         { className: "content-col-header" },
-                        "Comment by",
                         React.createElement(
                             Link,
-                            { to: "/profile/" + comment._user._id },
+                            { className: "user", to: "/profile/" + comment._user._id },
                             React.createElement(
                                 "strong",
                                 null,
@@ -54,8 +77,24 @@ var ArticlesCommentsComponent = React.createClass({
                                 " "
                             )
                         ),
-                        "at ",
-                        dateformat(comment.created, "dd-mm-yyyy")
+                        React.createElement(
+                            "span",
+                            { className: "time" },
+                            React.createElement(
+                                "span",
+                                { className: "time-ago" },
+                                this.timeSince(new Date(comment.created)),
+                                " ago"
+                            ),
+                            " ",
+                            React.createElement(
+                                "span",
+                                null,
+                                "(",
+                                dateformat(comment.created, "dd mmmm yyyy"),
+                                ")"
+                            )
+                        )
                     ),
                     React.createElement(
                         "p",
@@ -64,25 +103,29 @@ var ArticlesCommentsComponent = React.createClass({
                     )
                 )
             );
-        });
+        }.bind(this));
         return React.createElement(
             "div",
-            { ref: "_panel", className: "list-group ch-comments-list " },
-            comments,
-            this.props.mode == 'read' ? null : React.createElement(
+            { className: this.props.className },
+            React.createElement(
                 "div",
-                null,
-                React.createElement(
-                    "form",
-                    { "accept-charset": "UTF-8", role: "form" },
+                { ref: "_panel", className: "list-group ch-comments-list" },
+                comments,
+                this.props.mode == 'read' ? null : React.createElement(
+                    "div",
+                    null,
                     React.createElement(
-                        "div",
-                        { className: "form-group" },
-                        React.createElement("input", { type: "hidden", name: "articleId", value: "<%=article._id%>" }),
-                        React.createElement("textarea", { ref: "_form", name: "comment", className: "form-control", style: { height: '100px' } })
-                    )
-                ),
-                React.createElement("input", { className: "btn btn-success", value: "Leave comment", type: "button", onClick: this.handleSave })
+                        "form",
+                        { "accept-charset": "UTF-8", role: "form" },
+                        React.createElement(
+                            "div",
+                            { className: "form-group" },
+                            React.createElement("input", { type: "hidden", name: "articleId", value: "<%=article._id%>" }),
+                            React.createElement("textarea", { ref: "_form", name: "comment", className: "form-control", style: { height: '100px' } })
+                        )
+                    ),
+                    React.createElement("input", { className: "btn btn-success", value: "Leave comment", type: "button", onClick: this.handleSave })
+                )
             )
         );
     }

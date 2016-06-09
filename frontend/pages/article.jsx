@@ -25,19 +25,30 @@ var ArticlePage = React.createClass({
     handleCommentSave: function(e){
         this.context.executeAction(articleViewActions.saveComment, e);
     },
+    handleArticleSave:function(e){
+        this.context.executeAction(articleViewActions.saveArticle, e);
+    },
     getStoreState: function(){
         return this.context.getStore(ArticleViewStore).getState();
     },
     render: function(){
         return (<div>
-            <ArticleViewComponent
+            <div className="ch-article-title">
+                <div class="container title-wrap">
+                    <div className="title-content-wrap">
+                        <span className="title-content">{this.state.article.title}</span>
+                        <a onClick={this.handleModeChange} className="glyphicon glyphicon-edit pull-right"></a>
+                    </div>
+                </div>
+            </div>
+            <ArticleViewComponent className="ch-bg-f9 ch-article container"
                 ref="_article"
                 article={this.state.article}
-                mode={'write'} />
-            <ArticleCommentsComponent
+                handleSave = {this.handleArticleSave}
+                mode={'read'} />
+            <ArticleCommentsComponent className="ch-bg-f9 container"
                 article={this.state.article}
                 comments={this.state.comments}
-                mode={'write'}
                 handleSave={this.handleCommentSave}/>
         </div>);
     }

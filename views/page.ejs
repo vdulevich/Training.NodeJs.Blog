@@ -2,27 +2,33 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-        <link rel="stylesheet" href="/vendor/bower_components/bootstrap/dist/css/bootstrap.css" />
+        <link href="/vendor/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="/vendor/bower_components/jquery-loadmask/jquery.loadmask.css" />
-        <link rel="stylesheet" href="/vendor/bower_components/jquery-bar-rating/dist/themes/bars-movie.css">
+        <link rel="stylesheet" href="/vendor/bower_components/bootstrap/dist/css/bootstrap.min.css" />
         <link rel="stylesheet" href="/css/style.css" />
 
         <script type="text/javascript" src="/vendor/bower_components/jquery/dist/jquery.min.js"></script>
-        <script type="text/javascript" src="/vendor/bower_components/jquery-loadmask/jquery.loadmask.min.js"></script>
-        <script type="text/javascript" src="/vendor/bower_components/jquery-validation/dist/jquery.validate.js"></script>
-        <script type="text/javascript" src="/vendor/bower_components/jquery-confirm/jquery.confirm.js"></script>
-        <script type="text/javascript" src="/vendor/bower_components/jquery-bar-rating/jquery.barrating.js"></script>
-        <script type="text/javascript" src="/vendor/jquery.utils.js"></script>
-        <script type="text/javascript" src="/vendor/bower_components/bootstrap/dist/js/bootstrap.js"></script>
-        <script type="text/javascript" src="/vendor/bower_components/react/react.js"></script>
-        <script type="text/javascript" src="/vendor/bower_components/react/react-dom.js"></script>
 
-        <script type="text/javascript" src="/js/bundles/common.bundle.js"></script>
+        <script type="text/javascript" src="/vendor/bower_components/jquery-loadmask/jquery.loadmask.min.js"></script>
+
+        <script type="text/javascript" src="/vendor/bower_components/jquery-validation/dist/jquery.validate.min.js"></script>
+
+        <script type="text/javascript" src="/vendor/bower_components/jquery-confirm/jquery.confirm.min.js"></script>
+
+        <!--<script type="text/javascript" src="/vendor/bower_components/bootstrap/js/modal.js"></script>-->
+        <script type="text/javascript" src="/vendor/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+        <script type="text/javascript" src="/vendor/bower_components/react/react.min.js"></script>
+        <script type="text/javascript" src="/vendor/bower_components/react/react-dom.min.js"></script>
+
+        <script type="text/javascript" src="/vendor/ckeditor/ckeditor.js"></script>
+
+        <script type="text/javascript" src="/js/jquery-utils.js"></script>
+        <script type="text/javascript" src="/js/ckeditor-plugin.js"></script>
     </head>
     <body>
         <div id="app" style="height: 100%"><div style="height: 100%"><%-appHtml%></div></div>
         <script type="text/javascript"><%-appState%></script>
-        <script type="text/javascript" src="/js/bundles/common.bundle.js"></script>
         <script type="text/javascript" src="/js/bundles/client.bundle.js"></script>
         <script type="text/javascript">client(document.getElementById('app'), window.App)</script>
     </body>

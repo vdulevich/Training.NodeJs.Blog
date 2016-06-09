@@ -1,5 +1,6 @@
 'use strict';
 var React = require("react");
+
 var LoginFormComponent = React.createClass({
     componentDidMount:function(){
         var form = $(this.refs._form);

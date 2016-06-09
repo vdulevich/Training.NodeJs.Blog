@@ -1,4 +1,6 @@
 var React = require("react");
+global.jQuery = global.$ = require('jquery');
+    var modal = require('bootstrap/js/modal')
 
 var DialogComponent = React.createClass({
     componentDidMount:function() {

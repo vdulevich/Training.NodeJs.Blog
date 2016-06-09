@@ -50,6 +50,18 @@ var ArticleViewActions = {
             }
             done();
         });
+    },
+    saveArticle:function(context, payload, done){
+        context.dispatch(actionsNames.SAVE, { entity: "article", id: payload._id });
+        context.dispatch(actionsNames.ARTICLE_SAVE_REQUEST);
+        context.service.create('saveArticle', payload, {}, function (err, response) {
+            if (err) {
+                context.dispatch(actionsNames.ARTICLE_SAVE_FAILED);
+            } else {
+                context.dispatch(actionsNames.ARTICLE_SAVE_SUCCESS, response);
+            }
+            done();
+        });
     }
 };
 
