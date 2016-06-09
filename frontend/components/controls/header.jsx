@@ -88,7 +88,7 @@ var HeaderComponent = React.createClass({
                             )
                         }
                     </div>
-                    <div class="navbar-form navbar-right" role="search">
+                    <div class="ch-header-search navbar-form navbar-right" role="search">
                         <form onSubmit={this.handelSearch} class="form-group input-group">
                             <input ref="_searchText" defaultValue={this.state.searchText} className="form-control" placeholder="search text..."/>
                             <span class="input-group-btn">

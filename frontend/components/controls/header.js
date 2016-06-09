@@ -167,7 +167,7 @@ var HeaderComponent = React.createClass({
                 ),
                 React.createElement(
                     "div",
-                    { className: "navbar-form navbar-right", role: "search" },
+                    { className: "ch-header-search navbar-form navbar-right", role: "search" },
                     React.createElement(
                         "form",
                         { onSubmit: this.handelSearch, className: "form-group input-group" },

@@ -45,14 +45,14 @@ a:hover {
 
 @media (min-width: 768px) {
   .navbar-text {
-    margin-top: 15px;
-    margin-bottom: 15px;
+	margin-top: 15px;
+	margin-bottom: 15px;
   }
 }
 
 @media (min-width: 768px){
   .navbar-right {
-    margin-right: 5px;
+	margin-right: 5px;
   }
 }
 
@@ -75,27 +75,27 @@ a:hover {
 
 @media only screen and (max-width: 532px) {
   .ch-header {
-    padding: 0px;
+	padding: 0px;
   }
 }
 
 @media only screen and (min-width: 1200px) {
   .ch-bg-f9 {
-    background-color:#f9f9f9;
-    position: relative;
+	background-color:#f9f9f9;
+	position: relative;
   }
 
   .ch-bg-f9::before {
-    content: '';
-    display: block;
-    border-radius: 6px 6px 0px 0px;
-    background-color:#f9f9f9;
-    position: absolute;
-    width: 100%;
-    height: 9999px;
-    z-index: -1;
-    top: 0px;
-    left: 0px;
+	content: '';
+	display: block;
+	border-radius: 6px 6px 0px 0px;
+	background-color:#f9f9f9;
+	position: absolute;
+	width: 100%;
+	height: 9999px;
+	z-index: -1;
+	top: 0px;
+	left: 0px;
   }
 }
 
@@ -110,8 +110,8 @@ a:hover {
 
 @media only screen and (max-width: 532px) {
   .container {
-    padding-right: 0px;
-    padding-left: 0px;
+	padding-right: 0px;
+	padding-left: 0px;
   }
 }
 
@@ -156,7 +156,7 @@ a:hover {
 
 @media only screen and (max-width: 532px) {
   .ch-top-navbar {
-    border-radius: 0px;
+	border-radius: 0px;
   }
 }
 
@@ -216,6 +216,14 @@ a:hover {
   display: none;
 }
 
+/*-----Component--------*/
+
+@media only screen and (min-width: 768px) and (max-width: 800px) {
+    .ch-header-search {
+        width: 225px;
+    }
+}
+
 /*-----Profile page-----*/
 
 .ch-profileinfo-panel .panel-body {
@@ -258,16 +266,15 @@ a:hover {
 
 
   .ch-profile-actiles-list .col-lg-4{
-    padding-right: 5px;
-    padding-left: 5px;
+	padding-right: 5px;
+	padding-left: 5px;
   }
 
 
 /*-----Feed article list-----*/
 
 .ch-feed-list{
-  margin-right:-5px;
-  margin-left: -5px;
+  margin:-5px -5px 0px -5px;
 }
 
 .ch-feed-list .ch-feed-list-item {
@@ -275,9 +282,12 @@ a:hover {
 }
 
 @media (min-width: 1200px) {
-  .ch-feed-list .ch-feed-list-item{
-    padding: 0px 5px 10px 5px;
-  }
+	.ch-feed-list .ch-feed-list-item{
+		padding: 0px 5px 10px 5px;
+	}
+	.ch-feed-list{
+        margin-top:5px;
+	}
 }
 
 .ch-feed-list .panel {
@@ -291,8 +301,14 @@ a:hover {
 
 @media (min-width: 1200px) {
   .ch-feed-list .panel {
-    box-shadow: 0px 0px 12px -3px black;
+	box-shadow: 0px 0px 12px -3px black;
   }
+}
+
+.ch-feed-list .ch-feed-list-item .ch-feed-title{
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .ch-feed-list .ch-feed-content {
@@ -320,13 +336,13 @@ a:hover {
 
 @media (min-width: 1200px){
   .ch-feed-list .ch-feed-rate{
-    float: right;
+	float: right;
   }
 }
 
 @media (min-width: 1200px) {
   .ch-feed-list .ch-feed-author {
-    text-align: right;
+	text-align: right;
   }
 }
 
@@ -414,11 +430,18 @@ a:hover {
   background-color: black;
 }
 
-.ch-article-title .glyphicon-edit{
+.ch-article-title .glyphicon-edit--title{
   position: absolute;
   top: -22px;
   right: 5px;
   color: white;
+}
+
+.ch-article-title .glyphicon-edit--bg{
+	position: absolute;
+	top: 10px;
+	right: 5px;
+	color: white;
 }
 
 .ch-article-title .title-wrap {
@@ -435,32 +458,26 @@ a:hover {
 }
 
 .ch-article-title .title-content-wrap::after{
-    content: '';
-    position: absolute;
-    top:0px;
-    right:0px;
-    left: 0px;
-    bottom: 0px;
-    background-color: whitesmoke;
-    opacity: 0.5;
+	content: '';
+	position: absolute;
+	top:0px;
+	right:0px;
+	left: 0px;
+	bottom: 0px;
+	background-color: whitesmoke;
+	opacity: 0.5;
 }
 
 .ch-article-title .title-content{
   font-size: 16px;
   color: white;
-    z-index: 1;
+	z-index: 1;
 }
 
-/*.ch-article-title .title-content::after{
-  content: '';
-  position: absolute;
-  top:0px;
-  right:0px;
-  left: 0px;
-  bottom: 0px;
-  background-color: whitesmoke;
-  opacity: 0.5;
-}*/
+.ch-bg-edit-input{
+	line-height: 24px;
+	width: 100%;
+}
 
 .ch-article-panel{
   position: relative;
@@ -472,6 +489,10 @@ a:hover {
 
 .ch-article-panel .panel-heading {
   position: relative;
+}
+
+.ch-article-panel .ch-article-panel__content{
+	overflow: hidden;
 }
 
 a.cke_button.cke_button__save {

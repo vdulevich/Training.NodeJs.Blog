@@ -70,6 +70,8 @@ ArticleViewStore.handlers[actionsNames.ARTICLE_LOAD_REQUEST] = '_handleArticleRe
 ArticleViewStore.handlers[actionsNames.ARTICLE_LOAD_FAILED] = '_handleArticleFailed';
 ArticleViewStore.handlers[actionsNames.ARTICLE_LOAD_SUCCESS] = '_handleArticleSuccess';
 
+ArticleViewStore.handlers[actionsNames.ARTICLE_SAVE_SUCCESS] = '_handleArticleSuccess'
+
 ArticleViewStore.handlers[actionsNames.COMMENTS_LOAD_REQUEST] = '_handleCommentsRequest';
 ArticleViewStore.handlers[actionsNames.COMMENTS_LOAD_FAILED] = '_handleCommentsFailed';
 ArticleViewStore.handlers[actionsNames.COMMENTS_LOAD_SUCCESS] = '_handleCommentsSuccess';

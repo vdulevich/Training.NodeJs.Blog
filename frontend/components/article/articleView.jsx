@@ -33,7 +33,9 @@ var ArticlesViewComponent = React.createClass({
             case 'edit':
                 this.editor = CKEDITOR.inline(this.editorId, {
                     startupFocus: true,
-                    extraPlugins: 'savecancel',
+                    autoParagraph: false,
+                    extraPlugins: 'savecancel,sourcedialog',
+                    removePlugins: 'sourcearea',
                     on:{
                         save:function(){
                             this.handleSave();
@@ -84,6 +86,7 @@ var ArticlesViewComponent = React.createClass({
                 <a onClick={this.handleModeChange} className="glyphicon glyphicon-edit pull-right"></a>
                 <div class="panel-body">
                     <div id={this.editorId}
+                         className="ch-article-panel__content"
                          contentEditable={this.state.mode == 'edit' ? true: false}
                          dangerouslySetInnerHTML={this.rawMarkup(this.props.article.content)}>
                     </div>
