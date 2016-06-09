@@ -1,5 +1,9 @@
 CKEDITOR.plugins.add( 'savecancel', {
     init: function(editor) {
+
+        editor.ui.addToolbarGroup('save');
+        editor.ui.addToolbarGroup('cancel');
+
         var save = editor.ui.addButton( 'Save', {
             label: 'Save',
             command: 'save',
