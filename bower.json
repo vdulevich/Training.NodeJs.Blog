@@ -14,10 +14,15 @@
     "bootstrap": "3.*",
     "jquery-confirm": "~2.5.2",
     "jquery-loadmask": "*",
-    "jquery-validation": "jquery.validate#~1.13.0"
+    "jquery-validation": "jquery.validate#~1.13.0",
+    "font-awesome": "~4.6.3",
+    "jquery": "~3.0.0"
   },
   "homepage": "https://github.com/vdulevich/Training.NodeJs.Blog",
   "description": "",
   "main": "",
-  "license": "MIT"
+  "license": "MIT",
+  "resolutions": {
+    "jquery": "~3.0.0"
+  }
 }
