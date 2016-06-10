@@ -5,6 +5,23 @@ module.exports = {
     loginOpen: function(context, payload, done){
         context.dispatch(actionsNames.AUTH_LOGIN_DIALOG, true);
     },
+    signUpOpen:function(context, payload, done){
+        context.dispatch(actionsNames.AUTH_SIGUP_DIALOG, true);
+    },
+    signUpHide:function(context, payload, done){
+        context.dispatch(actionsNames.AUTH_SIGUP_DIALOG, false);
+    },
+    logout: function(context, payload, done){
+        context.dispatch(actionsNames.AUTH_LOGOUT_REQUEST);
+        context.service.create('logout', {}, payload, function(err, response){
+            if(err){
+                context.dispatch(actionsNames.AUTH_LOGOUT_FAILED);
+            } else {
+                context.dispatch(actionsNames.AUTH_LOGOUT_SUCCESS, response);
+            }
+            done();
+        });
+    },
     loginHide: function(context, payload, done){
         context.dispatch(actionsNames.AUTH_LOGIN_DIALOG, false);
     },

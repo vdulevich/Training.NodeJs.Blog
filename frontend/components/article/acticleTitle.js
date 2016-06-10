@@ -78,18 +78,18 @@ var ArticlesTitleComponent = React.createClass({
         this.toggleModeChange('title');
     },
     handleTitleSave: function handleTitleSave() {
-        if (this.props.handleTitleSave) {
+        if (this.props.handleSave) {
             var article = JSON.parse(JSON.stringify(this.props.article));
             article.title = this.ckEditor.getData();
-            this.props.handleTitleSave(article);
+            this.props.handleSave(article);
         }
-        this.toggleModeChange('background');
+        this.toggleModeChange('title');
     },
     handleBackgroungSave: function handleBackgroungSave() {
-        if (this.props.handleTitleSave) {
+        if (this.props.handleSave) {
             var article = JSON.parse(JSON.stringify(this.props.article));
             article.backgroundStyle = this.refs._backgroundStyle.value;
-            this.props.handleTitleSave(article);
+            this.props.handleSave(article);
         }
         this.toggleModeChange('background');
     },

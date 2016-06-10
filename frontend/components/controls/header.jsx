@@ -17,6 +17,9 @@ var HeaderComponent = React.createClass({
     componentDidMount:function() {
         this.context.getStore(ApplicationStore).addChangeListener(this.handleStoreChange);
     },
+    componentDidUpdate: function(){
+        this.bindLogoutBtn();
+    },
     componentWillUnmount:function(){
         this.context.getStore(ApplicationStore).removeChangeListener(this.handleStoreChange);
     },
@@ -25,11 +28,23 @@ var HeaderComponent = React.createClass({
             loggedUser: this.context.getStore(ApplicationStore).getUser()
         }
     },
+    bindLogoutBtn: function(){
+        if(this.refs._logoutBtn != null) {
+            $(this.refs._logoutBtn).confirm({
+                confirm: function () {
+                    this.context.executeAction(authActions.logout);
+                }.bind(this)
+            });
+        }
+    },
     handleStoreChange () {
         this.setState(this.getStoreState());
     },
     handleLoginBtn: function(){
         this.context.executeAction(authActions.loginOpen);
+    },
+    handleSignUpBtn: function(){
+        this.context.executeAction(authActions.signUpOpen);
     },
     menuTreeMapFn: function(){
         var links = [];
@@ -72,18 +87,19 @@ var HeaderComponent = React.createClass({
                                 <span>
                                     <Link to={{pathname: '/profile/'+ this.state.loggedUser._id}} className="navbar-link">Welcome&nbsp;<strong>{this.state.loggedUser.email}</strong></Link>
                                     <span className="nav-divider" />
-                                    <a className="navbar-link"
-                                        data-text="Do you really want to logout?"
-                                        data-confirm-button-class="btn-success"
-                                        data-confirm-button="Yes I am"
-                                        data-cancel-button="No">Logout
+                                    <a ref="_logoutBtn"
+                                       className="navbar-link"
+                                       data-text="Do you really want to logout?"
+                                       data-confirm-button-class="btn-success"
+                                       data-confirm-button="Yes I am"
+                                       data-cancel-button="No">Logout
                                     </a>
                                 </span>
                             ) : (
                                 <span>
                                     <a onClick={this.handleLoginBtn} class="navbar-link" type="button">Login</a>
                                     <span className="nav-divider">or</span>
-                                    <a class="navbar-link" type="button">Sign up</a>
+                                    <a onClick={this.handleSignUpBtn} class="navbar-link" type="button">Sign up</a>
                                 </span>
                             )
                         }

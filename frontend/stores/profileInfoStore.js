@@ -13,7 +13,7 @@ var ProfileInfoStore = createStore({
         this.loading = {
             profile: false,
             articles: false
-        };
+        }; 
     },
     _handleProfileArticlesSuccess: function(payload){
         this.articles = payload.articles;

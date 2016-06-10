@@ -19,7 +19,7 @@ var BlogApp = React.createClass({
             { style: { height: '100%' } },
             React.createElement(
                 'div',
-                { className: 'ch-modals' },
+                null,
                 React.createElement(LoginDialogComponent, { ref: '_loginDlg' })
             ),
             React.createElement(

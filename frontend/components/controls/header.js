@@ -21,6 +21,9 @@ var HeaderComponent = React.createClass({
     componentDidMount: function componentDidMount() {
         this.context.getStore(ApplicationStore).addChangeListener(this.handleStoreChange);
     },
+    componentDidUpdate: function componentDidUpdate() {
+        this.bindLogoutBtn();
+    },
     componentWillUnmount: function componentWillUnmount() {
         this.context.getStore(ApplicationStore).removeChangeListener(this.handleStoreChange);
     },
@@ -29,12 +32,25 @@ var HeaderComponent = React.createClass({
             loggedUser: this.context.getStore(ApplicationStore).getUser()
         };
     },
+
+    bindLogoutBtn: function bindLogoutBtn() {
+        if (this.refs._logoutBtn != null) {
+            $(this.refs._logoutBtn).confirm({
+                confirm: function () {
+                    this.context.executeAction(authActions.logout);
+                }.bind(this)
+            });
+        }
+    },
     handleStoreChange: function handleStoreChange() {
         this.setState(this.getStoreState());
     },
 
     handleLoginBtn: function handleLoginBtn() {
         this.context.executeAction(authActions.loginOpen);
+    },
+    handleSignUpBtn: function handleSignUpBtn() {
+        this.context.executeAction(authActions.signUpOpen);
     },
     menuTreeMapFn: function menuTreeMapFn() {
         var links = [];
@@ -138,7 +154,8 @@ var HeaderComponent = React.createClass({
                         React.createElement("span", { className: "nav-divider" }),
                         React.createElement(
                             "a",
-                            { className: "navbar-link",
+                            { ref: "_logoutBtn",
+                                className: "navbar-link",
                                 "data-text": "Do you really want to logout?",
                                 "data-confirm-button-class": "btn-success",
                                 "data-confirm-button": "Yes I am",
@@ -160,7 +177,7 @@ var HeaderComponent = React.createClass({
                         ),
                         React.createElement(
                             "a",
-                            { className: "navbar-link", type: "button" },
+                            { onClick: this.handleSignUpBtn, className: "navbar-link", type: "button" },
                             "Sign up"
                         )
                     )

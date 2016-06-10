@@ -16,7 +16,7 @@
     "jquery-loadmask": "*",
     "jquery-validation": "jquery.validate#~1.13.0",
     "font-awesome": "~4.6.3",
-    "jquery": "~3.0.0"
+    "jquery": "~2.2.4"
   },
   "homepage": "https://github.com/vdulevich/Training.NodeJs.Blog",
   "description": "",

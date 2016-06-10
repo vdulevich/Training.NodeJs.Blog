@@ -13,7 +13,7 @@ var BlogApp = React.createClass({
     render: function(){
         return (
             <div style={{height: '100%'}}>
-                <div class="ch-modals">
+                <div>
                     <LoginDialogComponent ref="_loginDlg"/>
                 </div>
                 <div class="ch-wrapper">
