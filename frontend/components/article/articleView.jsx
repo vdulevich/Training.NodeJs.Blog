@@ -4,8 +4,7 @@ var marked = require('marked');
 var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 var ArticlesViewComponent = React.createClass({
-    editorId: 'articleContentEditorId',
-    editor: null,
+    ckEditor: null,
     getInitialState: function(){
         return { mode: this.props.mode };
     },
@@ -26,31 +25,28 @@ var ArticlesViewComponent = React.createClass({
     updateArticleEditMode: function(){
         switch(this.state.mode){
             case 'read':
-                if(this.editor != null){
-                    this.editor.destroy();
+                if(this.ckEditor != null){
+                    this.ckEditor.destroy();
                 }
                 break;
             case 'edit':
-                this.editor = CKEDITOR.inline(this.editorId, {
+                this.ckEditor = CKEDITOR.inline(this.refs._article, {
                     startupFocus: true,
                     autoParagraph: false,
                     extraPlugins: 'savecancel,sourcedialog',
                     removePlugins: 'sourcearea',
                     on:{
-                        save:function(){
-                            this.handleSave();
-                        }.bind(this),
-                        cancel:function(){
-                            this.handleCancel();
-                        }.bind(this)
+                        save:function(){ this.handleSave();}.bind(this),
+                        cancel:function(){ this.handleCancel();}.bind(this),
+                        blur: function(e){ return false; }
                     }
                 });
                 break;
         }
     },
     componentWillUnmount:function(){
-        if(this.editor != null){
-            this.editor.destroy();
+        if(this.ckEditor != null){
+            this.ckEditor.destroy();
         }
     },
     shouldComponentUpdate: function(nextProps, nextState){
@@ -69,13 +65,13 @@ var ArticlesViewComponent = React.createClass({
         }
     },
     handleCancel:function(){
-        $('#' + this.editorId).innerHTML = this.rawMarkup(this.props.article.content).__html;
+        this.refs._article.innerHTML = this.rawMarkup(this.props.article.content).__html;
         this.handleModeChange();
     },
     handleSave: function(){
         if(this.props.handleSave){
             var article = JSON.parse(JSON.stringify(this.props.article));
-            article.content = this.editor.getData();
+            article.content = this.ckEditor.getData();
             this.props.handleSave(article);
         }
         this.handleModeChange();
@@ -85,7 +81,7 @@ var ArticlesViewComponent = React.createClass({
             <div ref="_panel" className="panel panel-default ch-article-panel">
                 <a onClick={this.handleModeChange} className="glyphicon glyphicon-edit pull-right"></a>
                 <div class="panel-body">
-                    <div id={this.editorId}
+                    <div ref="_article"
                          className="ch-article-panel__content"
                          contentEditable={this.state.mode == 'edit' ? true: false}
                          dangerouslySetInnerHTML={this.rawMarkup(this.props.article.content)}>
@@ -99,7 +95,7 @@ var ArticlesViewComponent = React.createClass({
                                 <button type="button" onClick={this.handleCancel} className="btn btn-sm btn-default">Cancel</button>
                             </div>
                         </div>)
-                        : ('')
+                        : null
                 }
             </div>
         </div>)

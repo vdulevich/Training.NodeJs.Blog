@@ -4,129 +4,113 @@ var marked = require('marked');
 var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 var ArticlesTitleComponent = React.createClass({
-    editorId: 'articleTitleEditorId',
-    editor: null,
+    ckEditor: null,
     getInitialState: function(){
         return {
-            mode: this.props.mode,
-            bgMode : this.props.mode,
-            bgStyle: this.props.article.backgroundStyle
+            mode: {
+                title: 'read',
+                background: 'read'
+            },
+            backgroundStyle: this.props.article.backgroundStyle
         };
     },
     componentDidMount: function(){
-        this.updateArticleEditMode();
-        this.refs._bg.setAttribute('style', this.state.bgStyle);
+        this.updateTitleEditMode();
+        this.refs._background.setAttribute('style', this.state.backgroundStyle);
     },
     componentWillReceiveProps: function(nextProps){
-        this.setState({ bgStyle: nextProps.article.backgroundStyle });
+        this.setState({ backgroundStyle: nextProps.article.backgroundStyle });
     },
     componentDidUpdate: function(){
-        this.updateArticleEditMode();
-        this.refs._bg.setAttribute('style', this.state.bgStyle);
+        this.updateTitleEditMode();
+        this.refs._background.setAttribute('style', this.state.backgroundStyle);
     },
-    updateArticleEditMode: function(){
-        switch(this.state.mode){
+    updateTitleEditMode: function(){
+        switch(this.state.mode.title){
             case 'read':
-                if(this.editor != null){
-                    this.editor.destroy();
+                if(this.ckEditor != null){
+                    this.ckEditor.destroy();
                 }
                 break;
             case 'edit':
-                this.editor = CKEDITOR.inline(this.editorId, {
+                this.ckEditor = CKEDITOR.inline(this.refs._title, {
                     startupFocus: true,
                     autoParagraph: false,
                     extraPlugins: 'savecancel,sourcedialog',
                     removePlugins: 'sourcearea',
                     on:{
-                        save:function(){
-                            this.handleSave();
-                        }.bind(this),
-                        cancel:function(){
-                            this.handleCancel();
-                        }.bind(this)
+                        save:function(){ this.handleTitleSave(); }.bind(this),
+                        cancel:function(){ this.handleTitleCancel(); }.bind(this),
+                        blur: function(e){ return false; }
                     }
                 });
                 break;
         }
     },
     componentWillUnmount:function(){
-        if(this.editor != null){
-            this.editor.destroy();
+        if(this.ckEditor != null){
+            this.ckEditor.destroy();
         }
-        this.refs._bg.setAttribute('style', '');
+        this.refs._background.setAttribute('style', '');
     },
     shouldComponentUpdate: function(nextProps, nextState){
         return PureRenderMixin.shouldComponentUpdate.bind(this)(nextProps, nextState)
     },
-    rawMarkup: function(content) {
-        return {
-            __html: content//marked(content != null ? content : '')
-        };
+    toggleModeChange: function(name){
+        var mode = JSON.parse(JSON.stringify(this.state.mode));
+        mode[name] = (mode[name] == 'read' ? 'edit' : 'read');
+        this.setState({mode: mode});
     },
-    handleModeChange: function(){
-        if(this.state.mode == 'read') {
-            this.setState({mode: 'edit'});
-        } else {
-            this.setState({mode: 'read'});
-        }
+    handleBackgroundChange: function(event){
+      this.setState({backgroundStyle: event.target.value});
     },
-    handleBgChange: function(event){
-      this.setState({bgStyle: event.target.value});
+    handleTitleCancel:function(){
+        this.refs._title.innerHTML = this.props.article.title;
+        this.toggleModeChange('title');
     },
-    handleBgModeChange: function(){
-        if(this.state.bgMode == 'read') {
-            this.setState({bgMode: 'edit'});
-        } else {
-            this.setState({bgMode: 'read'});
-        }
-    },
-    handleCancel:function(){
-        $('#' + this.editorId).innerHTML = this.rawMarkup(this.props.article.title).__html;
-        this.handleModeChange();
-    },
-    handleSave: function(){
-        if(this.props.handleSave){
+    handleTitleSave: function(){
+        if(this.props.handleTitleSave){
             var article = JSON.parse(JSON.stringify(this.props.article));
-            article.title = this.editor.getData();
-            this.props.handleSave(article);
+            article.title = this.ckEditor.getData();
+            this.props.handleTitleSave(article);
         }
-        this.handleModeChange();
+        this.toggleModeChange('background');
     },
-    handleBgSave: function(){
-        if(this.props.handleSave){
+    handleBackgroungSave: function(){
+        if(this.props.handleTitleSave){
             var article = JSON.parse(JSON.stringify(this.props.article));
-            article.backgroundStyle = this.refs._bgStyle.value;
-            this.props.handleSave(article);
-            this.forceUpdate();
+            article.backgroundStyle = this.refs._backgroundStyle.value;
+            this.props.handleTitleSave(article);
         }
-        this.handleBgModeChange();
+        this.toggleModeChange('background');
     },
     render: function() {
         return (
-            <div ref="_bg" className="ch-article-title">
+            <div ref="_background" className="ch-article-title">
                 <div class="container title-wrap">
-                    <a onClick={this.handleBgModeChange} className="glyphicon glyphicon-edit glyphicon-edit--bg"></a>
+                    <a onClick={function(){this.toggleModeChange('background')}.bind(this)} className="glyphicon glyphicon-edit glyphicon-edit--bg"/>
                     {
-                        this.state.bgMode == 'edit' ?
+                        this.state.mode.background == 'edit' ?
                             (<div class="panel">
                                 <div class="panel-body">
-                                    <input ref="_bgStyle" class="ch-bg-edit-input" value={this.state.bgStyle} onChange={this.handleBgChange}/>
+                                    <input ref="_backgroundStyle" class="ch-bg-edit-input" value={this.state.backgroundStyle} onChange={this.handleBackgroundChange}/>
                                 </div>
                                 <div class="panel-footer clearfix">
                                     <div class="btn-toolbar pull-right">
-                                        <button type="button" onClick={this.handleBgSave} className="btn btn-sm btn-primary">Save</button>
-                                        <button type="button" onClick={this.handleBgModeChange} className="btn btn-sm btn-default">Cancel</button>
+                                        <button type="button" onClick={this.handleBackgroungSave} className="btn btn-sm btn-primary">Save</button>
+                                        <button type="button" onClick={function(){this.toggleModeChange('background')}.bind(this)} className="btn btn-sm btn-default">Cancel</button>
                                     </div>
                                 </div>
                             </div>)
                             : null
                     }
                     <div className="title-content-wrap">
+                        <a onClick={function(){this.toggleModeChange('title')}.bind(this)} className="glyphicon glyphicon-edit glyphicon-edit--title"/>
                         <div className="title-content"
-                             id={this.editorId}
-                             contentEditable={this.state.mode == 'edit' ? true: false}
-                             dangerouslySetInnerHTML={this.rawMarkup(this.props.article.title)}></div>
-                        <a onClick={this.handleModeChange} className="glyphicon glyphicon-edit glyphicon-edit--title"></a>
+                             ref="_title"
+                             contentEditable={this.state.mode.title == 'edit'}
+                             dangerouslySetInnerHTML={{__html: this.props.article.title}}>
+                        </div>
                     </div>
                 </div>
             </div>

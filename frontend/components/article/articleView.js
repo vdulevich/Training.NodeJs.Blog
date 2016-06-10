@@ -7,8 +7,7 @@ var PureRenderMixin = require('react-addons-pure-render-mixin');
 var ArticlesViewComponent = React.createClass({
     displayName: 'ArticlesViewComponent',
 
-    editorId: 'articleContentEditorId',
-    editor: null,
+    ckEditor: null,
     getInitialState: function getInitialState() {
         return { mode: this.props.mode };
     },
@@ -29,12 +28,12 @@ var ArticlesViewComponent = React.createClass({
     updateArticleEditMode: function updateArticleEditMode() {
         switch (this.state.mode) {
             case 'read':
-                if (this.editor != null) {
-                    this.editor.destroy();
+                if (this.ckEditor != null) {
+                    this.ckEditor.destroy();
                 }
                 break;
             case 'edit':
-                this.editor = CKEDITOR.inline(this.editorId, {
+                this.ckEditor = CKEDITOR.inline(this.refs._article, {
                     startupFocus: true,
                     autoParagraph: false,
                     extraPlugins: 'savecancel,sourcedialog',
@@ -45,15 +44,18 @@ var ArticlesViewComponent = React.createClass({
                         }.bind(this),
                         cancel: function () {
                             this.handleCancel();
-                        }.bind(this)
+                        }.bind(this),
+                        blur: function blur(e) {
+                            return false;
+                        }
                     }
                 });
-                break;
+                break; 
         }
     },
     componentWillUnmount: function componentWillUnmount() {
-        if (this.editor != null) {
-            this.editor.destroy();
+        if (this.ckEditor != null) {
+            this.ckEditor.destroy();
         }
     },
     shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
@@ -72,13 +74,13 @@ var ArticlesViewComponent = React.createClass({
         }
     },
     handleCancel: function handleCancel() {
-        $('#' + this.editorId).innerHTML = this.rawMarkup(this.props.article.content).__html;
+        this.refs._article.innerHTML = this.rawMarkup(this.props.article.content).__html;
         this.handleModeChange();
     },
     handleSave: function handleSave() {
         if (this.props.handleSave) {
             var article = JSON.parse(JSON.stringify(this.props.article));
-            article.content = this.editor.getData();
+            article.content = this.ckEditor.getData();
             this.props.handleSave(article);
         }
         this.handleModeChange();
@@ -94,7 +96,7 @@ var ArticlesViewComponent = React.createClass({
                 React.createElement(
                     'div',
                     { className: 'panel-body' },
-                    React.createElement('div', { id: this.editorId,
+                    React.createElement('div', { ref: '_article',
                         className: 'ch-article-panel__content',
                         contentEditable: this.state.mode == 'edit' ? true : false,
                         dangerouslySetInnerHTML: this.rawMarkup(this.props.article.content) })
@@ -116,7 +118,7 @@ var ArticlesViewComponent = React.createClass({
                             'Cancel'
                         )
                     )
-                ) : ''
+                ) : null
             )
         );
     }

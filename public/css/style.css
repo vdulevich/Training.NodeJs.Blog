@@ -296,7 +296,7 @@ a:hover {
 }
 
 .ch-feed-list .panel-footer{
-  background-color: transparent;
+  background-color: #f3f3f3;
 }
 
 @media (min-width: 1200px) {
