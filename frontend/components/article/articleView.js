@@ -50,7 +50,7 @@ var ArticlesViewComponent = React.createClass({
                         }
                     }
                 });
-                break; 
+                break;
         }
     },
     componentWillUnmount: function componentWillUnmount() {

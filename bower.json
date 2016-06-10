@@ -14,8 +14,7 @@
     "bootstrap": "3.*",
     "jquery-confirm": "~2.5.2",
     "jquery-loadmask": "*",
-    "jquery-validation": "jquery.validate#~1.13.0",
-    "froala-wysiwyg-editor": "wysiwyg-editor#~2.3.0"
+    "jquery-validation": "jquery.validate#~1.13.0"
   },
   "homepage": "https://github.com/vdulevich/Training.NodeJs.Blog",
   "description": "",
