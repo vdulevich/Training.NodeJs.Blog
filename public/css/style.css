@@ -305,24 +305,48 @@ a:hover {
   }
 }
 
-.ch-feed-list .ch-feed-list-item .ch-feed-title{
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
 .ch-feed-list .ch-feed-content {
-  height: 130px;
+  height: 60px;
   overflow: hidden;
   text-overflow: ellipsis;
   position: relative;
   z-index: 1;
 }
 
-.ch-feed-list .ch-feed-author {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.ch-feed-list .ch-feed-itembg {
+    height: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+    z-index: 1;
+}
+
+.ch-feed-list .ch-feed-overflow {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ch-feed-list .ch-feed-iconlabel a,
+.ch-feed-list .ch-feed-iconlabel span {
+    color: gray;
+    font-size: 12px;
+}
+
+.ch-feed-list .ch-feed-iconlabel .glyphicon,
+.ch-feed-list .ch-feed-iconlabel .glyphicon {
+    padding-right: 5px;
+    font-size: 10px;
+    font-weight:900;
+    color: lightgrey;
+}
+
+.ch-feed-list .ch-feed-iconlabel:first-child{
+    margin-left: 0px;
+}
+
+.ch-feed-list .ch-feed-iconlabel{
+    margin-left: 10px;
 }
 
 .ch-feed-list .ch-feed-rate strong {
