@@ -3,6 +3,7 @@ var React = require("react");
 var HeaderComponent = require('frontend/components/controls/header');
 var FooterComponent = require('frontend/components/controls/footer');
 var LoginDialogComponent = require('frontend/components/controls/authentication/loginDialog');
+var SignupDialogComponent = require('frontend/components/controls/authentication/signupDialog');
 
 var BlogApp = React.createClass({
     contextTypes: {
@@ -13,9 +14,8 @@ var BlogApp = React.createClass({
     render: function(){
         return (
             <div style={{height: '100%'}}>
-                <div>
-                    <LoginDialogComponent ref="_loginDlg"/>
-                </div>
+                <LoginDialogComponent ref="_loginDlg"/>
+                <SignupDialogComponent ref="_signupDlg"/>
                 <div class="ch-wrapper">
                     <div class="ch-header">
                         <div class="container container--header">

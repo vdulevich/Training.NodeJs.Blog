@@ -4,6 +4,7 @@ var React = require("react");
 var HeaderComponent = require('frontend/components/controls/header');
 var FooterComponent = require('frontend/components/controls/footer');
 var LoginDialogComponent = require('frontend/components/controls/authentication/loginDialog');
+var SignupDialogComponent = require('frontend/components/controls/authentication/signupDialog');
 
 var BlogApp = React.createClass({
     displayName: 'BlogApp',
@@ -17,11 +18,8 @@ var BlogApp = React.createClass({
         return React.createElement(
             'div',
             { style: { height: '100%' } },
-            React.createElement(
-                'div',
-                null,
-                React.createElement(LoginDialogComponent, { ref: '_loginDlg' })
-            ),
+            React.createElement(LoginDialogComponent, { ref: '_loginDlg' }),
+            React.createElement(SignupDialogComponent, { ref: '_signupDlg' }),
             React.createElement(
                 'div',
                 { className: 'ch-wrapper' },

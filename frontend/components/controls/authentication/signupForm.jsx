@@ -5,10 +5,9 @@ var SignupFormComponent = React.createClass({
     componentDidMount:function(){
         var form = $(this.refs._form),
             self = this;
-
         this.refs._validator = form.validate({
             rules: {
-                email: {
+               /* email: {
                     required: true,
                     email: true,
                     remote: {
@@ -20,7 +19,7 @@ var SignupFormComponent = React.createClass({
                             }
                         }
                     }
-                },
+                },*/
                 password: {
                     minlength: 3,
                     maxlength: 15,
@@ -64,7 +63,7 @@ var SignupFormComponent = React.createClass({
         }
     },
     getData: function(){
-        return $(this.refs._form).serialize();
+        return $(this.refs._form).serializeObject();
     },
     focus:function(){
         this.refs._firstName.focus();

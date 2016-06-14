@@ -2,6 +2,7 @@
 var mongoose = require('lib/mongoose');
 var errors = require('errors');
 var UserManager = require('managers/userManager');
+var ProfileManager = require('managers/profileManager');
 
 module.exports = [{
         name: 'login',
@@ -32,6 +33,25 @@ module.exports = [{
         create: function (req, resource, params, body, config, callback) {
             req.session.destroy();
             callback(null);
+        }
+    },
+    {
+        name: 'signup',
+        create: function(req, resource, params, body, config, callback){
+            (new ProfileManager()).signup(params, function(err, profile) {
+                if(err) {
+                    if (err instanceof errors.AuthError) {
+                        return callback(new errors.HttpError(403, err.message));
+                    } else if(err instanceof mongoose.Error.ValidationError){
+                        return callback(new errors.HttpError(403, err.message));
+                    }
+                    else {
+                        return callback(err);
+                    }
+                }
+                req.session.user = profile._user.toString();
+                callback(null, profile._user);
+            });
         }
     }
 ];

@@ -2,6 +2,7 @@
 var fetchrPlugin  = require('fluxible-plugin-fetchr');
 var Fluxible = require('fluxible');
 var LoginDialogStore = require('frontend/stores/loginDialogStore');
+var SignupDialogStore = require('frontend/stores/signupDialogStore');
 var ArticlesFeedStore = require('frontend/stores/articlesFeedStore');
 var ApplicationStore = require('frontend/stores/applicationStore');
 var ProfileInfoStore = require('frontend/stores/profileInfoStore');
@@ -13,6 +14,7 @@ var app = new Fluxible({
     stores:[
         ApplicationStore,
         LoginDialogStore,
+        SignupDialogStore,
         ArticlesFeedStore,
         ProfileInfoStore,
         ArticleViewStore

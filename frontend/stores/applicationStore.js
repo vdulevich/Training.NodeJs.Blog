@@ -56,6 +56,7 @@ var ApplicationStore = createStore({
 ApplicationStore.handlers = {};
 ApplicationStore.handlers[actionsNames.CHANGE_ROUTE] = '_handleNavigate';
 ApplicationStore.handlers[actionsNames.AUTH_LOGIN_SUCCESS] = '_handleLoginSuccess';
+ApplicationStore.handlers[actionsNames.AUTH_SIGNUP_SUCCESS] = '_handleLoginSuccess';
 ApplicationStore.handlers[actionsNames.AUTH_LOGOUT_SUCCESS] = '_handleLogoutSuccess';
 ApplicationStore.handlers[actionsNames.SAVE] = "_handleSave";
 

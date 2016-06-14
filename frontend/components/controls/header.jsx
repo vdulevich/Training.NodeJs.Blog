@@ -43,7 +43,7 @@ var HeaderComponent = React.createClass({
     handleLoginBtn: function(){
         this.context.executeAction(authActions.loginOpen);
     },
-    handleSignUpBtn: function(){
+    handleSignupBtn: function(){
         this.context.executeAction(authActions.signUpOpen);
     },
     menuTreeMapFn: function(){
@@ -99,7 +99,7 @@ var HeaderComponent = React.createClass({
                                 <span>
                                     <a onClick={this.handleLoginBtn} class="navbar-link" type="button">Login</a>
                                     <span className="nav-divider">or</span>
-                                    <a onClick={this.handleSignUpBtn} class="navbar-link" type="button">Sign up</a>
+                                    <a onClick={this.handleSignupBtn} class="navbar-link" type="button">Sign up</a>
                                 </span>
                             )
                         }

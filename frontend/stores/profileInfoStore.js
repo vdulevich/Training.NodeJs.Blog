@@ -13,7 +13,7 @@ var ProfileInfoStore = createStore({
         this.loading = {
             profile: false,
             articles: false
-        }; 
+        };
     },
     _handleProfileArticlesSuccess: function(payload){
         this.articles = payload.articles;
@@ -72,6 +72,5 @@ ProfileInfoStore.handlers[actionsNames.PROFILE_ARTICLES_REQUEST] = "_handleProfi
 ProfileInfoStore.handlers[actionsNames.PROFILE_INFO_SUCCESS] = "_handleProfileInfoSuccess";
 ProfileInfoStore.handlers[actionsNames.PROFILE_INFO_REQUEST] = "_handleProfileInfoRequest";
 ProfileInfoStore.handlers[actionsNames.SAVE] = "_handleSave";
-
 
 module.exports = ProfileInfoStore;
